@@ -1,0 +1,21 @@
+{
+  "appTitle": "DRIP",
+  "login": "Login",
+  "register": "Register",
+  "email": "Email",
+  "password": "Password",
+  "home": "Home",
+  "announcements": "Announcements",
+  "tasks": "Tasks",
+  "shuttles": "Shuttles",
+  "profile": "Profile",
+  "map": "Map",
+  "resources": "Resources",
+  "createTask": "Create Task",
+  "join": "Join",
+  "leave": "Leave",
+  "settings": "Settings",
+  "language": "Language",
+  "darkMode": "Dark Mode",
+  "logout": "Logout"
+}

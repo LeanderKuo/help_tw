@@ -1,0 +1,21 @@
+{
+  "appTitle": "救災資源整合平台",
+  "login": "登入",
+  "register": "註冊",
+  "email": "電子郵件",
+  "password": "密碼",
+  "home": "首頁",
+  "announcements": "公告",
+  "tasks": "任務",
+  "shuttles": "班車",
+  "profile": "個人",
+  "map": "地圖",
+  "resources": "資源",
+  "createTask": "建立任務",
+  "join": "加入",
+  "leave": "退出",
+  "settings": "設定",
+  "language": "語言",
+  "darkMode": "深色模式",
+  "logout": "登出"
+}
