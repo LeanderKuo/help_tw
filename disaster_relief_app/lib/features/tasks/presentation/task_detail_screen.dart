@@ -4,6 +4,7 @@ import 'package:timeago/timeago.dart' as timeago;
 import '../../../models/task_model.dart';
 import '../../../models/chat_message.dart';
 import '../data/task_repository.dart';
+import 'task_controller.dart';
 import '../../chat/data/chat_repository.dart';
 import '../../auth/data/auth_repository.dart';
 import '../../../l10n/app_localizations.dart';
@@ -19,6 +20,11 @@ final taskDetailProvider = FutureProvider.family<TaskModel?, String>((ref, id) a
 
 final chatMessagesProvider = StreamProvider.family<List<ChatMessage>, String>((ref, taskId) {
   return ref.watch(chatRepositoryProvider).subscribeToTaskMessages(taskId);
+});
+
+final taskParticipationProvider =
+    FutureProvider.family<bool, String>((ref, taskId) async {
+  return ref.watch(taskRepositoryProvider).isUserParticipant(taskId);
 });
 
 class TaskDetailScreen extends ConsumerWidget {
@@ -113,6 +119,8 @@ class _ChatSection extends ConsumerStatefulWidget {
 
 class _ChatSectionState extends ConsumerState<_ChatSection> {
   final _messageController = TextEditingController();
+  bool _isVisible = true;
+  bool _isJoining = false;
 
   @override
   void dispose() {
@@ -137,6 +145,23 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
     _messageController.clear();
   }
 
+  Future<void> _toggleParticipation(bool joined) async {
+    final user = ref.read(authRepositoryProvider).currentUser;
+    if (user == null) return;
+    setState(() => _isJoining = true);
+    try {
+      if (joined) {
+        await ref.read(taskControllerProvider.notifier).leaveTask(widget.taskId);
+      } else {
+        await ref
+            .read(taskControllerProvider.notifier)
+            .joinTask(widget.taskId, isVisible: _isVisible);
+      }
+    } finally {
+      setState(() => _isJoining = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final messagesAsync = ref.watch(chatMessagesProvider(widget.taskId));
@@ -144,6 +169,41 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
 
     return Column(
       children: [
+        Consumer(
+          builder: (context, ref, _) {
+            final joinedAsync = ref.watch(taskParticipationProvider(widget.taskId));
+            return joinedAsync.when(
+              data: (joined) => Column(
+                children: [
+                  SwitchListTile(
+                    value: _isVisible,
+                    onChanged: joined || _isJoining
+                        ? null
+                        : (v) => setState(() => _isVisible = v),
+                    title: const Text('展示聯絡方式給任務成員'),
+                    subtitle: const Text('關閉後僅任務建立者可見'),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isJoining
+                            ? null
+                            : () => _toggleParticipation(joined),
+                        child: Text(
+                          joined ? '退出任務' : '加入任務',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              loading: () => const SizedBox.shrink(),
+              error: (_, __) => const SizedBox.shrink(),
+            );
+          },
+        ),
         Expanded(
           child: messagesAsync.when(
             data: (messages) {

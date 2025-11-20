@@ -129,4 +129,39 @@ class TaskRepository {
       }
     }
   }
+
+  Future<bool> isUserParticipant(String taskId) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return false;
+
+    final rows = await _supabase
+        .from('task_participants')
+        .select('user_id')
+        .eq('task_id', taskId)
+        .eq('user_id', userId)
+        .limit(1);
+    return rows is List && rows.isNotEmpty;
+  }
+
+  Future<void> joinTask(String taskId, {bool isVisible = true}) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) throw Exception('User not authenticated');
+
+    await _supabase.from('task_participants').insert({
+      'task_id': taskId,
+      'user_id': userId,
+      'is_visible': isVisible,
+    });
+  }
+
+  Future<void> leaveTask(String taskId) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) throw Exception('User not authenticated');
+
+    await _supabase
+        .from('task_participants')
+        .delete()
+        .eq('task_id', taskId)
+        .eq('user_id', userId);
+  }
 }

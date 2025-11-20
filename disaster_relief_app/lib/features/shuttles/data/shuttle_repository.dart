@@ -91,6 +91,25 @@ class ShuttleRepository {
     // Trigger a refresh or update local count optimistically
   }
 
+  Future<void> leaveShuttle(String shuttleId) async {
+    await _supabase.rpc('leave_shuttle', params: {
+      'p_shuttle_id': shuttleId,
+    });
+  }
+
+  Future<bool> isUserParticipant(String shuttleId) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return false;
+
+    final rows = await _supabase
+        .from('shuttle_participants')
+        .select('user_id')
+        .eq('shuttle_id', shuttleId)
+        .eq('user_id', userId)
+        .limit(1);
+    return rows is List && rows.isNotEmpty;
+  }
+
   Stream<List<Map<String, dynamic>>> subscribeToShuttleUpdates() {
     return _supabase
         .from('shuttles')

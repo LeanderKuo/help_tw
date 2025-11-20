@@ -28,4 +28,14 @@ class TaskController extends StateNotifier<AsyncValue<List<TaskModel>>> {
     await _repository.syncDrafts();
     await loadTasks();
   }
+
+  Future<void> joinTask(String taskId, {bool isVisible = true}) async {
+    await _repository.joinTask(taskId, isVisible: isVisible);
+    await loadTasks();
+  }
+
+  Future<void> leaveTask(String taskId) async {
+    await _repository.leaveTask(taskId);
+    await loadTasks();
+  }
 }

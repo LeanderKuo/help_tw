@@ -10,8 +10,11 @@ import '../../../core/widgets/global_chrome.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/shuttle_model.dart';
 import '../../auth/data/auth_repository.dart';
+import '../../profile/data/profile_repository.dart';
+import '../../../models/user_profile.dart';
 
-final shuttleDetailProvider = FutureProvider.family<ShuttleModel?, String>((ref, id) async {
+final shuttleDetailProvider =
+    FutureProvider.family<ShuttleModel?, String>((ref, id) async {
   final shuttles = await ref.watch(shuttleRepositoryProvider).getShuttles();
   try {
     return shuttles.firstWhere((s) => s.id == id);
@@ -20,14 +23,36 @@ final shuttleDetailProvider = FutureProvider.family<ShuttleModel?, String>((ref,
   }
 });
 
-class ShuttleDetailScreen extends ConsumerWidget {
-  final String shuttleId;
+final shuttleParticipationProvider =
+    FutureProvider.family<bool, String>((ref, shuttleId) async {
+  return ref.watch(shuttleRepositoryProvider).isUserParticipant(shuttleId);
+});
 
+final shuttleHostProfileProvider =
+    FutureProvider.family<UserProfile?, String?>((ref, userId) async {
+  if (userId == null) return null;
+  return ref.watch(profileRepositoryProvider).getProfile(userId);
+});
+
+class ShuttleDetailScreen extends ConsumerStatefulWidget {
   const ShuttleDetailScreen({required this.shuttleId, super.key});
 
+  final String shuttleId;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final shuttleAsync = ref.watch(shuttleDetailProvider(shuttleId));
+  ConsumerState<ShuttleDetailScreen> createState() =>
+      _ShuttleDetailScreenState();
+}
+
+class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
+  bool _isVisible = true;
+  bool _isBusy = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final shuttleAsync = ref.watch(shuttleDetailProvider(widget.shuttleId));
+    final joinedAsync =
+        ref.watch(shuttleParticipationProvider(widget.shuttleId));
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
@@ -40,6 +65,10 @@ class ShuttleDetailScreen extends ConsumerWidget {
           if (shuttle == null) {
             return Center(child: Text(l10n.shuttleNotFound));
           }
+          final joined = joinedAsync.valueOrNull ?? false;
+          final isFull = shuttle.capacity > 0 &&
+              shuttle.seatsTaken >= shuttle.capacity &&
+              !joined;
           return Column(
             children: [
               SizedBox(
@@ -53,16 +82,19 @@ class ShuttleDetailScreen extends ConsumerWidget {
                     zoom: 12,
                   ),
                   markers: {
-                    if (shuttle.routeStartLat != null)
+                    if (shuttle.routeStartLat != null &&
+                        shuttle.routeStartLng != null)
                       Marker(
                         markerId: const MarkerId('start'),
-                        position: LatLng(shuttle.routeStartLat!, shuttle.routeStartLng!),
+                        position:
+                            LatLng(shuttle.routeStartLat!, shuttle.routeStartLng!),
                         infoWindow: InfoWindow(title: l10n.startPoint),
                       ),
-                    if (shuttle.routeEndLat != null)
+                    if (shuttle.routeEndLat != null && shuttle.routeEndLng != null)
                       Marker(
                         markerId: const MarkerId('end'),
-                        position: LatLng(shuttle.routeEndLat!, shuttle.routeEndLng!),
+                        position:
+                            LatLng(shuttle.routeEndLat!, shuttle.routeEndLng!),
                         infoWindow: InfoWindow(title: l10n.endPoint),
                       ),
                   },
@@ -87,13 +119,15 @@ class ShuttleDetailScreen extends ConsumerWidget {
                         children: [
                           StatusChip(
                             label: _statusLabel(shuttle.status, l10n),
-                            backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                            backgroundColor:
+                                AppColors.primary.withValues(alpha: 0.12),
                             textColor: AppColors.primary,
                           ),
                           const SizedBox(width: 8),
                           StatusChip(
                             label: shuttle.costType,
-                            backgroundColor: AppColors.secondary.withValues(alpha: 0.12),
+                            backgroundColor:
+                                AppColors.secondary.withValues(alpha: 0.12),
                             textColor: AppColors.secondary,
                           ),
                           const Spacer(),
@@ -103,14 +137,15 @@ class ShuttleDetailScreen extends ConsumerWidget {
                                   ? '${shuttle.updatedAt!.month}/${shuttle.updatedAt!.day}'
                                   : l10n.unknownTime,
                             ),
-                            style: const TextStyle(color: AppColors.textSecondaryLight),
+                            style:
+                                const TextStyle(color: AppColors.textSecondaryLight),
                           ),
                         ],
                       ),
                       const SizedBox(height: 16),
                       _infoTile(
                         icon: Icons.note_outlined,
-                        label: '備註 / 描述',
+                        label: '備註 / 說明',
                         value: shuttle.description ?? '尚未填寫',
                       ),
                       _infoTile(
@@ -125,7 +160,7 @@ class ShuttleDetailScreen extends ConsumerWidget {
                       ),
                       _infoTile(
                         icon: Icons.access_time,
-                        label: '出發時間',
+                        label: '發車時間',
                         value: shuttle.departureTime != null
                             ? '${shuttle.departureTime!.month}/${shuttle.departureTime!.day} ${shuttle.departureTime!.hour.toString().padLeft(2, '0')}:${shuttle.departureTime!.minute.toString().padLeft(2, '0')}'
                             : l10n.timeNotSet,
@@ -147,9 +182,18 @@ class ShuttleDetailScreen extends ConsumerWidget {
                         label: '費用',
                         value: shuttle.farePerPerson != null
                             ? '總額 ${shuttle.fareTotal?.toStringAsFixed(0) ?? '-'} / 人均 ${shuttle.farePerPerson!.toStringAsFixed(0)}'
-                            : '未提供',
+                            : '未設定',
                       ),
+                      const SizedBox(height: 10),
+                      _HostContact(shuttle: shuttle),
                       const SizedBox(height: 16),
+                      SwitchListTile(
+                        title: const Text('公開聯絡方式給同車成員'),
+                        subtitle: const Text('關閉後僅主揪可見'),
+                        value: _isVisible,
+                        onChanged: joined ? null : (v) => setState(() => _isVisible = v),
+                      ),
+                      const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
@@ -160,7 +204,7 @@ class ShuttleDetailScreen extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: const [
                             Text(
-                              '參與者列表 / 聊天訊息串',
+                              '已加入者可查看聊聊 / 與主揪訊息',
                               style: TextStyle(
                                 fontWeight: FontWeight.w700,
                                 color: AppColors.textPrimaryLight,
@@ -168,7 +212,7 @@ class ShuttleDetailScreen extends ConsumerWidget {
                             ),
                             SizedBox(height: 6),
                             Text(
-                              '加入班車後即可查看參與者與聊天室。',
+                              '加入後即可在聊天室同步行程異動',
                               style: TextStyle(color: AppColors.textSecondaryLight),
                             ),
                           ],
@@ -189,7 +233,7 @@ class ShuttleDetailScreen extends ConsumerWidget {
                         child: OutlinedButton.icon(
                           onPressed: () {},
                           icon: const Icon(Icons.navigation),
-                          label: const Text('導航集合地'),
+                          label: const Text('導航查看'),
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
@@ -199,21 +243,15 @@ class ShuttleDetailScreen extends ConsumerWidget {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            final user = ref.read(authRepositoryProvider).currentUser;
-                            if (user != null) {
-                              ref
-                                  .read(shuttleControllerProvider.notifier)
-                                  .joinShuttle(shuttleId);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(l10n.joinedShuttleSuccess)),
-                              );
-                            }
-                          },
+                          onPressed: isFull && !joined || _isBusy
+                              ? null
+                              : () => _toggleJoin(joined),
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
-                          child: const Text('我要上車'),
+                          child: joined
+                              ? const Text('退出班車')
+                              : Text(isFull ? '車次已滿' : '報名上車'),
                         ),
                       ),
                     ],
@@ -227,6 +265,29 @@ class ShuttleDetailScreen extends ConsumerWidget {
         error: (e, s) => Center(child: Text(l10n.errorWithMessage('$e'))),
       ),
     );
+  }
+
+  Future<void> _toggleJoin(bool joined) async {
+    final user = ref.read(authRepositoryProvider).currentUser;
+    if (user == null) return;
+    setState(() => _isBusy = true);
+    try {
+      if (joined) {
+        await ref.read(shuttleControllerProvider.notifier).leaveShuttle(widget.shuttleId);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('已退出班車')));
+      } else {
+        await ref
+            .read(shuttleControllerProvider.notifier)
+            .joinShuttle(widget.shuttleId, isVisible: _isVisible);
+        if (!mounted) return;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(const SnackBar(content: Text('報名成功')));
+      }
+    } finally {
+      setState(() => _isBusy = false);
+    }
   }
 }
 
@@ -281,5 +342,70 @@ String _statusLabel(String status, AppLocalizations l10n) {
       return l10n.shuttleStatusCancelled;
     default:
       return status;
+  }
+}
+
+class _HostContact extends ConsumerWidget {
+  const _HostContact({required this.shuttle});
+
+  final ShuttleModel shuttle;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final profileAsync =
+        ref.watch(shuttleHostProfileProvider(shuttle.createdBy));
+    return profileAsync.when(
+      data: (profile) {
+        if (profile == null) {
+          return const SizedBox.shrink();
+        }
+        return Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 22,
+                backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                child: const Icon(Icons.person, color: AppColors.primary),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      profile.nickname ?? '主揪',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimaryLight,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      profile.maskedPhone ?? '已遮罩聯絡電話',
+                      style: const TextStyle(color: AppColors.textSecondaryLight),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.privacy_tip_outlined, color: AppColors.textSecondaryLight),
+            ],
+          ),
+        );
+      },
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
+    );
   }
 }

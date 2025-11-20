@@ -26,4 +26,9 @@ class ShuttleController extends StateNotifier<AsyncValue<List<ShuttleModel>>> {
         role: role, isVisible: isVisible);
     await loadShuttles();
   }
+
+  Future<void> leaveShuttle(String shuttleId) async {
+    await _repository.leaveShuttle(shuttleId);
+    await loadShuttles();
+  }
 }
