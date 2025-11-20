@@ -1,6 +1,6 @@
 {
-    "name": "disaster_relief_platform",
-    "short_name": "disaster_relief_platform",
+    "name": "help_tw",
+    "short_name": "help_tw",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
