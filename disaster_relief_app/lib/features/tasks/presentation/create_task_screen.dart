@@ -17,7 +17,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   String _priority = 'Normal';
-  
+
   final List<String> _priorities = ['Low', 'Normal', 'High', 'Emergency'];
 
   @override
@@ -62,7 +62,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _priority,
+                initialValue: _priority,
                 decoration: const InputDecoration(labelText: 'Priority'),
                 items: _priorities.map((p) {
                   return DropdownMenuItem(value: p, child: Text(p));

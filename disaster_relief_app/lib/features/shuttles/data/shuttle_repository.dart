@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
@@ -27,6 +28,11 @@ class ShuttleRepository {
           .map((json) => ShuttleModel.fromJson(json))
           .toList();
       
+      // Skip Isar on web (not supported in 3.x).
+      if (kIsWeb) {
+        return shuttles;
+      }
+
       // Cache
       final isar = await _isarService.db;
       await isar.writeTxn(() async {
@@ -35,6 +41,7 @@ class ShuttleRepository {
 
       return shuttles;
     } catch (e) {
+      if (kIsWeb) rethrow;
       final isar = await _isarService.db;
       return await isar.shuttleModels.where().findAll();
     }

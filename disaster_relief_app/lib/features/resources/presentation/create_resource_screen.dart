@@ -9,7 +9,8 @@ class CreateResourceScreen extends ConsumerStatefulWidget {
   const CreateResourceScreen({super.key});
 
   @override
-  ConsumerState<CreateResourceScreen> createState() => _CreateResourceScreenState();
+  ConsumerState<CreateResourceScreen> createState() =>
+      _CreateResourceScreenState();
 }
 
 class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
@@ -17,10 +18,10 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
   String _selectedType = 'Other';
-  
+
   // Default to Taipei for now, ideally pick from map
-  double _latitude = 25.0330;
-  double _longitude = 121.5654;
+  final double _latitude = 25.0330;
+  final double _longitude = 121.5654;
 
   final List<String> _types = ['Water', 'Shelter', 'Medical', 'Food', 'Other'];
 
@@ -67,7 +68,7 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedType,
+                initialValue: _selectedType,
                 decoration: const InputDecoration(labelText: 'Type'),
                 items: _types.map((type) {
                   return DropdownMenuItem(value: type, child: Text(type));

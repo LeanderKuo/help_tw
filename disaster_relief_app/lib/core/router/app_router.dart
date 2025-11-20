@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
@@ -20,19 +19,13 @@ import '../../features/auth/data/auth_repository.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
-  
+
   return GoRouter(
     initialLocation: '/',
     refreshListenable: GoRouterRefreshStream(authRepository.authStateChanges),
     routes: [
-      GoRoute(
-        path: '/',
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-        path: '/login',
-        builder: (context, state) => const LoginScreen(),
-      ),
+      GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
+      GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
@@ -51,7 +44,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/map',
             builder: (context, state) => const MapScreen(),
             routes: [
-               GoRoute(
+              GoRoute(
                 path: 'resources',
                 builder: (context, state) => const ResourceListScreen(),
                 routes: [
@@ -61,7 +54,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                   ),
                 ],
               ),
-            ]
+            ],
           ),
           GoRoute(
             path: '/tasks',
@@ -73,7 +66,8 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
               GoRoute(
                 path: ':id',
-                builder: (context, state) => TaskDetailScreen(taskId: state.pathParameters['id']!),
+                builder: (context, state) =>
+                    TaskDetailScreen(taskId: state.pathParameters['id']!),
               ),
             ],
           ),
@@ -83,7 +77,8 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: ':id',
-                builder: (context, state) => ShuttleDetailScreen(shuttleId: state.pathParameters['id']!),
+                builder: (context, state) =>
+                    ShuttleDetailScreen(shuttleId: state.pathParameters['id']!),
               ),
             ],
           ),
@@ -96,8 +91,9 @@ final routerProvider = Provider<GoRouter>((ref) {
     ],
     redirect: (context, state) {
       final session = authRepository.currentUser;
-      final isLoggingIn = state.uri.path == '/login' || state.uri.path == '/register';
-      
+      final isLoggingIn =
+          state.uri.path == '/login' || state.uri.path == '/register';
+
       if (session == null && !isLoggingIn) {
         return '/login';
       }
@@ -132,7 +128,10 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
           BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Tasks'),
-          BottomNavigationBarItem(icon: Icon(Icons.directions_bus), label: 'Shuttles'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.directions_bus),
+            label: 'Shuttles',
+          ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

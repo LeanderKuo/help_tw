@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
@@ -33,6 +34,11 @@ class ResourceRepository {
           .map((json) => ResourcePoint.fromJson(json))
           .toList();
 
+      // Web: Isar 3.x has no web support; skip caching.
+      if (kIsWeb) {
+        return resources;
+      }
+
       // 2. Cache to Isar
       final isar = await _isarService.db;
       await isar.writeTxn(() async {
@@ -41,6 +47,7 @@ class ResourceRepository {
 
       return resources;
     } catch (e) {
+      if (kIsWeb) rethrow;
       // 3. Fallback to Isar (Offline)
       final isar = await _isarService.db;
       return await isar.resourcePoints.where().findAll();
@@ -57,10 +64,12 @@ class ResourceRepository {
     
     await _supabase.from('resource_points').insert(data);
 
-    // 2. Save to local cache
-    final isar = await _isarService.db;
-    await isar.writeTxn(() async {
-      await isar.resourcePoints.put(resource);
-    });
+    // 2. Save to local cache (native only)
+    if (!kIsWeb) {
+      final isar = await _isarService.db;
+      await isar.writeTxn(() async {
+        await isar.resourcePoints.put(resource);
+      });
+    }
   }
 }

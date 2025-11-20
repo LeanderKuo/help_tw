@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
@@ -33,6 +34,11 @@ class TaskRepository {
           .map((json) => TaskModel.fromJson(json))
           .toList();
 
+      // Web: Isar 3.x not supported; skip caching.
+      if (kIsWeb) {
+        return tasks;
+      }
+
       // Cache to Isar
       final isar = await _isarService.db;
       await isar.writeTxn(() async {
@@ -41,6 +47,7 @@ class TaskRepository {
 
       return tasks;
     } catch (e) {
+      if (kIsWeb) rethrow;
       // Fallback to Isar
       final isar = await _isarService.db;
       return await isar.taskModels.where().findAll();
@@ -56,20 +63,26 @@ class TaskRepository {
     try {
       await _supabase.from('tasks').insert(task.toJson());
       // If success, save to local as synced
-      await isar.writeTxn(() async {
-        await isar.taskModels.put(task.copyWith(isDraft: false));
-      });
+      if (!kIsWeb) {
+        await isar.writeTxn(() async {
+          await isar.taskModels.put(task.copyWith(isDraft: false));
+        });
+      }
     } catch (e) {
       // If fail, save as draft
-      await isar.writeTxn(() async {
-        await isar.taskModels.put(task.copyWith(isDraft: true));
-      });
+      if (!kIsWeb) {
+        await isar.writeTxn(() async {
+          await isar.taskModels.put(task.copyWith(isDraft: true));
+        });
+      }
       rethrow; // Optional: rethrow to let UI know it's offline
     }
   }
 
   // Sync Drafts
   Future<void> syncDrafts() async {
+    if (kIsWeb) return; // No local cache on web.
+
     final isar = await _isarService.db;
     final drafts = await isar.taskModels.filter().isDraftEqualTo(true).findAll();
 

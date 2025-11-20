@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'resource_controller.dart';
-import '../../../models/resource_point.dart';
 
 class ResourceListScreen extends ConsumerWidget {
   const ResourceListScreen({super.key});
@@ -35,7 +34,9 @@ class ResourceListScreen extends ConsumerWidget {
                   child: Icon(_getIconForType(resource.type)),
                 ),
                 title: Text(resource.title),
-                subtitle: Text('${resource.type} • ${resource.description ?? ""}'),
+                subtitle: Text(
+                  '${resource.type} • ${resource.description ?? ""}',
+                ),
                 onTap: () {
                   // TODO: Navigate to detail
                 },

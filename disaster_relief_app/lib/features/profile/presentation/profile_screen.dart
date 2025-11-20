@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 import '../../../l10n/app_localizations.dart';
-import '../data/profile_repository.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../auth/data/auth_repository.dart';
 
@@ -13,9 +11,9 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(authRepositoryProvider).currentUser;
-    
+
     // TODO: Fetch full profile from ProfileRepository
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(l10n.profile),
@@ -32,10 +30,7 @@ class ProfileScreen extends ConsumerWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const CircleAvatar(
-              radius: 50,
-              child: Icon(Icons.person, size: 50),
-            ),
+            const CircleAvatar(radius: 50, child: Icon(Icons.person, size: 50)),
             const SizedBox(height: 16),
             Text(
               user?.email ?? 'No Email',
