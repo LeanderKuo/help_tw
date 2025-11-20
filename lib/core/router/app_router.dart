@@ -10,6 +10,11 @@ import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/map/presentation/map_screen.dart';
 import '../../features/resources/presentation/resource_list_screen.dart';
 import '../../features/resources/presentation/create_resource_screen.dart';
+import '../../features/tasks/presentation/task_list_screen.dart';
+import '../../features/tasks/presentation/create_task_screen.dart';
+import '../../features/tasks/presentation/task_detail_screen.dart';
+import '../../features/shuttles/presentation/shuttle_list_screen.dart';
+import '../../features/shuttles/presentation/shuttle_detail_screen.dart';
 import '../../features/auth/data/auth_repository.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -44,14 +49,40 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/map',
             builder: (context, state) => const MapScreen(),
+            routes: [
+               GoRoute(
+                path: 'resources',
+                builder: (context, state) => const ResourceListScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'create',
+                    builder: (context, state) => const CreateResourceScreen(),
+                  ),
+                ],
+              ),
+            ]
           ),
           GoRoute(
-            path: '/resources',
-            builder: (context, state) => const ResourceListScreen(),
+            path: '/tasks',
+            builder: (context, state) => const TaskListScreen(),
             routes: [
               GoRoute(
                 path: 'create',
-                builder: (context, state) => const CreateResourceScreen(),
+                builder: (context, state) => const CreateTaskScreen(),
+              ),
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => TaskDetailScreen(taskId: state.pathParameters['id']!),
+              ),
+            ],
+          ),
+          GoRoute(
+            path: '/shuttles',
+            builder: (context, state) => const ShuttleListScreen(),
+            routes: [
+              GoRoute(
+                path: ':id',
+                builder: (context, state) => ShuttleDetailScreen(shuttleId: state.pathParameters['id']!),
               ),
             ],
           ),
@@ -99,7 +130,8 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
-          BottomNavigationBarItem(icon: Icon(Icons.list), label: 'Resources'),
+          BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Tasks'),
+          BottomNavigationBarItem(icon: Icon(Icons.directions_bus), label: 'Shuttles'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
@@ -110,8 +142,9 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
     final String location = GoRouterState.of(context).uri.path;
     if (location.startsWith('/home')) return 0;
     if (location.startsWith('/map')) return 1;
-    if (location.startsWith('/resources')) return 2;
-    if (location.startsWith('/profile')) return 3;
+    if (location.startsWith('/tasks')) return 2;
+    if (location.startsWith('/shuttles')) return 3;
+    if (location.startsWith('/profile')) return 4;
     return 0;
   }
 
@@ -124,9 +157,12 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
         GoRouter.of(context).go('/map');
         break;
       case 2:
-        GoRouter.of(context).go('/resources');
+        GoRouter.of(context).go('/tasks');
         break;
       case 3:
+        GoRouter.of(context).go('/shuttles');
+        break;
+      case 4:
         GoRouter.of(context).go('/profile');
         break;
     }

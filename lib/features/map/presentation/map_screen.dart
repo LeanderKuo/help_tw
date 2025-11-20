@@ -85,9 +85,21 @@ class _MapScreenState extends ConsumerState<MapScreen> {
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => Center(child: Text('Error: $error')),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => context.push('/resources/create'),
-        child: const Icon(Icons.add_location_alt),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton(
+            heroTag: 'list',
+            onPressed: () => context.push('/map/resources'),
+            child: const Icon(Icons.list),
+          ),
+          const SizedBox(height: 16),
+          FloatingActionButton(
+            heroTag: 'add',
+            onPressed: () => context.push('/map/resources/create'),
+            child: const Icon(Icons.add_location_alt),
+          ),
+        ],
       ),
     );
   }
