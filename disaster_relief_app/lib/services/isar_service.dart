@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/resource_point.dart';
@@ -13,12 +14,20 @@ class IsarService {
 
   Future<Isar> openDB() async {
     if (Isar.instanceNames.isEmpty) {
-      final dir = await getApplicationDocumentsDirectory();
-      return await Isar.open(
-        [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
-        directory: dir.path,
-        inspector: true,
-      );
+      // On web there is no path_provider implementation; Isar stores data in IndexedDB.
+      if (kIsWeb) {
+        return Isar.open(
+          [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
+          inspector: false,
+        );
+      } else {
+        final dir = await getApplicationDocumentsDirectory();
+        return Isar.open(
+          [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
+          directory: dir.path,
+          inspector: true,
+        );
+      }
     }
     return Future.value(Isar.getInstance());
   }
