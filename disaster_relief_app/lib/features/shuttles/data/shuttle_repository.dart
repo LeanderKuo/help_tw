@@ -25,12 +25,36 @@ class ShuttleRepository {
 
   Future<List<ShuttleModel>> getShuttles() async {
     try {
+      const selectColumns = [
+        'id',
+        'display_id',
+        'title',
+        'description',
+        'status',
+        'cost_type',
+        'fare_total',
+        'fare_per_person',
+        'seats_total',
+        'seats_taken',
+        'origin_address',
+        'destination_address',
+        'created_by',
+        'depart_at',
+        'arrive_at',
+        'signup_deadline',
+        'created_at',
+        'updated_at',
+        'origin_lat: ST_Y(origin::geometry)',
+        'origin_lng: ST_X(origin::geometry)',
+        'destination_lat: ST_Y(destination::geometry)',
+        'destination_lng: ST_X(destination::geometry)',
+      ];
       final data = await _supabase
           .from('shuttles')
-          .select()
+          .select(selectColumns.join(','))
           .timeout(const Duration(seconds: 12));
       final shuttles = (data as List)
-          .map((json) => ShuttleModel.fromJson(json))
+          .map((json) => ShuttleModel.fromSupabase(json as Map<String, dynamic>))
           .toList();
       final shuttlesWithIds = shuttles
           .map((s) => s.copyWith(isarId: fastHash(s.id)))
@@ -56,12 +80,14 @@ class ShuttleRepository {
     }
   }
 
-  Future<void> joinShuttle(String shuttleId, String userId) async {
-    await _supabase.from('shuttle_participants').insert({
-      'shuttle_id': shuttleId,
-      'user_id': userId,
-      'status': 'Joined',
+  Future<void> joinShuttle(String shuttleId,
+      {String role = 'passenger', bool isVisible = true}) async {
+    await _supabase.rpc('join_shuttle', params: {
+      'p_shuttle_id': shuttleId,
+      'p_role': role,
+      'p_is_visible': isVisible,
     });
+
     // Trigger a refresh or update local count optimistically
   }
 

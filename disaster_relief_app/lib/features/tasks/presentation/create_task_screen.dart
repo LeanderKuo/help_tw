@@ -36,6 +36,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
         description: _descriptionController.text,
         priority: _priority,
         status: 'Open',
+        materialsStatus: '穩定',
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
       );

@@ -12,31 +12,55 @@ class ChatRepository {
 
   ChatRepository(this._supabase);
 
-  Future<List<ChatMessage>> getMessages(String taskId) async {
+  Future<List<ChatMessage>> getTaskMessages(String taskId) async {
     final data = await _supabase
-        .from('chat_messages')
+        .from('task_messages')
         .select()
         .eq('task_id', taskId)
         .order('created_at', ascending: true);
 
-    return (data as List).map((json) => ChatMessage.fromJson(json)).toList();
+    return (data as List)
+        .map((json) => ChatMessage.fromSupabase(json))
+        .toList();
   }
 
-  Future<void> sendMessage(ChatMessage message) async {
-    await _supabase.from('chat_messages').insert({
+  Future<void> sendTaskMessage(ChatMessage message) async {
+    await _supabase.from('task_messages').insert({
       'task_id': message.taskId,
-      'sender_id': message.senderId,
+      'author_id': message.senderId,
       'content': message.content,
       'image_url': message.imageUrl,
     });
   }
 
-  Stream<List<ChatMessage>> subscribeToMessages(String taskId) {
+  Stream<List<ChatMessage>> subscribeToTaskMessages(String taskId) {
     return _supabase
-        .from('chat_messages')
+        .from('task_messages')
         .stream(primaryKey: ['id'])
         .eq('task_id', taskId)
         .order('created_at')
-        .map((data) => data.map((json) => ChatMessage.fromJson(json)).toList());
+        .map((data) => data
+            .map((json) => ChatMessage.fromSupabase(json))
+            .toList());
+  }
+
+  Stream<List<ChatMessage>> subscribeToShuttleMessages(String shuttleId) {
+    return _supabase
+        .from('shuttle_messages')
+        .stream(primaryKey: ['id'])
+        .eq('shuttle_id', shuttleId)
+        .order('created_at')
+        .map((data) => data
+            .map((json) => ChatMessage.fromSupabase(json))
+            .toList());
+  }
+
+  Future<void> sendShuttleMessage(ChatMessage message) async {
+    await _supabase.from('shuttle_messages').insert({
+      'shuttle_id': message.shuttleId,
+      'author_id': message.senderId,
+      'content': message.content,
+      'image_url': message.imageUrl,
+    });
   }
 }

@@ -204,7 +204,7 @@ class ShuttleDetailScreen extends ConsumerWidget {
                             if (user != null) {
                               ref
                                   .read(shuttleControllerProvider.notifier)
-                                  .joinShuttle(shuttleId, user.id);
+                                  .joinShuttle(shuttleId);
                               ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text(l10n.joinedShuttleSuccess)),
                               );
@@ -267,10 +267,13 @@ Widget _infoTile({required IconData icon, required String label, required String
 
 String _statusLabel(String status, AppLocalizations l10n) {
   switch (status.toLowerCase()) {
+    case 'open':
     case 'scheduled':
       return l10n.shuttleStatusScheduled;
+    case 'in_progress':
     case 'en route':
       return l10n.shuttleStatusEnRoute;
+    case 'done':
     case 'arrived':
       return l10n.shuttleStatusArrived;
     case 'cancelled':

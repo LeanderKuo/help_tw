@@ -18,7 +18,7 @@ final taskDetailProvider = FutureProvider.family<TaskModel?, String>((ref, id) a
 });
 
 final chatMessagesProvider = StreamProvider.family<List<ChatMessage>, String>((ref, taskId) {
-  return ref.watch(chatRepositoryProvider).subscribeToMessages(taskId);
+  return ref.watch(chatRepositoryProvider).subscribeToTaskMessages(taskId);
 });
 
 class TaskDetailScreen extends ConsumerWidget {
@@ -75,10 +75,13 @@ class TaskDetailScreen extends ConsumerWidget {
 
 String _statusLabel(String status, AppLocalizations l10n) {
   switch (status.toLowerCase()) {
+    case 'in_progress':
     case 'in progress':
       return l10n.taskStatusInProgress;
+    case 'done':
     case 'completed':
       return l10n.taskStatusCompleted;
+    case 'canceled':
     case 'cancelled':
       return l10n.taskStatusCancelled;
     default:
@@ -130,7 +133,7 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
       content: _messageController.text,
     );
 
-    ref.read(chatRepositoryProvider).sendMessage(message);
+    ref.read(chatRepositoryProvider).sendTaskMessage(message);
     _messageController.clear();
   }
 

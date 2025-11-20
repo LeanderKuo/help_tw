@@ -485,10 +485,13 @@ class _ShuttleCard extends StatelessWidget {
 
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
+      case 'open':
       case 'scheduled':
         return AppColors.primary;
+      case 'in_progress':
       case 'en route':
         return AppColors.warning;
+      case 'done':
       case 'arrived':
         return AppColors.success;
       case 'cancelled':
@@ -501,10 +504,13 @@ class _ShuttleCard extends StatelessWidget {
 
   String _getStatusText(String status) {
     switch (status.toLowerCase()) {
+      case 'open':
       case 'scheduled':
         return l10n.shuttleStatusScheduled;
+      case 'in_progress':
       case 'en route':
         return l10n.shuttleStatusEnRoute;
+      case 'done':
       case 'arrived':
         return l10n.shuttleStatusArrived;
       case 'cancelled':

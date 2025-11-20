@@ -569,10 +569,13 @@ class _TaskCard extends StatelessWidget {
     switch (status.toLowerCase()) {
       case 'open':
         return l10n.taskStatusOpen;
+      case 'in_progress':
       case 'in progress':
         return l10n.taskStatusInProgress;
+      case 'done':
       case 'completed':
         return l10n.taskStatusCompleted;
+      case 'canceled':
       case 'cancelled':
         return l10n.taskStatusCancelled;
       default:

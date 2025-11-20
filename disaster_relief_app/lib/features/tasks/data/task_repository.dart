@@ -26,15 +26,34 @@ class TaskRepository {
   // Fetch tasks (Network first, then Cache)
   Future<List<TaskModel>> getTasks() async {
     try {
+      const selectColumns = [
+        'id',
+        'display_id',
+        'title',
+        'description',
+        'status',
+        'is_priority',
+        'role_label',
+        'address',
+        'materials_status',
+        'required_participants',
+        'participant_count',
+        'assigned_to',
+        'author_id',
+        'created_at',
+        'updated_at',
+        'lat: ST_Y(location::geometry)',
+        'lng: ST_X(location::geometry)',
+      ];
       // Supabase -> short timeout so the UI doesn't hang on web.
       final data = await _supabase
           .from('tasks')
-          .select()
+          .select(selectColumns.join(','))
           .order('created_at', ascending: false)
           .timeout(const Duration(seconds: 12));
 
       final tasks = (data as List)
-          .map((json) => TaskModel.fromJson(json))
+          .map((json) => TaskModel.fromSupabase(json as Map<String, dynamic>))
           .toList();
       final tasksWithIds = tasks
           .map((t) => t.copyWith(isarId: fastHash(t.id)))
@@ -69,7 +88,10 @@ class TaskRepository {
     // 1. Save to local as draft (or not draft if we are optimistic)
     // For now, let's try to send to server, if fail, mark as draft.
     try {
-      await _supabase.from('tasks').insert(task.toJson());
+      final authorId = _supabase.auth.currentUser?.id ?? task.createdBy;
+      await _supabase.from('tasks').insert(
+        task.toSupabasePayload(authorId: authorId),
+      );
       // If success, save to local as synced
       await isar.writeTxn((isar) async {
         await isar.taskModels.put(
@@ -94,7 +116,10 @@ class TaskRepository {
 
     for (final task in drafts) {
       try {
-        await _supabase.from('tasks').insert(task.toJson());
+        final authorId = _supabase.auth.currentUser?.id ?? task.createdBy;
+        await _supabase.from('tasks').insert(
+          task.toSupabasePayload(authorId: authorId),
+        );
         await isar.writeTxn((isar) async {
           await isar.taskModels.put(task.copyWith(isDraft: false));
         });

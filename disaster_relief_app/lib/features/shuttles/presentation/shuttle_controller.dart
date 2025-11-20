@@ -20,8 +20,10 @@ class ShuttleController extends StateNotifier<AsyncValue<List<ShuttleModel>>> {
     state = await AsyncValue.guard(() => _repository.getShuttles());
   }
 
-  Future<void> joinShuttle(String shuttleId, String userId) async {
-    await _repository.joinShuttle(shuttleId, userId);
+  Future<void> joinShuttle(String shuttleId,
+      {String role = 'passenger', bool isVisible = true}) async {
+    await _repository.joinShuttle(shuttleId,
+        role: role, isVisible: isVisible);
     await loadShuttles();
   }
 }
