@@ -42,8 +42,7 @@ class TaskRepository {
         'author_id',
         'created_at',
         'updated_at',
-        'lat: ST_Y(location::geometry)',
-        'lng: ST_X(location::geometry)',
+        'location',
       ];
       // Supabase -> short timeout so the UI doesn't hang on web.
       final data = await _supabase
