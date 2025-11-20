@@ -40,8 +40,7 @@ class ResourceRepository {
         'created_by',
         'created_at',
         'updated_at',
-        'lat: ST_Y(location::geometry)',
-        'lng: ST_X(location::geometry)',
+        'location',
       ];
       // 1. Try to fetch from Supabase (Network First)
       final data = await _supabase

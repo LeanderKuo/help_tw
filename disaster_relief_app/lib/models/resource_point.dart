@@ -34,8 +34,21 @@ class ResourcePoint with _$ResourcePoint {
 
   /// Parse Supabase `resource_points` rows (jsonb title/description + geography).
   factory ResourcePoint.fromSupabase(Map<String, dynamic> json) {
-    final lat = _toDouble(json['lat'] ?? json['latitude']) ?? 0;
-    final lng = _toDouble(json['lng'] ?? json['longitude']) ?? 0;
+    final lat = _toDouble(json['lat'] ?? json['latitude']);
+    final lng = _toDouble(json['lng'] ?? json['longitude']);
+    final geo = json['location'];
+    double? parsedLat = lat;
+    double? parsedLng = lng;
+
+    if ((parsedLat == null || parsedLng == null) &&
+        geo is Map &&
+        geo['coordinates'] is List) {
+      final coords = (geo['coordinates'] as List);
+      if (coords.length >= 2) {
+        parsedLng = _toDouble(coords[0]) ?? parsedLng;
+        parsedLat = _toDouble(coords[1]) ?? parsedLat;
+      }
+    }
     final rawType = (json['resource_type'] as String?) ?? 'other';
     final normalizedType =
         rawType.isEmpty ? 'other' : '${rawType[0].toUpperCase()}${rawType.substring(1)}';
@@ -45,8 +58,8 @@ class ResourcePoint with _$ResourcePoint {
       title: _localizedText(json['title']),
       description: _localizedText(json['description']),
       type: normalizedType,
-      latitude: lat,
-      longitude: lng,
+      latitude: parsedLat ?? 0,
+      longitude: parsedLng ?? 0,
       address: json['address'] as String?,
       expiresAt: _parseDate(json['expires_at']),
       isActive: (json['is_active'] as bool?) ?? true,
@@ -64,6 +77,8 @@ class ResourcePoint with _$ResourcePoint {
   Map<String, dynamic> toSupabasePayload({String locale = 'zh-TW'}) {
     final normalizedType = type.toLowerCase();
     final category = expiresAt != null ? 'temporary' : 'permanent';
+    final lng = longitude;
+    final lat = latitude;
     return {
       'id': id,
       'title': {locale: title, 'en-US': title},
@@ -72,7 +87,7 @@ class ResourcePoint with _$ResourcePoint {
       'resource_type': normalizedType,
       'category': category,
       'address': address,
-      'location': 'POINT($longitude $latitude)',
+      if (lng != null && lat != null) 'location': 'POINT($lng $lat)',
       'expires_at': expiresAt?.toIso8601String(),
       'is_active': isActive,
       'tags': tags,
