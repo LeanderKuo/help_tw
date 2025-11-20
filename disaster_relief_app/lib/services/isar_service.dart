@@ -18,6 +18,8 @@ class IsarService {
       if (kIsWeb) {
         return Isar.open(
           [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
+          // Directory is ignored on web but required by the API.
+          directory: 'web',
           inspector: false,
         );
       } else {
