@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../services/supabase_service.dart';
@@ -36,10 +37,12 @@ class AuthRepository {
   }
 
   Future<bool> signInWithGoogle() async {
-    return await _client.auth.signInWithOAuth(
+    // For web, let Supabase use the current origin; for mobile, use the deep link.
+    await _client.auth.signInWithOAuth(
       OAuthProvider.google,
-      redirectTo: 'tw.help.disasterrelief://login-callback',
+      redirectTo: kIsWeb ? null : 'tw.help.disasterrelief://login-callback',
     );
+    return true;
   }
 
   Future<bool> signInWithLine() async {
