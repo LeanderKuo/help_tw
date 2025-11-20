@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(scoop:*)",
+      "Bash(npm:*)",
+      "Bash(npx supabase:*)",
+      "Bash(docker --version:*)",
+      "Bash(cp:*)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_bd70a434f1b2e8d0e5e2e0a4e80bb6e7f4ac54ee npx supabase link:*)",
+      "Bash(SUPABASE_ACCESS_TOKEN=sbp_bd70a434f1b2e8d0e5e2e0a4e80bb6e7f4ac54ee npx supabase db push:*)",
+      "Bash(npx supabase@latest start:*)",
+      "Bash(PGPASSWORD=postgres psql:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
