@@ -477,6 +477,8 @@ class _ResourceCard extends StatelessWidget {
     );
   }
 
+  // Used for future type-specific pin styling; ignore analyzer unused warning for now.
+  // ignore: unused_element
   IconData _getIconForType(String type) {
     switch (type) {
       case 'Water':

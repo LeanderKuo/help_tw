@@ -106,8 +106,8 @@ class ShuttleRepository {
         .select('user_id')
         .eq('shuttle_id', shuttleId)
         .eq('user_id', userId)
-        .limit(1);
-    return rows is List && rows.isNotEmpty;
+        .limit(1) as List;
+    return rows.isNotEmpty;
   }
 
   Stream<List<Map<String, dynamic>>> subscribeToShuttleUpdates() {

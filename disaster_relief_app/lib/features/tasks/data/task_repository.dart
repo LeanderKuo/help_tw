@@ -139,8 +139,8 @@ class TaskRepository {
         .select('user_id')
         .eq('task_id', taskId)
         .eq('user_id', userId)
-        .limit(1);
-    return rows is List && rows.isNotEmpty;
+        .limit(1) as List;
+    return rows.isNotEmpty;
   }
 
   Future<void> joinTask(String taskId, {bool isVisible = true}) async {

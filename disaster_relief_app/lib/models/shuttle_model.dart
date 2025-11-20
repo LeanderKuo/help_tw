@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
 
@@ -31,7 +33,7 @@ class ShuttleModel with _$ShuttleModel {
     @JsonKey(name: 'created_by') String? createdBy,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
-    @JsonKey(ignore: true) @Id() int? isarId,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
   }) = _ShuttleModel;
 
   factory ShuttleModel.fromJson(Map<String, dynamic> json) =>

@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
 
@@ -28,7 +30,7 @@ class TaskModel with _$TaskModel {
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
     @Default(false) bool isDraft, // Local only flag
-    @JsonKey(ignore: true) @Id() int? isarId,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
   }) = _TaskModel;
 
   factory TaskModel.fromJson(Map<String, dynamic> json) =>

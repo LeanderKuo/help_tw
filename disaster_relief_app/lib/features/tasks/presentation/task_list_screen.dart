@@ -519,6 +519,8 @@ class _TaskCard extends StatelessWidget {
     }
   }
 
+  // Reserved for future color-coding; suppress unused warning for now.
+  // ignore: unused_element
   Color _getPriorityColor(String priority) {
     switch (priority.toLowerCase()) {
       case 'emergency':

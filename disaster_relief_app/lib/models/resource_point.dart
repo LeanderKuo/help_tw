@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_annotation_target
+
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
 
@@ -24,7 +26,7 @@ class ResourcePoint with _$ResourcePoint {
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
     @Default([]) List<String> images,
     @Default([]) List<String> tags,
-    @JsonKey(ignore: true) @Id() int? isarId,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
   }) = _ResourcePoint;
 
   factory ResourcePoint.fromJson(Map<String, dynamic> json) =>

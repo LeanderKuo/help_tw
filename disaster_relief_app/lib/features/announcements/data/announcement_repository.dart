@@ -60,7 +60,6 @@ class AnnouncementModel {
   static String _localizedText(dynamic payload, AppLanguage locale) {
     if (payload is Map) {
       final matching = payload[_localeKey(locale)] ??
-          payload['${_localeKey(locale)}'] ??
           payload['zh-TW'] ??
           payload['en-US'];
       if (matching is String) return matching;
@@ -74,7 +73,6 @@ class AnnouncementModel {
       case AppLanguage.enUs:
         return 'en-US';
       case AppLanguage.zhTw:
-      default:
         return 'zh-TW';
     }
   }
