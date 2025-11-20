@@ -6,6 +6,7 @@ import '../../../models/chat_message.dart';
 import '../data/task_repository.dart';
 import '../../chat/data/chat_repository.dart';
 import '../../auth/data/auth_repository.dart';
+import '../../../l10n/app_localizations.dart';
 
 final taskDetailProvider = FutureProvider.family<TaskModel?, String>((ref, id) async {
   final tasks = await ref.watch(taskRepositoryProvider).getTasks();
@@ -28,27 +29,28 @@ class TaskDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final taskAsync = ref.watch(taskDetailProvider(taskId));
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Task Details')),
+      appBar: AppBar(title: Text(l10n.taskDetails)),
       body: taskAsync.when(
         data: (task) {
-          if (task == null) return const Center(child: Text('Task not found'));
+          if (task == null) return Center(child: Text(l10n.taskNotFound));
           return Column(
             children: [
-              _buildTaskInfo(task),
+              _buildTaskInfo(task, l10n),
               const Divider(),
               Expanded(child: _ChatSection(taskId: taskId)),
             ],
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, s) => Center(child: Text('Error: $e')),
+        error: (e, s) => Center(child: Text(l10n.errorWithMessage('$e'))),
       ),
     );
   }
 
-  Widget _buildTaskInfo(TaskModel task) {
+  Widget _buildTaskInfo(TaskModel task, AppLocalizations l10n) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -58,16 +60,42 @@ class TaskDetailScreen extends ConsumerWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              Chip(label: Text(task.status)),
+              Chip(label: Text(_statusLabel(task.status, l10n))),
               const SizedBox(width: 8),
-              Chip(label: Text(task.priority)),
+              Chip(label: Text(_priorityLabel(task.priority, l10n))),
             ],
           ),
           const SizedBox(height: 8),
-          Text(task.description ?? 'No description'),
+          Text(task.description ?? l10n.noDescriptionAvailable),
         ],
       ),
     );
+  }
+}
+
+String _statusLabel(String status, AppLocalizations l10n) {
+  switch (status.toLowerCase()) {
+    case 'in progress':
+      return l10n.taskStatusInProgress;
+    case 'completed':
+      return l10n.taskStatusCompleted;
+    case 'cancelled':
+      return l10n.taskStatusCancelled;
+    default:
+      return l10n.taskStatusOpen;
+  }
+}
+
+String _priorityLabel(String priority, AppLocalizations l10n) {
+  switch (priority.toLowerCase()) {
+    case 'low':
+      return l10n.priorityLow;
+    case 'high':
+      return l10n.priorityHigh;
+    case 'emergency':
+      return l10n.priorityEmergency;
+    default:
+      return l10n.priorityNormal;
   }
 }
 
@@ -109,6 +137,7 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
   @override
   Widget build(BuildContext context) {
     final messagesAsync = ref.watch(chatMessagesProvider(widget.taskId));
+    final l10n = AppLocalizations.of(context)!;
 
     return Column(
       children: [
@@ -147,7 +176,7 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
               );
             },
             loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, s) => Center(child: Text('Error loading chat: $e')),
+            error: (e, s) => Center(child: Text(l10n.errorLoadingChat('$e'))),
           ),
         ),
         Padding(
@@ -157,9 +186,9 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
               Expanded(
                 child: TextField(
                   controller: _messageController,
-                  decoration: const InputDecoration(
-                    hintText: 'Type a message...',
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    hintText: l10n.messageHint,
+                    border: const OutlineInputBorder(),
                   ),
                 ),
               ),

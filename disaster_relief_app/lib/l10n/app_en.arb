@@ -17,5 +17,173 @@
   "settings": "Settings",
   "language": "Language",
   "darkMode": "Dark Mode",
-  "logout": "Logout"
+  "logout": "Logout",
+  "signInSubtitle": "Sign in to the relief coordination platform",
+  "emailHint": "Enter your email",
+  "emailRequired": "Email is required",
+  "emailInvalid": "Enter a valid email address",
+  "passwordHint": "Enter your password",
+  "passwordRequired": "Password is required",
+  "forgotPassword": "Forgot password?",
+  "orContinueWith": "Or continue with",
+  "continueWithGoogle": "Continue with Google",
+  "continueWithLine": "Continue with LINE",
+  "noAccountPrompt": "No account yet?",
+  "createAccount": "Create an account",
+  "registerIntro": "Join the disaster relief platform by filling in the information below.",
+  "fullName": "Full name",
+  "fullNameHint": "Enter your full name",
+  "fullNameRequired": "Full name is required",
+  "passwordLengthRule": "Password must be at least 6 characters",
+  "passwordLengthHint": "At least 6 characters",
+  "confirmPassword": "Confirm password",
+  "confirmPasswordHint": "Re-enter your password",
+  "passwordsDoNotMatch": "Passwords do not match",
+  "registrationSuccess": "Registration successful. Please verify your email.",
+  "alreadyHaveAccount": "Already have an account?",
+  "missionBoardTitle": "MISSION BOARD\\nTasks",
+  "useMyLocation": "Use my location",
+  "searchTasksHint": "Search tasks by title or location",
+  "filterAllCategories": "All categories",
+  "filterGeneral": "General",
+  "filterUrgent": "Urgent",
+  "filterMyDrafts": "My drafts",
+  "sortNewest": "Newest",
+  "sortNearest": "Nearest",
+  "sortPriority": "Priority",
+  "tabOpenTasks": "Open tasks",
+  "tabMyDrafts": "My drafts",
+  "noTasksMatch": "No active tasks match your filters.",
+  "noDraftsYet": "You have not created any drafts.",
+  "taskEmptyMessage": "Try creating a new task or adjusting the filters.",
+  "loadFailed": "Load failed",
+  "locationNotSet": "Location not set",
+  "unknownTime": "Unknown",
+  "justNow": "Just now",
+  "minutesAgo": "{minutes} min ago",
+  "@minutesAgo": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "hoursAgo": "{hours} h ago",
+  "@hoursAgo": {
+    "placeholders": {
+      "hours": {}
+    }
+  },
+  "daysAgo": "{days} d ago",
+  "@daysAgo": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "priorityLow": "Low",
+  "priorityNormal": "Normal",
+  "priorityHigh": "High",
+  "priorityEmergency": "Emergency",
+  "taskStatusOpen": "Open",
+  "taskStatusInProgress": "In progress",
+  "taskStatusCompleted": "Completed",
+  "taskStatusCancelled": "Cancelled",
+  "titleLabel": "Title",
+  "priorityLabel": "Priority",
+  "descriptionLabel": "Description",
+  "typeLabel": "Type",
+  "requiredField": "Required",
+  "myShuttlesTitle": "MY SHUTTLES\\nTransport",
+  "createShuttle": "Create shuttle",
+  "searchShuttlesHint": "Search shuttles by title or location",
+  "tabHosting": "Hosting",
+  "tabJoined": "Joined",
+  "tabCompleted": "Completed",
+  "noShuttlesHosting": "No shuttles created yet.",
+  "noShuttlesJoined": "No joined shuttles yet.",
+  "noShuttlesCompleted": "No completed trips.",
+  "shuttleEmptyMessage": "Try creating a shuttle or joining one.",
+  "navigate": "Navigate",
+  "details": "Details",
+  "shuttleStatusScheduled": "Scheduled",
+  "shuttleStatusEnRoute": "On the way",
+  "shuttleStatusArrived": "Arrived",
+  "shuttleStatusCancelled": "Cancelled",
+  "timeNotSet": "Time not set",
+  "communityResourcesTitle": "COMMUNITY RESOURCES\\nResource directory",
+  "addResource": "Add resource",
+  "searchResourcesHint": "Search resources or locations",
+  "resourceTypeAll": "All",
+  "resourceTypeShelter": "Shelter",
+  "resourceTypeWater": "Water",
+  "resourceTypeFood": "Food",
+  "resourceTypeMedical": "Medical",
+  "resourceTypeOther": "Other",
+  "noResourcesFound": "No resources found",
+  "noResourcesMessage": "Try adjusting filters or add a resource.",
+  "activeStatus": "Active",
+  "inactiveStatus": "Inactive",
+  "updatedAt": "Updated {timestamp}",
+  "@updatedAt": {
+    "placeholders": {
+      "timestamp": {}
+    }
+  },
+  "locationLabel": "Location",
+  "createResource": "Create Resource",
+  "errorWithMessage": "Error: {message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "taskDetails": "Task Details",
+  "taskNotFound": "Task not found",
+  "noDescriptionAvailable": "No description",
+  "errorLoadingChat": "Error loading chat: {message}",
+  "@errorLoadingChat": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "messageHint": "Type a message...",
+  "shuttleDetails": "Shuttle Details",
+  "shuttleNotFound": "Shuttle not found",
+  "startPoint": "Start",
+  "endPoint": "End",
+  "statusWithValue": "Status: {status}",
+  "@statusWithValue": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "capacityWithValue": "Capacity: {taken}/{capacity}",
+  "@capacityWithValue": {
+    "placeholders": {
+      "taken": {},
+      "capacity": {}
+    }
+  },
+  "joinedShuttleSuccess": "Joined shuttle!",
+  "joinShuttle": "Join Shuttle",
+  "languageTraditional": "Traditional Chinese (UI)",
+  "languageTraditionalSubtitle": "UI labels and errors use Traditional Chinese. Content fields accept any language you type.",
+  "languageEnglish": "English (UI only)",
+  "languageEnglishSubtitle": "Switches interface copy to English. Content fields are language-agnostic with auto-fallback.",
+  "languageNote": "Interface language is separate from content language. Bilingual fields are optional; display prefers your language and falls back to the other when empty.",
+  "saveLanguageFailed": "Failed to save language. Please retry.",
+  "noEmail": "No Email",
+  "roleUser": "User",
+  "accountInfo": "Account Info",
+  "emailLabel": "Email",
+  "userIdLabel": "User ID",
+  "appSettingsSection": "App Settings",
+  "languageSettings": "Language Settings",
+  "notificationSettings": "Notification Settings",
+  "privacySettings": "Privacy Settings",
+  "aboutSection": "About",
+  "helpCenter": "Help Center",
+  "aboutApp": "About Platform",
+  "terms": "Terms of Service",
+  "logoutConfirmTitle": "Confirm logout",
+  "logoutConfirmMessage": "Are you sure you want to log out?",
+  "cancel": "Cancel"
 }

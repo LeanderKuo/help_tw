@@ -6,6 +6,7 @@ import '../../../models/shuttle_model.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/common_widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ShuttleListScreen extends ConsumerStatefulWidget {
   const ShuttleListScreen({super.key});
@@ -36,10 +37,11 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
   @override
   Widget build(BuildContext context) {
     final shuttlesAsync = ref.watch(shuttleControllerProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MY SHUTTLES\nTransport'),
+        title: Text(l10n.myShuttlesTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -57,27 +59,27 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
             Container(
               padding: const EdgeInsets.all(16),
               color: AppColors.surfaceLight,
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        // TODO: Create shuttle
-                      },
-                      icon: const Icon(Icons.directions_bus),
-                      label: const Text('Create shuttle'),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _searchController,
-                    decoration: InputDecoration(
-                      hintText: 'Search shuttles by title or location',
-                      prefixIcon: const Icon(Icons.search),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          // TODO: Create shuttle
+                        },
+                        icon: const Icon(Icons.directions_bus),
+                        label: Text(l10n.createShuttle),
                       ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      controller: _searchController,
+                      decoration: InputDecoration(
+                        hintText: l10n.searchShuttlesHint,
+                        prefixIcon: const Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                        ),
                       filled: true,
                       fillColor: Colors.white,
                       contentPadding: const EdgeInsets.symmetric(
@@ -99,10 +101,10 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               labelColor: AppColors.primary,
               unselectedLabelColor: AppColors.textSecondaryLight,
               indicatorColor: AppColors.primary,
-              tabs: const [
-                Tab(text: 'Hosting'),
-                Tab(text: 'Joined'),
-                Tab(text: 'Completed'),
+              tabs: [
+                Tab(text: l10n.tabHosting),
+                Tab(text: l10n.tabJoined),
+                Tab(text: l10n.tabCompleted),
               ],
             ),
             Expanded(
@@ -132,15 +134,18 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                     children: [
                       _ShuttleListView(
                         shuttles: hosting,
-                        emptyMessage: 'No shuttles created yet.',
+                        emptyMessage: l10n.noShuttlesHosting,
+                        l10n: l10n,
                       ),
                       _ShuttleListView(
                         shuttles: joined,
-                        emptyMessage: 'No joined shuttles yet.',
+                        emptyMessage: l10n.noShuttlesJoined,
+                        l10n: l10n,
                       ),
                       _ShuttleListView(
                         shuttles: completed,
-                        emptyMessage: 'No completed trips.',
+                        emptyMessage: l10n.noShuttlesCompleted,
+                        l10n: l10n,
                         isCompleted: true,
                       ),
                     ],
@@ -149,7 +154,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => EmptyState(
                   icon: Icons.error_outline,
-                  title: 'Load failed',
+                  title: l10n.loadFailed,
                   message: error.toString(),
                 ),
               ),
@@ -165,10 +170,12 @@ class _ShuttleListView extends StatelessWidget {
   final List<ShuttleModel> shuttles;
   final String emptyMessage;
   final bool isCompleted;
+  final AppLocalizations l10n;
 
   const _ShuttleListView({
     required this.shuttles,
     required this.emptyMessage,
+    required this.l10n,
     this.isCompleted = false,
   });
 
@@ -178,7 +185,7 @@ class _ShuttleListView extends StatelessWidget {
       return EmptyState(
         icon: Icons.directions_bus_outlined,
         title: emptyMessage,
-        message: 'Try creating a shuttle or joining one.',
+        message: l10n.shuttleEmptyMessage,
       );
     }
 
@@ -187,7 +194,11 @@ class _ShuttleListView extends StatelessWidget {
       itemCount: shuttles.length,
       itemBuilder: (context, index) {
         final shuttle = shuttles[index];
-        return _ShuttleCard(shuttle: shuttle, isCompleted: isCompleted);
+        return _ShuttleCard(
+          shuttle: shuttle,
+          isCompleted: isCompleted,
+          l10n: l10n,
+        );
       },
     );
   }
@@ -196,9 +207,11 @@ class _ShuttleListView extends StatelessWidget {
 class _ShuttleCard extends StatelessWidget {
   final ShuttleModel shuttle;
   final bool isCompleted;
+  final AppLocalizations l10n;
 
   const _ShuttleCard({
     required this.shuttle,
+    required this.l10n,
     this.isCompleted = false,
   });
 
@@ -310,7 +323,7 @@ class _ShuttleCard extends StatelessWidget {
                           // TODO: Navigation to pickup
                         },
                         icon: const Icon(Icons.navigation, size: 16),
-                        label: const Text('Navigate'),
+                        label: Text(l10n.navigate),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                         ),
@@ -321,7 +334,7 @@ class _ShuttleCard extends StatelessWidget {
                       child: ElevatedButton.icon(
                         onPressed: () => context.push('/shuttles/${shuttle.id}'),
                         icon: const Icon(Icons.info_outline, size: 16),
-                        label: const Text('Details'),
+                        label: Text(l10n.details),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                         ),
@@ -355,20 +368,20 @@ class _ShuttleCard extends StatelessWidget {
   String _getStatusText(String status) {
     switch (status.toLowerCase()) {
       case 'scheduled':
-        return 'Scheduled';
+        return l10n.shuttleStatusScheduled;
       case 'en route':
-        return 'On the way';
+        return l10n.shuttleStatusEnRoute;
       case 'arrived':
-        return 'Arrived';
+        return l10n.shuttleStatusArrived;
       case 'cancelled':
-        return 'Cancelled';
+        return l10n.shuttleStatusCancelled;
       default:
         return status;
     }
   }
 
   String _formatTime(DateTime? time) {
-    if (time == null) return 'Time not set';
+    if (time == null) return l10n.timeNotSet;
     return '${time.month}/${time.day} ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
   }
 }

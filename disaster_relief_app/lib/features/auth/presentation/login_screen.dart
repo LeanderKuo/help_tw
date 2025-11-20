@@ -78,16 +78,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimaryLight,
                       ),
-                      textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.signInSubtitle,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: AppColors.textSecondaryLight,
                     ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Sign in to the relief coordination platform',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: AppColors.textSecondaryLight,
-                      ),
-                      textAlign: TextAlign.center,
+                    textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 48),
                     TextFormField(
@@ -95,15 +95,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: l10n.email,
-                        hintText: 'Enter your email',
+                        hintText: l10n.emailHint,
                         prefixIcon: const Icon(Icons.email_outlined),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Email is required';
+                          return l10n.emailRequired;
                         }
                         if (!value.contains('@')) {
-                          return 'Enter a valid email address';
+                          return l10n.emailInvalid;
                         }
                         return null;
                       },
@@ -114,7 +114,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         labelText: l10n.password,
-                        hintText: 'Enter your password',
+                        hintText: l10n.passwordHint,
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -131,7 +131,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Password is required';
+                          return l10n.passwordRequired;
                         }
                         return null;
                       },
@@ -143,7 +143,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onPressed: () {
                           // TODO: Forgot password
                         },
-                        child: const Text('Forgot password?'),
+                        child: Text(l10n.forgotPassword),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -167,7 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
-                            'Or continue with',
+                            l10n.orContinueWith,
                             style: TextStyle(
                               color: AppColors.textSecondaryLight,
                               fontSize: 12,
@@ -185,7 +185,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               .read(authControllerProvider.notifier)
                               .signInWithGoogle(),
                       icon: const Icon(Icons.g_mobiledata, size: 28),
-                      label: const Text('Continue with Google'),
+                      label: Text(l10n.continueWithGoogle),
                     ),
                     const SizedBox(height: 12),
                     OutlinedButton.icon(
@@ -195,14 +195,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               .read(authControllerProvider.notifier)
                               .signInWithLine(),
                       icon: const Icon(Icons.chat_bubble_outline, size: 20),
-                      label: const Text('Continue with LINE'),
+                      label: Text(l10n.continueWithLine),
                     ),
                     const SizedBox(height: 32),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'No account yet?',
+                          l10n.noAccountPrompt,
                           style: TextStyle(color: AppColors.textSecondaryLight),
                         ),
                         TextButton(

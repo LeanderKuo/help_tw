@@ -55,7 +55,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      user?.email ?? 'No Email',
+                      user?.email ?? l10n.noEmail,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -72,9 +72,9 @@ class ProfileScreen extends ConsumerWidget {
                         color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Text(
-                        'User',
-                        style: TextStyle(fontSize: 12, color: Colors.white),
+                      child: Text(
+                        l10n.roleUser,
+                        style: const TextStyle(fontSize: 12, color: Colors.white),
                       ),
                     ),
                   ],
@@ -87,17 +87,17 @@ class ProfileScreen extends ConsumerWidget {
                     const SizedBox(height: 16),
                     _buildInfoCard(
                       context,
-                      title: '帳號資訊',
+                      title: l10n.accountInfo,
                       children: [
                         _buildInfoTile(
                           icon: Icons.email_outlined,
-                          label: '電子郵件',
+                          label: l10n.emailLabel,
                           value: user?.email ?? 'N/A',
                         ),
                         const Divider(),
                         _buildInfoTile(
                           icon: Icons.badge_outlined,
-                          label: '使用者 ID',
+                          label: l10n.userIdLabel,
                           value: user?.id ?? 'N/A',
                         ),
                       ],
@@ -105,23 +105,23 @@ class ProfileScreen extends ConsumerWidget {
                     const SizedBox(height: 16),
                     _buildInfoCard(
                       context,
-                      title: '應用設定',
+                      title: l10n.appSettingsSection,
                       children: [
                         _buildActionTile(
                           icon: Icons.language,
-                          label: '語言設定',
+                          label: l10n.languageSettings,
                           onTap: () {},
                         ),
                         const Divider(),
                         _buildActionTile(
                           icon: Icons.notifications_outlined,
-                          label: '通知設定',
+                          label: l10n.notificationSettings,
                           onTap: () {},
                         ),
                         const Divider(),
                         _buildActionTile(
                           icon: Icons.privacy_tip_outlined,
-                          label: '隱私設定',
+                          label: l10n.privacySettings,
                           onTap: () {},
                         ),
                       ],
@@ -129,23 +129,23 @@ class ProfileScreen extends ConsumerWidget {
                     const SizedBox(height: 16),
                     _buildInfoCard(
                       context,
-                      title: '關於',
+                      title: l10n.aboutSection,
                       children: [
                         _buildActionTile(
                           icon: Icons.help_outline,
-                          label: '幫助中心',
+                          label: l10n.helpCenter,
                           onTap: () {},
                         ),
                         const Divider(),
                         _buildActionTile(
                           icon: Icons.info_outline,
-                          label: '關於我們',
+                          label: l10n.aboutApp,
                           onTap: () {},
                         ),
                         const Divider(),
                         _buildActionTile(
                           icon: Icons.description_outlined,
-                          label: '服務條款',
+                          label: l10n.terms,
                           onTap: () {},
                         ),
                       ],
@@ -155,12 +155,12 @@ class ProfileScreen extends ConsumerWidget {
                       width: double.infinity,
                       child: OutlinedButton.icon(
                         onPressed: () {
-                          _showLogoutDialog(context, ref);
+                          _showLogoutDialog(context, ref, l10n);
                         },
                         icon: const Icon(Icons.logout, color: AppColors.error),
-                        label: const Text(
-                          '登出',
-                          style: TextStyle(color: AppColors.error),
+                        label: Text(
+                          l10n.logout,
+                          style: const TextStyle(color: AppColors.error),
                         ),
                         style: OutlinedButton.styleFrom(
                           side: const BorderSide(color: AppColors.error),
@@ -177,126 +177,126 @@ class ProfileScreen extends ConsumerWidget {
       ),
     );
   }
+}
 
-  Widget _buildInfoCard(
-    BuildContext context, {
-    required String title,
-    required List<Widget> children,
-  }) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-                color: AppColors.textPrimaryLight,
-              ),
-            ),
-            const SizedBox(height: 12),
-            ...children,
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoTile({
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
+Widget _buildInfoCard(
+  BuildContext context, {
+  required String title,
+  required List<Widget> children,
+}) {
+  return Card(
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, size: 20, color: AppColors.textSecondaryLight),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textSecondaryLight,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: AppColors.textPrimaryLight,
-                  ),
-                ),
-              ],
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimaryLight,
             ),
           ),
+          const SizedBox(height: 12),
+          ...children,
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
-  Widget _buildActionTile({
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        child: Row(
-          children: [
-            Icon(icon, size: 20, color: AppColors.textSecondaryLight),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
+Widget _buildInfoTile({
+  required IconData icon,
+  required String label,
+  required String value,
+}) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(vertical: 8),
+    child: Row(
+      children: [
+        Icon(icon, size: 20, color: AppColors.textSecondaryLight),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
                 label,
+                style: const TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondaryLight,
+                ),
+              ),
+              const SizedBox(height: 2),
+              Text(
+                value,
                 style: const TextStyle(
                   fontSize: 14,
                   color: AppColors.textPrimaryLight,
                 ),
               ),
-            ),
-            const Icon(
-              Icons.chevron_right,
-              size: 20,
-              color: AppColors.textSecondaryLight,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context, WidgetRef ref) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('確認登出'),
-        content: const Text('您確定要登出嗎？'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('取消'),
+            ],
           ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.pop(context);
-              ref.read(authControllerProvider.notifier).signOut();
-            },
-            style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
-            child: const Text('登出'),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildActionTile({
+  required IconData icon,
+  required String label,
+  required VoidCallback onTap,
+}) {
+  return InkWell(
+    onTap: onTap,
+    child: Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        children: [
+          Icon(icon, size: 20, color: AppColors.textSecondaryLight),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 14,
+                color: AppColors.textPrimaryLight,
+              ),
+            ),
+          ),
+          const Icon(
+            Icons.chevron_right,
+            size: 20,
+            color: AppColors.textSecondaryLight,
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
+void _showLogoutDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+  showDialog(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(l10n.logoutConfirmTitle),
+      content: Text(l10n.logoutConfirmMessage),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(l10n.cancel),
+        ),
+        ElevatedButton(
+          onPressed: () {
+            Navigator.pop(context);
+            ref.read(authControllerProvider.notifier).signOut();
+          },
+          style: ElevatedButton.styleFrom(backgroundColor: AppColors.error),
+          child: Text(l10n.logout),
+        ),
+      ],
+    ),
+  );
 }

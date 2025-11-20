@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 import 'resource_controller.dart';
 import '../../../models/resource_point.dart';
+import '../../../l10n/app_localizations.dart';
 
 class CreateResourceScreen extends ConsumerStatefulWidget {
   const CreateResourceScreen({super.key});
@@ -52,8 +53,9 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Add Resource')),
+      appBar: AppBar(title: Text(l10n.addResource)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -62,16 +64,19 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: InputDecoration(labelText: l10n.titleLabel),
                 validator: (value) =>
-                    value == null || value.isEmpty ? 'Required' : null,
+                    value == null || value.isEmpty ? l10n.requiredField : null,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 initialValue: _selectedType,
-                decoration: const InputDecoration(labelText: 'Type'),
+                decoration: InputDecoration(labelText: l10n.typeLabel),
                 items: _types.map((type) {
-                  return DropdownMenuItem(value: type, child: Text(type));
+                  return DropdownMenuItem(
+                    value: type,
+                    child: Text(_typeLabel(type, l10n)),
+                  );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
@@ -82,21 +87,37 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(labelText: l10n.descriptionLabel),
                 maxLines: 3,
               ),
               const SizedBox(height: 24),
               // TODO: Add Map Picker
-              Text('Location: $_latitude, $_longitude'),
+              Text('${l10n.locationLabel}: $_latitude, $_longitude'),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _submit,
-                child: const Text('Create Resource'),
+                child: Text(l10n.createResource),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String _typeLabel(String type, AppLocalizations l10n) {
+    switch (type) {
+      case 'Water':
+        return l10n.resourceTypeWater;
+      case 'Shelter':
+        return l10n.resourceTypeShelter;
+      case 'Medical':
+        return l10n.resourceTypeMedical;
+      case 'Food':
+        return l10n.resourceTypeFood;
+      case 'Other':
+      default:
+        return l10n.resourceTypeOther;
+    }
   }
 }

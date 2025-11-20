@@ -44,10 +44,8 @@ class SettingsScreen extends ConsumerWidget {
                   RadioListTile<AppLanguage>(
                     value: AppLanguage.zhTw,
                     groupValue: currentLanguage,
-                    title: const Text('Traditional Chinese (UI)'),
-                    subtitle: const Text(
-                      'UI labels and errors use Traditional Chinese. Content fields accept any language you type.',
-                    ),
+                    title: Text(l10n.languageTraditional),
+                    subtitle: Text(l10n.languageTraditionalSubtitle),
                     onChanged: localeState.isLoading
                         ? null
                         : (value) => _onLanguageChanged(value, ref, context),
@@ -56,10 +54,8 @@ class SettingsScreen extends ConsumerWidget {
                   RadioListTile<AppLanguage>(
                     value: AppLanguage.enUs,
                     groupValue: currentLanguage,
-                    title: const Text('English (UI only)'),
-                    subtitle: const Text(
-                      'Switches interface copy to English. Content fields are language-agnostic with auto-fallback.',
-                    ),
+                    title: Text(l10n.languageEnglish),
+                    subtitle: Text(l10n.languageEnglishSubtitle),
                     onChanged: localeState.isLoading
                         ? null
                         : (value) => _onLanguageChanged(value, ref, context),
@@ -68,9 +64,9 @@ class SettingsScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Interface language is separate from content language. Bilingual fields are optional; display prefers your language and falls back to the other when empty.',
-              style: TextStyle(
+            Text(
+              l10n.languageNote,
+              style: const TextStyle(
                 fontSize: 12,
                 color: AppColors.textSecondaryLight,
                 height: 1.4,
@@ -83,7 +79,7 @@ class SettingsScreen extends ConsumerWidget {
             if (localeState.hasError) ...[
               const SizedBox(height: 8),
               Text(
-                'Failed to save language. Please retry.',
+                l10n.saveLanguageFailed,
                 style: const TextStyle(color: AppColors.error),
               ),
             ],

@@ -56,8 +56,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
         );
       } else if (!next.isLoading && !next.hasError && next.hasValue) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registration successful. Please verify your email.'),
+          SnackBar(
+            content: Text(l10n.registrationSuccess),
             backgroundColor: AppColors.success,
           ),
         );
@@ -84,7 +84,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    'Create an account',
+                    l10n.createAccount,
                     style: TextStyle(
                       fontSize: isMobile ? 24 : 28,
                       fontWeight: FontWeight.bold,
@@ -93,7 +93,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Join the disaster relief platform by filling in the information below.',
+                    l10n.registerIntro,
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.textSecondaryLight,
@@ -102,14 +102,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   const SizedBox(height: 32),
                   TextFormField(
                     controller: _fullNameController,
-                    decoration: const InputDecoration(
-                      labelText: 'Full name',
-                      hintText: 'Enter your full name',
-                      prefixIcon: Icon(Icons.person_outline),
+                    decoration: InputDecoration(
+                      labelText: l10n.fullName,
+                      hintText: l10n.fullNameHint,
+                      prefixIcon: const Icon(Icons.person_outline),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Full name is required';
+                        return l10n.fullNameRequired;
                       }
                       return null;
                     },
@@ -120,15 +120,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: l10n.email,
-                      hintText: 'Enter your email',
+                      hintText: l10n.emailHint,
                       prefixIcon: const Icon(Icons.email_outlined),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Email is required';
+                        return l10n.emailRequired;
                       }
                       if (!value.contains('@')) {
-                        return 'Enter a valid email address';
+                        return l10n.emailInvalid;
                       }
                       return null;
                     },
@@ -139,7 +139,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       labelText: l10n.password,
-                      hintText: 'At least 6 characters',
+                      hintText: l10n.passwordLengthHint,
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -156,10 +156,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Password is required';
+                        return l10n.passwordRequired;
                       }
                       if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
+                        return l10n.passwordLengthRule;
                       }
                       return null;
                     },
@@ -169,8 +169,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
                     decoration: InputDecoration(
-                      labelText: 'Confirm password',
-                      hintText: 'Re-enter your password',
+                      labelText: l10n.confirmPassword,
+                      hintText: l10n.confirmPasswordHint,
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -187,7 +187,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     validator: (value) {
                       if (value != _passwordController.text) {
-                        return 'Passwords do not match';
+                        return l10n.passwordsDoNotMatch;
                       }
                       return null;
                     },
@@ -211,7 +211,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have an account?',
+                        l10n.alreadyHaveAccount,
                         style: TextStyle(color: AppColors.textSecondaryLight),
                       ),
                       TextButton(

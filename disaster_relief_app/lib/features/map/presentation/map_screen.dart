@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:go_router/go_router.dart';
 import '../../resources/presentation/resource_controller.dart';
 import '../../../models/resource_point.dart';
+import '../../../l10n/app_localizations.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
@@ -67,6 +68,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   Widget build(BuildContext context) {
     final resourcesAsync = ref.watch(resourceControllerProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: resourcesAsync.when(
@@ -83,7 +85,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text('Error: $error')),
+        error: (error, stack) => Center(child: Text(l10n.errorWithMessage('$error'))),
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,

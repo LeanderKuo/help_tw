@@ -17,5 +17,173 @@
   "settings": "設定",
   "language": "語言",
   "darkMode": "深色模式",
-  "logout": "登出"
+  "logout": "登出",
+  "signInSubtitle": "登入救災協作平台",
+  "emailHint": "請輸入電子郵件",
+  "emailRequired": "請輸入電子郵件",
+  "emailInvalid": "請輸入有效的電子郵件",
+  "passwordHint": "請輸入密碼",
+  "passwordRequired": "請輸入密碼",
+  "forgotPassword": "忘記密碼？",
+  "orContinueWith": "或繼續使用",
+  "continueWithGoogle": "使用 Google 繼續",
+  "continueWithLine": "使用 LINE 繼續",
+  "noAccountPrompt": "還沒有帳號？",
+  "createAccount": "建立帳號",
+  "registerIntro": "填寫下列資訊加入救災協作平台。",
+  "fullName": "姓名",
+  "fullNameHint": "請輸入姓名",
+  "fullNameRequired": "請輸入姓名",
+  "passwordLengthRule": "密碼長度至少 6 碼",
+  "passwordLengthHint": "至少 6 碼",
+  "confirmPassword": "確認密碼",
+  "confirmPasswordHint": "請再次輸入密碼",
+  "passwordsDoNotMatch": "兩次密碼不一致",
+  "registrationSuccess": "註冊成功，請前往信箱驗證。",
+  "alreadyHaveAccount": "已經有帳號？",
+  "missionBoardTitle": "任務看板\\nTasks",
+  "useMyLocation": "使用我的位置",
+  "searchTasksHint": "以標題或地點搜尋任務",
+  "filterAllCategories": "所有分類",
+  "filterGeneral": "一般",
+  "filterUrgent": "緊急",
+  "filterMyDrafts": "我的草稿",
+  "sortNewest": "最新",
+  "sortNearest": "最近",
+  "sortPriority": "優先順序",
+  "tabOpenTasks": "開放任務",
+  "tabMyDrafts": "我的草稿",
+  "noTasksMatch": "沒有符合篩選條件的任務。",
+  "noDraftsYet": "你尚未建立任何草稿。",
+  "taskEmptyMessage": "試著建立新任務或調整篩選條件。",
+  "loadFailed": "載入失敗",
+  "locationNotSet": "尚未設定地點",
+  "unknownTime": "未知",
+  "justNow": "剛剛",
+  "minutesAgo": "{minutes} 分鐘前",
+  "@minutesAgo": {
+    "placeholders": {
+      "minutes": {}
+    }
+  },
+  "hoursAgo": "{hours} 小時前",
+  "@hoursAgo": {
+    "placeholders": {
+      "hours": {}
+    }
+  },
+  "daysAgo": "{days} 天前",
+  "@daysAgo": {
+    "placeholders": {
+      "days": {}
+    }
+  },
+  "priorityLow": "低",
+  "priorityNormal": "一般",
+  "priorityHigh": "高",
+  "priorityEmergency": "緊急",
+  "taskStatusOpen": "開放中",
+  "taskStatusInProgress": "進行中",
+  "taskStatusCompleted": "已完成",
+  "taskStatusCancelled": "已取消",
+  "titleLabel": "標題",
+  "priorityLabel": "優先順序",
+  "descriptionLabel": "描述",
+  "typeLabel": "類型",
+  "requiredField": "必填",
+  "myShuttlesTitle": "我的接駁\\n運輸",
+  "createShuttle": "建立接駁",
+  "searchShuttlesHint": "以標題或地點搜尋接駁",
+  "tabHosting": "主持中",
+  "tabJoined": "已加入",
+  "tabCompleted": "已完成",
+  "noShuttlesHosting": "尚未建立任何接駁。",
+  "noShuttlesJoined": "尚未加入任何接駁。",
+  "noShuttlesCompleted": "尚未有完成的行程。",
+  "shuttleEmptyMessage": "試著建立或加入接駁。",
+  "navigate": "導航",
+  "details": "詳情",
+  "shuttleStatusScheduled": "已排程",
+  "shuttleStatusEnRoute": "前往中",
+  "shuttleStatusArrived": "已抵達",
+  "shuttleStatusCancelled": "已取消",
+  "timeNotSet": "尚未設定時間",
+  "communityResourcesTitle": "社區資源\\n資源目錄",
+  "addResource": "新增資源",
+  "searchResourcesHint": "搜尋資源或地點",
+  "resourceTypeAll": "全部",
+  "resourceTypeShelter": "收容",
+  "resourceTypeWater": "飲用水",
+  "resourceTypeFood": "食物",
+  "resourceTypeMedical": "醫療",
+  "resourceTypeOther": "其他",
+  "noResourcesFound": "沒有找到資源",
+  "noResourcesMessage": "試著調整篩選或新增資源。",
+  "activeStatus": "啟用",
+  "inactiveStatus": "停用",
+  "updatedAt": "更新於 {timestamp}",
+  "@updatedAt": {
+    "placeholders": {
+      "timestamp": {}
+    }
+  },
+  "locationLabel": "位置",
+  "createResource": "建立資源",
+  "errorWithMessage": "錯誤：{message}",
+  "@errorWithMessage": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "taskDetails": "任務詳情",
+  "taskNotFound": "找不到任務",
+  "noDescriptionAvailable": "沒有描述",
+  "errorLoadingChat": "聊天載入錯誤：{message}",
+  "@errorLoadingChat": {
+    "placeholders": {
+      "message": {}
+    }
+  },
+  "messageHint": "輸入訊息...",
+  "shuttleDetails": "接駁詳情",
+  "shuttleNotFound": "找不到接駁",
+  "startPoint": "起點",
+  "endPoint": "終點",
+  "statusWithValue": "狀態：{status}",
+  "@statusWithValue": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "capacityWithValue": "座位：{taken}/{capacity}",
+  "@capacityWithValue": {
+    "placeholders": {
+      "taken": {},
+      "capacity": {}
+    }
+  },
+  "joinedShuttleSuccess": "已加入接駁！",
+  "joinShuttle": "加入接駁",
+  "languageTraditional": "繁體中文（介面）",
+  "languageTraditionalSubtitle": "介面與錯誤訊息使用繁體中文，內容欄位可自由輸入任何語言。",
+  "languageEnglish": "English（介面）",
+  "languageEnglishSubtitle": "將介面文案切換為英文，內容欄位保留雙語彈性。",
+  "languageNote": "介面語言與內容語言分開設定。支援雙語欄位會優先顯示你的語言，若空白則顯示另一語言。",
+  "saveLanguageFailed": "語言儲存失敗，請再試一次。",
+  "noEmail": "尚未填寫 Email",
+  "roleUser": "使用者",
+  "accountInfo": "帳號資訊",
+  "emailLabel": "電子郵件",
+  "userIdLabel": "使用者 ID",
+  "appSettingsSection": "應用設定",
+  "languageSettings": "語言設定",
+  "notificationSettings": "通知設定",
+  "privacySettings": "隱私設定",
+  "aboutSection": "關於",
+  "helpCenter": "幫助中心",
+  "aboutApp": "關於平台",
+  "terms": "服務條款",
+  "logoutConfirmTitle": "確認登出",
+  "logoutConfirmMessage": "確定要登出嗎？",
+  "cancel": "取消"
 }

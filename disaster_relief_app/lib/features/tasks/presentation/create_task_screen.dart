@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:uuid/uuid.dart';
 import 'task_controller.dart';
 import '../../../models/task_model.dart';
+import '../../../l10n/app_localizations.dart';
 
 class CreateTaskScreen extends ConsumerStatefulWidget {
   const CreateTaskScreen({super.key});
@@ -46,8 +47,9 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const Text('Create Task')),
+      appBar: AppBar(title: Text(l10n.createTask)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -56,16 +58,19 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
             children: [
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: InputDecoration(labelText: l10n.titleLabel),
                 validator: (value) =>
-                    value == null || value.isEmpty ? 'Required' : null,
+                    value == null || value.isEmpty ? l10n.requiredField : null,
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 initialValue: _priority,
-                decoration: const InputDecoration(labelText: 'Priority'),
+                decoration: InputDecoration(labelText: l10n.priorityLabel),
                 items: _priorities.map((p) {
-                  return DropdownMenuItem(value: p, child: Text(p));
+                  return DropdownMenuItem(
+                    value: p,
+                    child: Text(_priorityLabel(p, l10n)),
+                  );
                 }).toList(),
                 onChanged: (value) {
                   setState(() {
@@ -76,18 +81,31 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _descriptionController,
-                decoration: const InputDecoration(labelText: 'Description'),
+                decoration: InputDecoration(labelText: l10n.descriptionLabel),
                 maxLines: 3,
               ),
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _submit,
-                child: const Text('Create Task'),
+                child: Text(l10n.createTask),
               ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  String _priorityLabel(String priority, AppLocalizations l10n) {
+    switch (priority.toLowerCase()) {
+      case 'low':
+        return l10n.priorityLow;
+      case 'high':
+        return l10n.priorityHigh;
+      case 'emergency':
+        return l10n.priorityEmergency;
+      default:
+        return l10n.priorityNormal;
+    }
   }
 }

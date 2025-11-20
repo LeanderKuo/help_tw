@@ -5,6 +5,7 @@ import '../../../models/shuttle_model.dart';
 import '../data/shuttle_repository.dart';
 import '../../auth/data/auth_repository.dart';
 import 'shuttle_controller.dart';
+import '../../../l10n/app_localizations.dart';
 
 final shuttleDetailProvider = FutureProvider.family<ShuttleModel?, String>((ref, id) async {
   final shuttles = await ref.watch(shuttleRepositoryProvider).getShuttles();
@@ -23,12 +24,13 @@ class ShuttleDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final shuttleAsync = ref.watch(shuttleDetailProvider(shuttleId));
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Shuttle Details')),
+      appBar: AppBar(title: Text(l10n.shuttleDetails)),
       body: shuttleAsync.when(
         data: (shuttle) {
-          if (shuttle == null) return const Center(child: Text('Shuttle not found'));
+          if (shuttle == null) return Center(child: Text(l10n.shuttleNotFound));
           return Column(
             children: [
               SizedBox(
@@ -43,13 +45,13 @@ class ShuttleDetailScreen extends ConsumerWidget {
                       Marker(
                         markerId: const MarkerId('start'),
                         position: LatLng(shuttle.routeStartLat!, shuttle.routeStartLng!),
-                        infoWindow: const InfoWindow(title: 'Start'),
+                        infoWindow: InfoWindow(title: l10n.startPoint),
                       ),
                     if (shuttle.routeEndLat != null)
                       Marker(
                         markerId: const MarkerId('end'),
                         position: LatLng(shuttle.routeEndLat!, shuttle.routeEndLng!),
-                        infoWindow: const InfoWindow(title: 'End'),
+                        infoWindow: InfoWindow(title: l10n.endPoint),
                       ),
                   },
                 ),
@@ -61,8 +63,8 @@ class ShuttleDetailScreen extends ConsumerWidget {
                   children: [
                     Text(shuttle.title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 8),
-                    Text('Status: ${shuttle.status}'),
-                    Text('Capacity: ${shuttle.seatsTaken}/${shuttle.capacity}'),
+                    Text(l10n.statusWithValue(_statusLabel(shuttle.status, l10n))),
+                    Text(l10n.capacityWithValue(shuttle.seatsTaken, shuttle.capacity)),
                     const SizedBox(height: 24),
                     SizedBox(
                       width: double.infinity,
@@ -72,11 +74,11 @@ class ShuttleDetailScreen extends ConsumerWidget {
                           if (user != null) {
                             ref.read(shuttleControllerProvider.notifier).joinShuttle(shuttleId, user.id);
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('Joined shuttle!')),
+                              SnackBar(content: Text(l10n.joinedShuttleSuccess)),
                             );
                           }
                         },
-                        child: const Text('Join Shuttle'),
+                        child: Text(l10n.joinShuttle),
                       ),
                     ),
                   ],
@@ -86,8 +88,23 @@ class ShuttleDetailScreen extends ConsumerWidget {
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, s) => Center(child: Text('Error: $e')),
+        error: (e, s) => Center(child: Text(l10n.errorWithMessage('$e'))),
       ),
     );
+  }
+}
+
+String _statusLabel(String status, AppLocalizations l10n) {
+  switch (status.toLowerCase()) {
+    case 'scheduled':
+      return l10n.shuttleStatusScheduled;
+    case 'en route':
+      return l10n.shuttleStatusEnRoute;
+    case 'arrived':
+      return l10n.shuttleStatusArrived;
+    case 'cancelled':
+      return l10n.shuttleStatusCancelled;
+    default:
+      return status;
   }
 }

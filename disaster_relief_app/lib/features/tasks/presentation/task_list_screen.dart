@@ -6,6 +6,7 @@ import '../../../models/task_model.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/common_widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 class TaskListScreen extends ConsumerStatefulWidget {
   const TaskListScreen({super.key});
@@ -35,13 +36,38 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
     super.dispose();
   }
 
+  String _filterLabel(String value, AppLocalizations l10n) {
+    switch (value) {
+      case 'General':
+        return l10n.filterGeneral;
+      case 'Urgent':
+        return l10n.filterUrgent;
+      case 'My drafts':
+        return l10n.filterMyDrafts;
+      default:
+        return l10n.filterAllCategories;
+    }
+  }
+
+  String _sortLabel(String value, AppLocalizations l10n) {
+    switch (value) {
+      case 'Nearest':
+        return l10n.sortNearest;
+      case 'Priority':
+        return l10n.sortPriority;
+      default:
+        return l10n.sortNewest;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final tasksAsync = ref.watch(taskControllerProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MISSION BOARD\nTasks'),
+        title: Text(l10n.missionBoardTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.sync),
@@ -73,7 +99,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         child: ElevatedButton.icon(
                           onPressed: () => context.push('/tasks/create'),
                           icon: const Icon(Icons.add),
-                          label: const Text('Create task'),
+                          label: Text(l10n.createTask),
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -83,7 +109,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                             // TODO: Location picker
                           },
                           icon: const Icon(Icons.my_location),
-                          label: const Text('Use my location'),
+                          label: Text(l10n.useMyLocation),
                         ),
                       ),
                     ],
@@ -95,7 +121,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         child: TextField(
                           controller: _searchController,
                           decoration: InputDecoration(
-                            hintText: 'Search tasks by title or location',
+                            hintText: l10n.searchTasksHint,
                             prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(24),
@@ -132,10 +158,15 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                             ),
                           ),
                           items: ['All categories', 'General', 'Urgent', 'My drafts']
-                              .map((filter) => DropdownMenuItem(
-                                    value: filter,
-                                    child: Text(filter, style: const TextStyle(fontSize: 14)),
-                                  ))
+                              .map(
+                                (filter) => DropdownMenuItem(
+                                  value: filter,
+                                  child: Text(
+                                    _filterLabel(filter, l10n),
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              )
                               .toList(),
                           onChanged: (value) {
                             if (value == null) return;
@@ -159,10 +190,15 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                             ),
                           ),
                           items: ['Newest', 'Nearest', 'Priority']
-                              .map((sort) => DropdownMenuItem(
-                                    value: sort,
-                                    child: Text(sort, style: const TextStyle(fontSize: 14)),
-                                  ))
+                              .map(
+                                (sort) => DropdownMenuItem(
+                                  value: sort,
+                                  child: Text(
+                                    _sortLabel(sort, l10n),
+                                    style: const TextStyle(fontSize: 14),
+                                  ),
+                                ),
+                              )
                               .toList(),
                           onChanged: (value) {
                             if (value == null) return;
@@ -182,9 +218,9 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
               labelColor: AppColors.primary,
               unselectedLabelColor: AppColors.textSecondaryLight,
               indicatorColor: AppColors.primary,
-              tabs: const [
-                Tab(text: 'Open tasks'),
-                Tab(text: 'My drafts'),
+              tabs: [
+                Tab(text: l10n.tabOpenTasks),
+                Tab(text: l10n.tabMyDrafts),
               ],
             ),
             Expanded(
@@ -209,11 +245,13 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                     children: [
                       _TaskListView(
                         tasks: filteredTasks,
-                        emptyMessage: 'No active tasks match your filters.',
+                        emptyMessage: l10n.noTasksMatch,
+                        l10n: l10n,
                       ),
                       _TaskListView(
                         tasks: myTasks,
-                        emptyMessage: 'You have not created any drafts.',
+                        emptyMessage: l10n.noDraftsYet,
+                        l10n: l10n,
                         isMyTasks: true,
                       ),
                     ],
@@ -222,7 +260,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => EmptyState(
                   icon: Icons.error_outline,
-                  title: 'Load failed',
+                  title: l10n.loadFailed,
                   message: error.toString(),
                 ),
               ),
@@ -238,10 +276,12 @@ class _TaskListView extends StatelessWidget {
   final List<TaskModel> tasks;
   final String emptyMessage;
   final bool isMyTasks;
+  final AppLocalizations l10n;
 
   const _TaskListView({
     required this.tasks,
     required this.emptyMessage,
+    required this.l10n,
     this.isMyTasks = false,
   });
 
@@ -251,7 +291,7 @@ class _TaskListView extends StatelessWidget {
       return EmptyState(
         icon: Icons.assignment_outlined,
         title: emptyMessage,
-        message: 'Try creating a new task or adjusting the filters.',
+        message: l10n.taskEmptyMessage,
       );
     }
 
@@ -260,7 +300,7 @@ class _TaskListView extends StatelessWidget {
       itemCount: tasks.length,
       itemBuilder: (context, index) {
         final task = tasks[index];
-        return _TaskCard(task: task, isMyTasks: isMyTasks);
+        return _TaskCard(task: task, isMyTasks: isMyTasks, l10n: l10n);
       },
     );
   }
@@ -269,9 +309,11 @@ class _TaskListView extends StatelessWidget {
 class _TaskCard extends StatelessWidget {
   final TaskModel task;
   final bool isMyTasks;
+  final AppLocalizations l10n;
 
   const _TaskCard({
     required this.task,
+    required this.l10n,
     this.isMyTasks = false,
   });
 
@@ -296,7 +338,7 @@ class _TaskCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4),
                     ),
                     child: Text(
-                      task.status,
+                      _statusLabel(task.status),
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 11,
@@ -340,7 +382,7 @@ class _TaskCard extends StatelessWidget {
                     child: Text(
                       task.latitude != null && task.longitude != null
                           ? '${task.latitude}, ${task.longitude}'
-                          : 'Location not set',
+                          : l10n.locationNotSet,
                       style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondaryLight,
@@ -379,7 +421,7 @@ class _TaskCard extends StatelessWidget {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          task.priority,
+                          _priorityLabel(task.priority),
                           style: TextStyle(
                             fontSize: 11,
                             color: _getPriorityColor(task.priority),
@@ -444,18 +486,46 @@ class _TaskCard extends StatelessWidget {
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return 'Unknown';
+    if (date == null) return l10n.unknownTime;
     final now = DateTime.now();
     final difference = now.difference(date);
 
     if (difference.inMinutes < 1) {
-      return 'Just now';
+      return l10n.justNow;
     } else if (difference.inHours < 1) {
-      return '${difference.inMinutes} min ago';
+      return l10n.minutesAgo(difference.inMinutes);
     } else if (difference.inDays < 1) {
-      return '${difference.inHours} h ago';
+      return l10n.hoursAgo(difference.inHours);
     } else {
-      return '${difference.inDays} d ago';
+      return l10n.daysAgo(difference.inDays);
+    }
+  }
+
+  String _statusLabel(String status) {
+    switch (status.toLowerCase()) {
+      case 'open':
+        return l10n.taskStatusOpen;
+      case 'in progress':
+        return l10n.taskStatusInProgress;
+      case 'completed':
+        return l10n.taskStatusCompleted;
+      case 'cancelled':
+        return l10n.taskStatusCancelled;
+      default:
+        return status;
+    }
+  }
+
+  String _priorityLabel(String priority) {
+    switch (priority.toLowerCase()) {
+      case 'low':
+        return l10n.priorityLow;
+      case 'high':
+        return l10n.priorityHigh;
+      case 'emergency':
+        return l10n.priorityEmergency;
+      default:
+        return l10n.priorityNormal;
     }
   }
 }

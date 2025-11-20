@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'resource_controller.dart';
 import '../../../models/resource_point.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/common_widgets.dart';
+import '../../../l10n/app_localizations.dart';
 
 class ResourceListScreen extends ConsumerStatefulWidget {
   const ResourceListScreen({super.key});
@@ -28,10 +30,11 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
   @override
   Widget build(BuildContext context) {
     final resourcesAsync = ref.watch(resourceControllerProvider);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('COMMUNITY RESOURCES\nResource directory'),
+        title: Text(l10n.communityResourcesTitle),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -56,14 +59,14 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                     child: ElevatedButton.icon(
                       onPressed: () => context.push('/resources/create'),
                       icon: const Icon(Icons.add),
-                      label: const Text('Add resource'),
+                      label: Text(l10n.addResource),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: 'Search resources or locations',
+                      hintText: l10n.searchResourcesHint,
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -86,15 +89,15 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        _buildFilterChip('All', null),
+                        _buildFilterChip('All', null, l10n),
                         const SizedBox(width: 8),
-                        _buildFilterChip('Shelter', AppColors.chipShelter),
+                        _buildFilterChip('Shelter', AppColors.chipShelter, l10n),
                         const SizedBox(width: 8),
-                        _buildFilterChip('Water', AppColors.chipWater),
+                        _buildFilterChip('Water', AppColors.chipWater, l10n),
                         const SizedBox(width: 8),
-                        _buildFilterChip('Food', AppColors.chipClothes),
+                        _buildFilterChip('Food', AppColors.chipClothes, l10n),
                         const SizedBox(width: 8),
-                        _buildFilterChip('Medical', AppColors.error),
+                        _buildFilterChip('Medical', AppColors.error, l10n),
                       ],
                     ),
                   ),
@@ -121,12 +124,12 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                   if (filteredResources.isEmpty) {
                     return EmptyState(
                       icon: Icons.place_outlined,
-                      title: 'No resources found',
-                      message: 'Try adjusting filters or add a resource.',
+                      title: l10n.noResourcesFound,
+                      message: l10n.noResourcesMessage,
                       action: ElevatedButton.icon(
                         onPressed: () => context.push('/resources/create'),
                         icon: const Icon(Icons.add),
-                        label: const Text('Add resource'),
+                        label: Text(l10n.addResource),
                       ),
                     );
                   }
@@ -136,14 +139,14 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                     itemCount: filteredResources.length,
                     itemBuilder: (context, index) {
                       final resource = filteredResources[index];
-                      return _ResourceCard(resource: resource);
+                      return _ResourceCard(resource: resource, l10n: l10n);
                     },
                   );
                 },
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => EmptyState(
                   icon: Icons.error_outline,
-                  title: 'Load failed',
+                  title: l10n.loadFailed,
                   message: error.toString(),
                 ),
               ),
@@ -154,10 +157,10 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
     );
   }
 
-  Widget _buildFilterChip(String label, Color? color) {
+  Widget _buildFilterChip(String label, Color? color, AppLocalizations l10n) {
     final isSelected = _selectedType == label;
     return FilterChip(
-      label: Text(label),
+      label: Text(_getTypeLabel(label, l10n)),
       selected: isSelected,
       onSelected: (selected) {
         setState(() {
@@ -187,12 +190,30 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
         return 'Other';
     }
   }
+
+  String _getTypeLabel(String type, AppLocalizations l10n) {
+    switch (type) {
+      case 'Shelter':
+        return l10n.resourceTypeShelter;
+      case 'Water':
+        return l10n.resourceTypeWater;
+      case 'Food':
+        return l10n.resourceTypeFood;
+      case 'Medical':
+        return l10n.resourceTypeMedical;
+      case 'All':
+        return l10n.resourceTypeAll;
+      default:
+        return l10n.resourceTypeOther;
+    }
+  }
 }
 
 class _ResourceCard extends StatelessWidget {
   final ResourcePoint resource;
+  final AppLocalizations l10n;
 
-  const _ResourceCard({required this.resource});
+  const _ResourceCard({required this.resource, required this.l10n});
 
   @override
   Widget build(BuildContext context) {
@@ -254,7 +275,7 @@ class _ResourceCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                resource.isActive ? 'Active' : 'Inactive',
+                                resource.isActive ? l10n.activeStatus : l10n.inactiveStatus,
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w500,
@@ -360,20 +381,21 @@ class _ResourceCard extends StatelessWidget {
   String _getTypeLabel(String type) {
     switch (type) {
       case 'Water':
-        return 'Water';
+        return l10n.resourceTypeWater;
       case 'Shelter':
-        return 'Shelter';
+        return l10n.resourceTypeShelter;
       case 'Medical':
-        return 'Medical';
+        return l10n.resourceTypeMedical;
       case 'Food':
-        return 'Food';
+        return l10n.resourceTypeFood;
       default:
-        return 'Other';
+        return l10n.resourceTypeOther;
     }
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return 'Unknown';
-    return 'Updated ${date.month}/${date.day} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    if (date == null) return l10n.unknownTime;
+    final formatted = DateFormat('MM/dd HH:mm').format(date);
+    return l10n.updatedAt(formatted);
   }
 }
