@@ -12,10 +12,10 @@ AppLanguage languageFromCode(String? code) {
 extension AppLanguageX on AppLanguage {
   String get code => this == AppLanguage.zhTw ? 'zh-TW' : 'en-US';
 
-  // Use language-only locales because current l10n supports zh and en without region.
+  // Keep region codes for persistence while still compatible with l10n (we map by language code in main).
   Locale get locale => this == AppLanguage.zhTw
-      ? const Locale('zh')
-      : const Locale('en');
+      ? const Locale('zh', 'TW')
+      : const Locale('en', 'US');
 
   AppLanguage get fallback =>
       this == AppLanguage.zhTw ? AppLanguage.enUs : AppLanguage.zhTw;

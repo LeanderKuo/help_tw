@@ -48,9 +48,14 @@ class DisasterReliefApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      supportedLocales: AppLocalizations.supportedLocales,
+      supportedLocales: const [
+        Locale('en'),
+        Locale('en', 'US'),
+        Locale('zh'),
+        Locale('zh', 'TW'),
+      ],
       localeResolutionCallback: (deviceLocale, supportedLocales) {
-        // Prefer the selected locale if languages match; otherwise fall back to device/supported.
+        // Prefer the selected locale by language code; fall back to device, else first supported.
         final selectedMatch = supportedLocales.firstWhere(
           (l) => l.languageCode == selectedLocale.languageCode,
           orElse: () => supportedLocales.first,
