@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/resource_point.dart';
-import 'resource_repository.dart';
+import '../data/resource_repository.dart';
 
 final resourceControllerProvider =
     StateNotifierProvider<ResourceController, AsyncValue<List<ResourcePoint>>>(

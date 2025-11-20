@@ -15,7 +15,7 @@ extension GetResourcePointCollection on Isar {
 
 const ResourcePointSchema = CollectionSchema(
   name: r'ResourcePoint',
-  id: 5254987665449724439,
+  id: 1,
   properties: {
     r'createdAt': PropertySchema(
       id: 0,

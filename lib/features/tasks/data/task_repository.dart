@@ -6,6 +6,10 @@ import '../../../services/supabase_service.dart';
 import '../../../services/isar_service.dart';
 import '../../../models/task_model.dart';
 
+final isarServiceProvider = Provider<IsarService>((ref) {
+  return IsarService();
+});
+
 final taskRepositoryProvider = Provider<TaskRepository>((ref) {
   final isarService = ref.watch(isarServiceProvider);
   return TaskRepository(SupabaseService.client, isarService);

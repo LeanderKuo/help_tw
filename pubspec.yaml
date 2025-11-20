@@ -24,7 +24,7 @@ dependencies:
   go_router: ^14.2.7
 
   # Backend & Database
-  supabase_flutter: ^2.6.0
+  supabase_flutter: ^2.8.0
 
   # Local Database (Offline Cache)
   isar: ^3.1.0+1
@@ -93,11 +93,12 @@ flutter:
     - assets/translations/
 
   # Fonts
-  fonts:
-    - family: NotoSansTC
-      fonts:
-        - asset: assets/fonts/NotoSansTC-Regular.ttf
-        - asset: assets/fonts/NotoSansTC-Medium.ttf
-          weight: 500
-        - asset: assets/fonts/NotoSansTC-Bold.ttf
-          weight: 700
+  # Fonts
+  # fonts:
+  #   - family: NotoSansTC
+  #     fonts:
+  #       - asset: assets/fonts/NotoSansTC-Regular.ttf
+  #       - asset: assets/fonts/NotoSansTC-Medium.ttf
+  #         weight: 500
+  #       - asset: assets/fonts/NotoSansTC-Bold.ttf
+  #         weight: 700

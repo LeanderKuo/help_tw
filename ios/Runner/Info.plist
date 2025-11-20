@@ -47,5 +47,16 @@
 	<true/>
 	<key>GMSServicesApiKey</key>
 	<string>AIzaSyBlZKrqGHxzspAmMO1Edy2DNAxNWsY3heg</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>tw.help.disasterrelief</string>
+			</array>
+		</dict>
+	</array>
 </dict>
 </plist>

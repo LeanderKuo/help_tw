@@ -5,6 +5,10 @@ import '../../../services/supabase_service.dart';
 import '../../../services/isar_service.dart';
 import '../../../models/shuttle_model.dart';
 
+final isarServiceProvider = Provider<IsarService>((ref) {
+  return IsarService();
+});
+
 final shuttleRepositoryProvider = Provider<ShuttleRepository>((ref) {
   final isarService = ref.watch(isarServiceProvider);
   return ShuttleRepository(SupabaseService.client, isarService);

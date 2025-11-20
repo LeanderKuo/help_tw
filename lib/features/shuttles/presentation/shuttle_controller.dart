@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/shuttle_model.dart';
-import 'shuttle_repository.dart';
+import '../data/shuttle_repository.dart';
 
 final shuttleControllerProvider =
     StateNotifierProvider<ShuttleController, AsyncValue<List<ShuttleModel>>>(

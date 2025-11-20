@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../models/task_model.dart';
-import 'task_repository.dart';
+import '../data/task_repository.dart';
 
 final taskControllerProvider =
     StateNotifierProvider<TaskController, AsyncValue<List<TaskModel>>>((ref) {

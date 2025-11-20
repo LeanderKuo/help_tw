@@ -15,7 +15,7 @@ extension GetShuttleModelCollection on Isar {
 
 const ShuttleModelSchema = CollectionSchema(
   name: r'ShuttleModel',
-  id: 7648843499861309697,
+  id: 3,
   properties: {
     r'capacity': PropertySchema(
       id: 0,
