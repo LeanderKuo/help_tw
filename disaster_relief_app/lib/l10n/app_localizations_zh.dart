@@ -6,7 +6,7 @@ import 'app_localizations.dart';
 
 /// The translations for Chinese (`zh`).
 class AppLocalizationsZh extends AppLocalizations {
-  AppLocalizationsZh([String locale = 'zh']) : super(locale);
+  AppLocalizationsZh([String locale = 'zh_TW']) : super(locale);
 
   @override
   String get appTitle => '救災資源整合平台';

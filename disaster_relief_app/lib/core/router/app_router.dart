@@ -16,6 +16,7 @@ import '../../features/tasks/presentation/task_detail_screen.dart';
 import '../../features/shuttles/presentation/shuttle_list_screen.dart';
 import '../../features/shuttles/presentation/shuttle_detail_screen.dart';
 import '../../features/auth/data/auth_repository.dart';
+import '../../features/profile/presentation/settings_screen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
@@ -85,6 +86,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/profile',
             builder: (context, state) => const ProfileScreen(),
+            routes: [
+              GoRoute(
+                path: 'settings',
+                builder: (context, state) => const SettingsScreen(),
+              ),
+            ],
           ),
         ],
       ),
