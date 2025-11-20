@@ -50,8 +50,12 @@ class DisasterReliefApp extends ConsumerWidget {
       ],
       supportedLocales: AppLocalizations.supportedLocales,
       localeResolutionCallback: (deviceLocale, supportedLocales) {
-        if (supportedLocales.contains(selectedLocale)) return selectedLocale;
-        return supportedLocales.first;
+        // Prefer the selected locale if languages match; otherwise fall back to device/supported.
+        final selectedMatch = supportedLocales.firstWhere(
+          (l) => l.languageCode == selectedLocale.languageCode,
+          orElse: () => supportedLocales.first,
+        );
+        return selectedMatch;
       },
     );
   }
