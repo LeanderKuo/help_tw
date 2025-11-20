@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import 'task_controller.dart';
-import '../../../models/task_model.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/common_widgets.dart';
+import '../../../core/widgets/global_chrome.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../models/task_model.dart';
 
 class TaskListScreen extends ConsumerStatefulWidget {
   const TaskListScreen({super.key});
@@ -19,9 +21,13 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final _searchController = TextEditingController();
+  final _latController = TextEditingController();
+  final _lngController = TextEditingController();
+
   String _searchQuery = '';
-  String _selectedFilter = 'All categories';
-  String _selectedSort = 'Newest';
+  double _distanceKm = 25;
+  String _selectedFilter = '全部任務';
+  String _selectedSort = '最新建立';
 
   @override
   void initState() {
@@ -33,31 +39,9 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
   void dispose() {
     _tabController.dispose();
     _searchController.dispose();
+    _latController.dispose();
+    _lngController.dispose();
     super.dispose();
-  }
-
-  String _filterLabel(String value, AppLocalizations l10n) {
-    switch (value) {
-      case 'General':
-        return l10n.filterGeneral;
-      case 'Urgent':
-        return l10n.filterUrgent;
-      case 'My drafts':
-        return l10n.filterMyDrafts;
-      default:
-        return l10n.filterAllCategories;
-    }
-  }
-
-  String _sortLabel(String value, AppLocalizations l10n) {
-    switch (value) {
-      case 'Nearest':
-        return l10n.sortNearest;
-      case 'Priority':
-        return l10n.sortPriority;
-      default:
-        return l10n.sortNewest;
-    }
   }
 
   @override
@@ -66,153 +50,17 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.missionBoardTitle),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.sync),
-            onPressed: () {
-              ref.read(taskControllerProvider.notifier).syncDrafts();
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: const Icon(Icons.account_circle),
-            onPressed: () => context.push('/profile'),
-          ),
-        ],
+      appBar: GlobalTopNavBar(
+        title: '救災資源整合平台',
+        onNotificationTap: () {},
+        onAvatarTap: () => context.push('/profile'),
       ),
       body: ResponsiveLayout(
         child: Column(
           children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              color: AppColors.surfaceLight,
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: ElevatedButton.icon(
-                          onPressed: () => context.push('/tasks/create'),
-                          icon: const Icon(Icons.add),
-                          label: Text(l10n.createTask),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: () {
-                            // TODO: Location picker
-                          },
-                          icon: const Icon(Icons.my_location),
-                          label: Text(l10n.useMyLocation),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: InputDecoration(
-                            hintText: l10n.searchTasksHint,
-                            prefixIcon: const Icon(Icons.search),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              _searchQuery = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          initialValue: _selectedFilter,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          items: ['All categories', 'General', 'Urgent', 'My drafts']
-                              .map(
-                                (filter) => DropdownMenuItem(
-                                  value: filter,
-                                  child: Text(
-                                    _filterLabel(filter, l10n),
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            if (value == null) return;
-                            setState(() {
-                              _selectedFilter = value;
-                            });
-                          },
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: DropdownButtonFormField<String>(
-                          initialValue: _selectedSort,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 8,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          items: ['Newest', 'Nearest', 'Priority']
-                              .map(
-                                (sort) => DropdownMenuItem(
-                                  value: sort,
-                                  child: Text(
-                                    _sortLabel(sort, l10n),
-                                    style: const TextStyle(fontSize: 14),
-                                  ),
-                                ),
-                              )
-                              .toList(),
-                          onChanged: (value) {
-                            if (value == null) return;
-                            setState(() {
-                              _selectedSort = value;
-                            });
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            _MissionHeader(l10n: l10n),
+            const SizedBox(height: 12),
+            _buildControlPanel(context, l10n),
             TabBar(
               controller: _tabController,
               labelColor: AppColors.primary,
@@ -227,15 +75,10 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
               child: tasksAsync.when(
                 data: (tasks) {
                   final filteredTasks = tasks.where((t) {
-                    if (!t.isDraft) {
-                      if (_searchQuery.isNotEmpty) {
-                        return t.title
-                            .toLowerCase()
-                            .contains(_searchQuery.toLowerCase());
-                      }
-                      return true;
-                    }
-                    return false;
+                    if (t.isDraft) return false;
+                    final matchesSearch = _searchQuery.isEmpty ||
+                        t.title.toLowerCase().contains(_searchQuery.toLowerCase());
+                    return matchesSearch;
                   }).toList();
 
                   final myTasks = tasks.where((t) => t.isDraft).toList();
@@ -264,6 +107,191 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                   message: error.toString(),
                 ),
               ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildControlPanel(BuildContext context, AppLocalizations l10n) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 6),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => context.push('/tasks/create'),
+                    icon: const Icon(Icons.add),
+                    label: Text(l10n.createTask),
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () {},
+                    icon: const Icon(Icons.my_location),
+                    label: const Text('定位我附近'),
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    controller: _lngController,
+                    decoration: InputDecoration(
+                      hintText: '經度',
+                      prefixIcon: const Icon(Icons.place_outlined),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: TextField(
+                    controller: _latController,
+                    decoration: InputDecoration(
+                      hintText: '緯度',
+                      prefixIcon: const Icon(Icons.place_outlined),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                hintText: l10n.searchTasksHint,
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              ),
+              onChanged: (value) {
+                setState(() {
+                  _searchQuery = value;
+                });
+              },
+            ),
+            const SizedBox(height: 12),
+            Row(
+              children: [
+                Text('距離 0-100 公里',
+                    style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimaryLight)),
+                const SizedBox(width: 8),
+                Text('${_distanceKm.toStringAsFixed(0)} km',
+                    style: const TextStyle(color: AppColors.primary)),
+              ],
+            ),
+            Slider(
+              value: _distanceKm,
+              min: 0,
+              max: 100,
+              activeColor: AppColors.primary,
+              onChanged: (v) => setState(() => _distanceKm = v),
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedFilter,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    items: const [
+                      '全部任務',
+                      '一般任務',
+                      '緊急任務',
+                      '我的草稿',
+                    ]
+                        .map((filter) => DropdownMenuItem(
+                              value: filter,
+                              child: Text(filter),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setState(() {
+                        _selectedFilter = value;
+                      });
+                    },
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: DropdownButtonFormField<String>(
+                    value: _selectedSort,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    items: const [
+                      '最新建立',
+                      '最近更新',
+                      '距離最近',
+                    ]
+                        .map((sort) => DropdownMenuItem(
+                              value: sort,
+                              child: Text(sort),
+                            ))
+                        .toList(),
+                    onChanged: (value) {
+                      if (value == null) return;
+                      setState(() {
+                        _selectedSort = value;
+                      });
+                    },
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -317,13 +345,17 @@ class _TaskCard extends StatelessWidget {
     this.isMyTasks = false,
   });
 
+  int get remainingSlots =>
+      (task.requiredParticipants - task.participantCount).clamp(0, 999);
+
   @override
   Widget build(BuildContext context) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       child: InkWell(
         onTap: () => context.push('/tasks/${task.id}'),
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(14),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -331,72 +363,12 @@ class _TaskCard extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: _getStatusColor(task.status),
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      _statusLabel(task.status),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                  StatusChip(
+                    label: task.roleLabel ?? '任務發起人',
+                    backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                    textColor: AppColors.primary,
                   ),
                   const Spacer(),
-                  if (isMyTasks)
-                    const Icon(Icons.edit, size: 18, color: AppColors.textSecondaryLight),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Text(
-                task.title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimaryLight,
-                ),
-              ),
-              const SizedBox(height: 8),
-              if (task.description != null && task.description!.isNotEmpty) ...[
-                Text(
-                  task.description!,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: AppColors.textSecondaryLight,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-              ],
-              Row(
-                children: [
-                  Icon(Icons.location_on_outlined,
-                      size: 16, color: AppColors.textSecondaryLight),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      task.latitude != null && task.longitude != null
-                          ? '${task.latitude}, ${task.longitude}'
-                          : l10n.locationNotSet,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        color: AppColors.textSecondaryLight,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  Icon(Icons.access_time,
-                      size: 16, color: AppColors.textSecondaryLight),
-                  const SizedBox(width: 4),
                   Text(
                     _formatDate(task.createdAt),
                     style: const TextStyle(
@@ -404,38 +376,130 @@ class _TaskCard extends StatelessWidget {
                       color: AppColors.textSecondaryLight,
                     ),
                   ),
-                  const Spacer(),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      task.title,
+                      style: const TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimaryLight,
+                      ),
+                    ),
+                  ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: _getPriorityColor(task.priority).withValues(alpha: 0.1),
+                      color: AppColors.secondary.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          _getPriorityIcon(task.priority),
-                          size: 14,
-                          color: _getPriorityColor(task.priority),
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          _priorityLabel(task.priority),
-                          style: TextStyle(
-                            fontSize: 11,
-                            color: _getPriorityColor(task.priority),
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      '剩餘 $remainingSlots 人',
+                      style: const TextStyle(
+                        color: AppColors.secondary,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
+                  ),
+                ],
+              ),
+              if (task.description != null && task.description!.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                Text(
+                  task.description!,
+                  style: const TextStyle(
+                    fontSize: 13,
+                    color: AppColors.textSecondaryLight,
+                    height: 1.5,
+                  ),
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+              const SizedBox(height: 12),
+              Column(
+                children: [
+                  _infoTile(
+                    icon: Icons.place_outlined,
+                    label: task.address ?? l10n.locationNotSet,
+                  ),
+                  _infoTile(
+                    icon: Icons.update,
+                    label: '最近更新：${_formatDate(task.updatedAt)}',
+                  ),
+                  _infoTile(
+                    icon: Icons.inventory_2_outlined,
+                    label: '物資需求：${task.materialsStatus}',
+                  ),
+                  _infoTile(
+                    icon: Icons.people_alt_outlined,
+                    label:
+                        '參與情況：${task.participantCount}/${task.requiredParticipants <= 0 ? '—' : task.requiredParticipants}',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.navigation, size: 18),
+                      label: const Text('導航'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => context.push('/tasks/${task.id}'),
+                      icon: const Icon(Icons.info_outline, size: 18),
+                      label: const Text('查看詳情 / 加入'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  StatusChip(
+                    label: _statusLabel(task.status),
+                    backgroundColor: _getStatusColor(task.status).withValues(alpha: 0.12),
+                    textColor: _getStatusColor(task.status),
+                    icon: _getPriorityIcon(task.priority),
                   ),
                 ],
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _infoTile({required IconData icon, required String label}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Icon(icon, size: 18, color: AppColors.textSecondaryLight),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              label,
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppColors.textSecondaryLight,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -515,17 +579,46 @@ class _TaskCard extends StatelessWidget {
         return status;
     }
   }
+}
 
-  String _priorityLabel(String priority) {
-    switch (priority.toLowerCase()) {
-      case 'low':
-        return l10n.priorityLow;
-      case 'high':
-        return l10n.priorityHigh;
-      case 'emergency':
-        return l10n.priorityEmergency;
-      default:
-        return l10n.priorityNormal;
-    }
+class _MissionHeader extends StatelessWidget {
+  const _MissionHeader({required this.l10n});
+
+  final AppLocalizations l10n;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'MISSION BOARD',
+            style: TextStyle(
+              color: AppColors.primary.withValues(alpha: 0.8),
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.5,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            l10n.missionBoardTitle,
+            style: const TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.w800,
+              color: AppColors.textPrimaryLight,
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            '任務一覽・搜尋、篩選並快速加入救災任務',
+            style: TextStyle(
+              color: AppColors.textSecondaryLight,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

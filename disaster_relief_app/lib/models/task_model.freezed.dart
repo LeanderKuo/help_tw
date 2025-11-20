@@ -27,8 +27,17 @@ mixin _$TaskModel {
       throw _privateConstructorUsedError; // Open, In Progress, Completed, Cancelled
   String get priority =>
       throw _privateConstructorUsedError; // Low, Normal, High, Emergency
+  @JsonKey(name: 'role_label')
+  String? get roleLabel => throw _privateConstructorUsedError;
   double? get latitude => throw _privateConstructorUsedError;
   double? get longitude => throw _privateConstructorUsedError;
+  String? get address => throw _privateConstructorUsedError;
+  @JsonKey(name: 'materials_status')
+  String get materialsStatus => throw _privateConstructorUsedError;
+  @JsonKey(name: 'participant_count')
+  int get participantCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'required_participants')
+  int get requiredParticipants => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   @JsonKey(name: 'assigned_to')
   String? get assignedTo => throw _privateConstructorUsedError;
@@ -60,8 +69,13 @@ abstract class $TaskModelCopyWith<$Res> {
       String? description,
       String status,
       String priority,
+      @JsonKey(name: 'role_label') String? roleLabel,
       double? latitude,
       double? longitude,
+      String? address,
+      @JsonKey(name: 'materials_status') String materialsStatus,
+      @JsonKey(name: 'participant_count') int participantCount,
+      @JsonKey(name: 'required_participants') int requiredParticipants,
       List<String> images,
       @JsonKey(name: 'assigned_to') String? assignedTo,
       @JsonKey(name: 'created_by') String? createdBy,
@@ -89,8 +103,13 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
     Object? description = freezed,
     Object? status = null,
     Object? priority = null,
+    Object? roleLabel = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? address = freezed,
+    Object? materialsStatus = null,
+    Object? participantCount = null,
+    Object? requiredParticipants = null,
     Object? images = null,
     Object? assignedTo = freezed,
     Object? createdBy = freezed,
@@ -120,6 +139,10 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
           ? _value.priority
           : priority // ignore: cast_nullable_to_non_nullable
               as String,
+      roleLabel: freezed == roleLabel
+          ? _value.roleLabel
+          : roleLabel // ignore: cast_nullable_to_non_nullable
+              as String?,
       latitude: freezed == latitude
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
@@ -128,6 +151,22 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      materialsStatus: null == materialsStatus
+          ? _value.materialsStatus
+          : materialsStatus // ignore: cast_nullable_to_non_nullable
+              as String,
+      participantCount: null == participantCount
+          ? _value.participantCount
+          : participantCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      requiredParticipants: null == requiredParticipants
+          ? _value.requiredParticipants
+          : requiredParticipants // ignore: cast_nullable_to_non_nullable
+              as int,
       images: null == images
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
@@ -174,8 +213,13 @@ abstract class _$$TaskModelImplCopyWith<$Res>
       String? description,
       String status,
       String priority,
+      @JsonKey(name: 'role_label') String? roleLabel,
       double? latitude,
       double? longitude,
+      String? address,
+      @JsonKey(name: 'materials_status') String materialsStatus,
+      @JsonKey(name: 'participant_count') int participantCount,
+      @JsonKey(name: 'required_participants') int requiredParticipants,
       List<String> images,
       @JsonKey(name: 'assigned_to') String? assignedTo,
       @JsonKey(name: 'created_by') String? createdBy,
@@ -201,8 +245,13 @@ class __$$TaskModelImplCopyWithImpl<$Res>
     Object? description = freezed,
     Object? status = null,
     Object? priority = null,
+    Object? roleLabel = freezed,
     Object? latitude = freezed,
     Object? longitude = freezed,
+    Object? address = freezed,
+    Object? materialsStatus = null,
+    Object? participantCount = null,
+    Object? requiredParticipants = null,
     Object? images = null,
     Object? assignedTo = freezed,
     Object? createdBy = freezed,
@@ -232,6 +281,10 @@ class __$$TaskModelImplCopyWithImpl<$Res>
           ? _value.priority
           : priority // ignore: cast_nullable_to_non_nullable
               as String,
+      roleLabel: freezed == roleLabel
+          ? _value.roleLabel
+          : roleLabel // ignore: cast_nullable_to_non_nullable
+              as String?,
       latitude: freezed == latitude
           ? _value.latitude
           : latitude // ignore: cast_nullable_to_non_nullable
@@ -240,6 +293,22 @@ class __$$TaskModelImplCopyWithImpl<$Res>
           ? _value.longitude
           : longitude // ignore: cast_nullable_to_non_nullable
               as double?,
+      address: freezed == address
+          ? _value.address
+          : address // ignore: cast_nullable_to_non_nullable
+              as String?,
+      materialsStatus: null == materialsStatus
+          ? _value.materialsStatus
+          : materialsStatus // ignore: cast_nullable_to_non_nullable
+              as String,
+      participantCount: null == participantCount
+          ? _value.participantCount
+          : participantCount // ignore: cast_nullable_to_non_nullable
+              as int,
+      requiredParticipants: null == requiredParticipants
+          ? _value.requiredParticipants
+          : requiredParticipants // ignore: cast_nullable_to_non_nullable
+              as int,
       images: null == images
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
@@ -281,8 +350,13 @@ class _$TaskModelImpl extends _TaskModel {
       this.description,
       this.status = 'Open',
       this.priority = 'Normal',
+      @JsonKey(name: 'role_label') this.roleLabel,
       this.latitude,
       this.longitude,
+      this.address,
+      @JsonKey(name: 'materials_status') this.materialsStatus = '穩定',
+      @JsonKey(name: 'participant_count') this.participantCount = 0,
+      @JsonKey(name: 'required_participants') this.requiredParticipants = 0,
       final List<String> images = const [],
       @JsonKey(name: 'assigned_to') this.assignedTo,
       @JsonKey(name: 'created_by') this.createdBy,
@@ -311,9 +385,23 @@ class _$TaskModelImpl extends _TaskModel {
   final String priority;
 // Low, Normal, High, Emergency
   @override
+  @JsonKey(name: 'role_label')
+  final String? roleLabel;
+  @override
   final double? latitude;
   @override
   final double? longitude;
+  @override
+  final String? address;
+  @override
+  @JsonKey(name: 'materials_status')
+  final String materialsStatus;
+  @override
+  @JsonKey(name: 'participant_count')
+  final int participantCount;
+  @override
+  @JsonKey(name: 'required_participants')
+  final int requiredParticipants;
   final List<String> _images;
   @override
   @JsonKey()
@@ -346,7 +434,7 @@ class _$TaskModelImpl extends _TaskModel {
 
   @override
   String toString() {
-    return 'TaskModel(id: $id, title: $title, description: $description, status: $status, priority: $priority, latitude: $latitude, longitude: $longitude, images: $images, assignedTo: $assignedTo, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, isDraft: $isDraft, isarId: $isarId)';
+    return 'TaskModel(id: $id, title: $title, description: $description, status: $status, priority: $priority, roleLabel: $roleLabel, latitude: $latitude, longitude: $longitude, address: $address, materialsStatus: $materialsStatus, participantCount: $participantCount, requiredParticipants: $requiredParticipants, images: $images, assignedTo: $assignedTo, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, isDraft: $isDraft, isarId: $isarId)';
   }
 
   @override
@@ -361,10 +449,19 @@ class _$TaskModelImpl extends _TaskModel {
             (identical(other.status, status) || other.status == status) &&
             (identical(other.priority, priority) ||
                 other.priority == priority) &&
+            (identical(other.roleLabel, roleLabel) ||
+                other.roleLabel == roleLabel) &&
             (identical(other.latitude, latitude) ||
                 other.latitude == latitude) &&
             (identical(other.longitude, longitude) ||
                 other.longitude == longitude) &&
+            (identical(other.address, address) || other.address == address) &&
+            (identical(other.materialsStatus, materialsStatus) ||
+                other.materialsStatus == materialsStatus) &&
+            (identical(other.participantCount, participantCount) ||
+                other.participantCount == participantCount) &&
+            (identical(other.requiredParticipants, requiredParticipants) ||
+                other.requiredParticipants == requiredParticipants) &&
             const DeepCollectionEquality().equals(other._images, _images) &&
             (identical(other.assignedTo, assignedTo) ||
                 other.assignedTo == assignedTo) &&
@@ -380,22 +477,28 @@ class _$TaskModelImpl extends _TaskModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      description,
-      status,
-      priority,
-      latitude,
-      longitude,
-      const DeepCollectionEquality().hash(_images),
-      assignedTo,
-      createdBy,
-      createdAt,
-      updatedAt,
-      isDraft,
-      isarId);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        title,
+        description,
+        status,
+        priority,
+        roleLabel,
+        latitude,
+        longitude,
+        address,
+        materialsStatus,
+        participantCount,
+        requiredParticipants,
+        const DeepCollectionEquality().hash(_images),
+        assignedTo,
+        createdBy,
+        createdAt,
+        updatedAt,
+        isDraft,
+        isarId
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -418,8 +521,13 @@ abstract class _TaskModel extends TaskModel {
       final String? description,
       final String status,
       final String priority,
+      @JsonKey(name: 'role_label') final String? roleLabel,
       final double? latitude,
       final double? longitude,
+      final String? address,
+      @JsonKey(name: 'materials_status') final String materialsStatus,
+      @JsonKey(name: 'participant_count') final int participantCount,
+      @JsonKey(name: 'required_participants') final int requiredParticipants,
       final List<String> images,
       @JsonKey(name: 'assigned_to') final String? assignedTo,
       @JsonKey(name: 'created_by') final String? createdBy,
@@ -443,9 +551,23 @@ abstract class _TaskModel extends TaskModel {
   @override // Open, In Progress, Completed, Cancelled
   String get priority;
   @override // Low, Normal, High, Emergency
+  @JsonKey(name: 'role_label')
+  String? get roleLabel;
+  @override
   double? get latitude;
   @override
   double? get longitude;
+  @override
+  String? get address;
+  @override
+  @JsonKey(name: 'materials_status')
+  String get materialsStatus;
+  @override
+  @JsonKey(name: 'participant_count')
+  int get participantCount;
+  @override
+  @JsonKey(name: 'required_participants')
+  int get requiredParticipants;
   @override
   List<String> get images;
   @override

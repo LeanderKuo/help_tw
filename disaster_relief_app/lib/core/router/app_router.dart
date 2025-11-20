@@ -18,6 +18,8 @@ import '../../features/shuttles/presentation/shuttle_detail_screen.dart';
 import '../../features/auth/data/auth_repository.dart';
 import '../../features/profile/presentation/settings_screen.dart';
 import '../../l10n/app_localizations.dart';
+import '../../features/announcements/data/announcement_repository.dart';
+import '../widgets/global_chrome.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
@@ -119,30 +121,50 @@ final routerProvider = Provider<GoRouter>((ref) {
   );
 });
 
-class ScaffoldWithBottomNavBar extends StatelessWidget {
+class ScaffoldWithBottomNavBar extends ConsumerWidget {
   const ScaffoldWithBottomNavBar({required this.child, super.key});
 
   final Widget child;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final emergencyAsync = ref.watch(activeEmergencyAnnouncementProvider);
+    final hasMarquee = emergencyAsync.maybeWhen(
+      data: (a) => a != null,
+      orElse: () => false,
+    );
+    const marqueeHeight = 52.0;
+
     return Scaffold(
-      body: child,
-      bottomNavigationBar: BottomNavigationBar(
-        type: BottomNavigationBarType.fixed,
-        currentIndex: _calculateSelectedIndex(context),
-        onTap: (int idx) => _onItemTapped(idx, context),
-        items: [
-          BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
-          BottomNavigationBarItem(icon: const Icon(Icons.map), label: l10n.map),
-          BottomNavigationBarItem(icon: const Icon(Icons.task), label: l10n.tasks),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.directions_bus),
-            label: l10n.shuttles,
+      body: Stack(
+        children: [
+          AnimatedPadding(
+            duration: const Duration(milliseconds: 220),
+            curve: Curves.easeOut,
+            padding: EdgeInsets.only(bottom: hasMarquee ? marqueeHeight : 0),
+            child: child,
           ),
-          BottomNavigationBarItem(icon: const Icon(Icons.person), label: l10n.profile),
+          const EmergencyMarquee(height: marqueeHeight),
         ],
+      ),
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.only(bottom: hasMarquee ? marqueeHeight : 0),
+        child: BottomNavigationBar(
+          type: BottomNavigationBarType.fixed,
+          currentIndex: _calculateSelectedIndex(context),
+          onTap: (int idx) => _onItemTapped(idx, context),
+          items: [
+            BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
+            BottomNavigationBarItem(icon: const Icon(Icons.map), label: l10n.map),
+            BottomNavigationBarItem(icon: const Icon(Icons.task), label: l10n.tasks),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.directions_bus),
+              label: l10n.shuttles,
+            ),
+            BottomNavigationBarItem(icon: const Icon(Icons.person), label: l10n.profile),
+          ],
+        ),
       ),
     );
   }

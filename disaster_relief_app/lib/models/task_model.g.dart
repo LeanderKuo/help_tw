@@ -15,22 +15,27 @@ extension GetTaskModelCollection on Isar {
 const TaskModelSchema = CollectionSchema(
   name: 'TaskModel',
   schema:
-      '{"name":"TaskModel","idName":"isarId","properties":[{"name":"assignedTo","type":"String"},{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"description","type":"String"},{"name":"id","type":"String"},{"name":"images","type":"StringList"},{"name":"isDraft","type":"Bool"},{"name":"latitude","type":"Double"},{"name":"longitude","type":"Double"},{"name":"priority","type":"String"},{"name":"status","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
+      '{"name":"TaskModel","idName":"isarId","properties":[{"name":"address","type":"String"},{"name":"assignedTo","type":"String"},{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"description","type":"String"},{"name":"id","type":"String"},{"name":"images","type":"StringList"},{"name":"isDraft","type":"Bool"},{"name":"latitude","type":"Double"},{"name":"longitude","type":"Double"},{"name":"materialsStatus","type":"String"},{"name":"participantCount","type":"Long"},{"name":"priority","type":"String"},{"name":"requiredParticipants","type":"Long"},{"name":"roleLabel","type":"String"},{"name":"status","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
   idName: 'isarId',
   propertyIds: {
-    'assignedTo': 0,
-    'createdAt': 1,
-    'createdBy': 2,
-    'description': 3,
-    'id': 4,
-    'images': 5,
-    'isDraft': 6,
-    'latitude': 7,
-    'longitude': 8,
-    'priority': 9,
-    'status': 10,
-    'title': 11,
-    'updatedAt': 12
+    'address': 0,
+    'assignedTo': 1,
+    'createdAt': 2,
+    'createdBy': 3,
+    'description': 4,
+    'id': 5,
+    'images': 6,
+    'isDraft': 7,
+    'latitude': 8,
+    'longitude': 9,
+    'materialsStatus': 10,
+    'participantCount': 11,
+    'priority': 12,
+    'requiredParticipants': 13,
+    'roleLabel': 14,
+    'status': 15,
+    'title': 16,
+    'updatedAt': 17
   },
   listProperties: {'images'},
   indexIds: {},
@@ -69,93 +74,122 @@ void _taskModelSerializeNative(
     List<int> offsets,
     AdapterAlloc alloc) {
   var dynamicSize = 0;
-  final value0 = object.assignedTo;
-  IsarUint8List? _assignedTo;
+  final value0 = object.address;
+  IsarUint8List? _address;
   if (value0 != null) {
-    _assignedTo = IsarBinaryWriter.utf8Encoder.convert(value0);
+    _address = IsarBinaryWriter.utf8Encoder.convert(value0);
+  }
+  dynamicSize += (_address?.length ?? 0) as int;
+  final value1 = object.assignedTo;
+  IsarUint8List? _assignedTo;
+  if (value1 != null) {
+    _assignedTo = IsarBinaryWriter.utf8Encoder.convert(value1);
   }
   dynamicSize += (_assignedTo?.length ?? 0) as int;
-  final value1 = object.createdAt;
-  final _createdAt = value1;
-  final value2 = object.createdBy;
+  final value2 = object.createdAt;
+  final _createdAt = value2;
+  final value3 = object.createdBy;
   IsarUint8List? _createdBy;
-  if (value2 != null) {
-    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value2);
+  if (value3 != null) {
+    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value3);
   }
   dynamicSize += (_createdBy?.length ?? 0) as int;
-  final value3 = object.description;
+  final value4 = object.description;
   IsarUint8List? _description;
-  if (value3 != null) {
-    _description = IsarBinaryWriter.utf8Encoder.convert(value3);
+  if (value4 != null) {
+    _description = IsarBinaryWriter.utf8Encoder.convert(value4);
   }
   dynamicSize += (_description?.length ?? 0) as int;
-  final value4 = object.id;
-  final _id = IsarBinaryWriter.utf8Encoder.convert(value4);
+  final value5 = object.id;
+  final _id = IsarBinaryWriter.utf8Encoder.convert(value5);
   dynamicSize += (_id.length) as int;
-  final value5 = object.images;
-  dynamicSize += (value5.length) * 8;
-  final bytesList5 = <IsarUint8List>[];
-  for (var str in value5) {
+  final value6 = object.images;
+  dynamicSize += (value6.length) * 8;
+  final bytesList6 = <IsarUint8List>[];
+  for (var str in value6) {
     final bytes = IsarBinaryWriter.utf8Encoder.convert(str);
-    bytesList5.add(bytes);
+    bytesList6.add(bytes);
     dynamicSize += bytes.length as int;
   }
-  final _images = bytesList5;
-  final value6 = object.isDraft;
-  final _isDraft = value6;
-  final value7 = object.latitude;
-  final _latitude = value7;
-  final value8 = object.longitude;
-  final _longitude = value8;
-  final value9 = object.priority;
-  final _priority = IsarBinaryWriter.utf8Encoder.convert(value9);
+  final _images = bytesList6;
+  final value7 = object.isDraft;
+  final _isDraft = value7;
+  final value8 = object.latitude;
+  final _latitude = value8;
+  final value9 = object.longitude;
+  final _longitude = value9;
+  final value10 = object.materialsStatus;
+  final _materialsStatus = IsarBinaryWriter.utf8Encoder.convert(value10);
+  dynamicSize += (_materialsStatus.length) as int;
+  final value11 = object.participantCount;
+  final _participantCount = value11;
+  final value12 = object.priority;
+  final _priority = IsarBinaryWriter.utf8Encoder.convert(value12);
   dynamicSize += (_priority.length) as int;
-  final value10 = object.status;
-  final _status = IsarBinaryWriter.utf8Encoder.convert(value10);
+  final value13 = object.requiredParticipants;
+  final _requiredParticipants = value13;
+  final value14 = object.roleLabel;
+  IsarUint8List? _roleLabel;
+  if (value14 != null) {
+    _roleLabel = IsarBinaryWriter.utf8Encoder.convert(value14);
+  }
+  dynamicSize += (_roleLabel?.length ?? 0) as int;
+  final value15 = object.status;
+  final _status = IsarBinaryWriter.utf8Encoder.convert(value15);
   dynamicSize += (_status.length) as int;
-  final value11 = object.title;
-  final _title = IsarBinaryWriter.utf8Encoder.convert(value11);
+  final value16 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value16);
   dynamicSize += (_title.length) as int;
-  final value12 = object.updatedAt;
-  final _updatedAt = value12;
+  final value17 = object.updatedAt;
+  final _updatedAt = value17;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
   rawObj.buffer_length = size;
   final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
   final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeBytes(offsets[0], _assignedTo);
-  writer.writeDateTime(offsets[1], _createdAt);
-  writer.writeBytes(offsets[2], _createdBy);
-  writer.writeBytes(offsets[3], _description);
-  writer.writeBytes(offsets[4], _id);
-  writer.writeStringList(offsets[5], _images);
-  writer.writeBool(offsets[6], _isDraft);
-  writer.writeDouble(offsets[7], _latitude);
-  writer.writeDouble(offsets[8], _longitude);
-  writer.writeBytes(offsets[9], _priority);
-  writer.writeBytes(offsets[10], _status);
-  writer.writeBytes(offsets[11], _title);
-  writer.writeDateTime(offsets[12], _updatedAt);
+  writer.writeBytes(offsets[0], _address);
+  writer.writeBytes(offsets[1], _assignedTo);
+  writer.writeDateTime(offsets[2], _createdAt);
+  writer.writeBytes(offsets[3], _createdBy);
+  writer.writeBytes(offsets[4], _description);
+  writer.writeBytes(offsets[5], _id);
+  writer.writeStringList(offsets[6], _images);
+  writer.writeBool(offsets[7], _isDraft);
+  writer.writeDouble(offsets[8], _latitude);
+  writer.writeDouble(offsets[9], _longitude);
+  writer.writeBytes(offsets[10], _materialsStatus);
+  writer.writeLong(offsets[11], _participantCount);
+  writer.writeBytes(offsets[12], _priority);
+  writer.writeLong(offsets[13], _requiredParticipants);
+  writer.writeBytes(offsets[14], _roleLabel);
+  writer.writeBytes(offsets[15], _status);
+  writer.writeBytes(offsets[16], _title);
+  writer.writeDateTime(offsets[17], _updatedAt);
 }
 
 TaskModel _taskModelDeserializeNative(IsarCollection<TaskModel> collection,
     int id, IsarBinaryReader reader, List<int> offsets) {
   final object = TaskModel(
-    assignedTo: reader.readStringOrNull(offsets[0]),
-    createdAt: reader.readDateTimeOrNull(offsets[1]),
-    createdBy: reader.readStringOrNull(offsets[2]),
-    description: reader.readStringOrNull(offsets[3]),
-    id: reader.readString(offsets[4]),
-    images: reader.readStringList(offsets[5]) ?? [],
-    isDraft: reader.readBool(offsets[6]),
+    address: reader.readStringOrNull(offsets[0]),
+    assignedTo: reader.readStringOrNull(offsets[1]),
+    createdAt: reader.readDateTimeOrNull(offsets[2]),
+    createdBy: reader.readStringOrNull(offsets[3]),
+    description: reader.readStringOrNull(offsets[4]),
+    id: reader.readString(offsets[5]),
+    images: reader.readStringList(offsets[6]) ?? [],
+    isDraft: reader.readBool(offsets[7]),
     isarId: id,
-    latitude: reader.readDoubleOrNull(offsets[7]),
-    longitude: reader.readDoubleOrNull(offsets[8]),
-    priority: reader.readString(offsets[9]),
-    status: reader.readString(offsets[10]),
-    title: reader.readString(offsets[11]),
-    updatedAt: reader.readDateTimeOrNull(offsets[12]),
+    latitude: reader.readDoubleOrNull(offsets[8]),
+    longitude: reader.readDoubleOrNull(offsets[9]),
+    materialsStatus: reader.readString(offsets[10]),
+    participantCount: reader.readLong(offsets[11]),
+    priority: reader.readString(offsets[12]),
+    requiredParticipants: reader.readLong(offsets[13]),
+    roleLabel: reader.readStringOrNull(offsets[14]),
+    status: reader.readString(offsets[15]),
+    title: reader.readString(offsets[16]),
+    updatedAt: reader.readDateTimeOrNull(offsets[17]),
   );
   return object;
 }
@@ -168,28 +202,38 @@ P _taskModelDeserializePropNative<P>(
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 2:
       return (reader.readStringOrNull(offset)) as P;
+    case 2:
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 3:
       return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readString(offset)) as P;
     case 6:
-      return (reader.readBool(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 7:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 8:
       return (reader.readDoubleOrNull(offset)) as P;
     case 9:
-      return (reader.readString(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 10:
       return (reader.readString(offset)) as P;
     case 11:
-      return (reader.readString(offset)) as P;
+      return (reader.readLong(offset)) as P;
     case 12:
+      return (reader.readString(offset)) as P;
+    case 13:
+      return (reader.readLong(offset)) as P;
+    case 14:
+      return (reader.readStringOrNull(offset)) as P;
+    case 15:
+      return (reader.readString(offset)) as P;
+    case 16:
+      return (reader.readString(offset)) as P;
+    case 17:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -199,6 +243,7 @@ P _taskModelDeserializePropNative<P>(
 dynamic _taskModelSerializeWeb(
     IsarCollection<TaskModel> collection, TaskModel object) {
   final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, 'address', object.address);
   IsarNative.jsObjectSet(jsObj, 'assignedTo', object.assignedTo);
   IsarNative.jsObjectSet(
       jsObj, 'createdAt', object.createdAt?.toUtc().millisecondsSinceEpoch);
@@ -210,7 +255,12 @@ dynamic _taskModelSerializeWeb(
   IsarNative.jsObjectSet(jsObj, 'isarId', object.isarId);
   IsarNative.jsObjectSet(jsObj, 'latitude', object.latitude);
   IsarNative.jsObjectSet(jsObj, 'longitude', object.longitude);
+  IsarNative.jsObjectSet(jsObj, 'materialsStatus', object.materialsStatus);
+  IsarNative.jsObjectSet(jsObj, 'participantCount', object.participantCount);
   IsarNative.jsObjectSet(jsObj, 'priority', object.priority);
+  IsarNative.jsObjectSet(
+      jsObj, 'requiredParticipants', object.requiredParticipants);
+  IsarNative.jsObjectSet(jsObj, 'roleLabel', object.roleLabel);
   IsarNative.jsObjectSet(jsObj, 'status', object.status);
   IsarNative.jsObjectSet(jsObj, 'title', object.title);
   IsarNative.jsObjectSet(
@@ -221,6 +271,7 @@ dynamic _taskModelSerializeWeb(
 TaskModel _taskModelDeserializeWeb(
     IsarCollection<TaskModel> collection, dynamic jsObj) {
   final object = TaskModel(
+    address: IsarNative.jsObjectGet(jsObj, 'address'),
     assignedTo: IsarNative.jsObjectGet(jsObj, 'assignedTo'),
     createdAt: IsarNative.jsObjectGet(jsObj, 'createdAt') != null
         ? DateTime.fromMillisecondsSinceEpoch(
@@ -240,7 +291,14 @@ TaskModel _taskModelDeserializeWeb(
     isarId: IsarNative.jsObjectGet(jsObj, 'isarId'),
     latitude: IsarNative.jsObjectGet(jsObj, 'latitude'),
     longitude: IsarNative.jsObjectGet(jsObj, 'longitude'),
+    materialsStatus: IsarNative.jsObjectGet(jsObj, 'materialsStatus') ?? '',
+    participantCount: IsarNative.jsObjectGet(jsObj, 'participantCount') ??
+        double.negativeInfinity,
     priority: IsarNative.jsObjectGet(jsObj, 'priority') ?? '',
+    requiredParticipants:
+        IsarNative.jsObjectGet(jsObj, 'requiredParticipants') ??
+            double.negativeInfinity,
+    roleLabel: IsarNative.jsObjectGet(jsObj, 'roleLabel'),
     status: IsarNative.jsObjectGet(jsObj, 'status') ?? '',
     title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
     updatedAt: IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
@@ -255,6 +313,8 @@ TaskModel _taskModelDeserializeWeb(
 
 P _taskModelDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
+    case 'address':
+      return (IsarNative.jsObjectGet(jsObj, 'address')) as P;
     case 'assignedTo':
       return (IsarNative.jsObjectGet(jsObj, 'assignedTo')) as P;
     case 'createdAt':
@@ -284,8 +344,18 @@ P _taskModelDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'latitude')) as P;
     case 'longitude':
       return (IsarNative.jsObjectGet(jsObj, 'longitude')) as P;
+    case 'materialsStatus':
+      return (IsarNative.jsObjectGet(jsObj, 'materialsStatus') ?? '') as P;
+    case 'participantCount':
+      return (IsarNative.jsObjectGet(jsObj, 'participantCount') ??
+          double.negativeInfinity) as P;
     case 'priority':
       return (IsarNative.jsObjectGet(jsObj, 'priority') ?? '') as P;
+    case 'requiredParticipants':
+      return (IsarNative.jsObjectGet(jsObj, 'requiredParticipants') ??
+          double.negativeInfinity) as P;
+    case 'roleLabel':
+      return (IsarNative.jsObjectGet(jsObj, 'roleLabel')) as P;
     case 'status':
       return (IsarNative.jsObjectGet(jsObj, 'status') ?? '') as P;
     case 'title':
@@ -373,6 +443,117 @@ extension TaskModelQueryWhere
 
 extension TaskModelQueryFilter
     on QueryBuilder<TaskModel, TaskModel, QFilterCondition> {
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'address',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressGreaterThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressBetween(
+    String? lower,
+    String? upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'address',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> addressMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'address',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> assignedToIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
@@ -1119,6 +1300,164 @@ extension TaskModelQueryFilter
     ));
   }
 
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      materialsStatusEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'materialsStatus',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      materialsStatusGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'materialsStatus',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      materialsStatusLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'materialsStatus',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      materialsStatusBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'materialsStatus',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      materialsStatusStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'materialsStatus',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      materialsStatusEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'materialsStatus',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      materialsStatusContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'materialsStatus',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      materialsStatusMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'materialsStatus',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      participantCountEqualTo(int value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'participantCount',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      participantCountGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'participantCount',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      participantCountLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'participantCount',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      participantCountBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'participantCount',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
+  }
+
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1217,6 +1556,169 @@ extension TaskModelQueryFilter
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.matches,
       property: 'priority',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      requiredParticipantsEqualTo(int value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'requiredParticipants',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      requiredParticipantsGreaterThan(
+    int value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'requiredParticipants',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      requiredParticipantsLessThan(
+    int value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'requiredParticipants',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      requiredParticipantsBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'requiredParticipants',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> roleLabelIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'roleLabel',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> roleLabelEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'roleLabel',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
+      roleLabelGreaterThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'roleLabel',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> roleLabelLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'roleLabel',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> roleLabelBetween(
+    String? lower,
+    String? upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'roleLabel',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> roleLabelStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'roleLabel',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> roleLabelEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'roleLabel',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> roleLabelContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'roleLabel',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> roleLabelMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'roleLabel',
       value: pattern,
       caseSensitive: caseSensitive,
     ));
@@ -1491,6 +1993,14 @@ extension TaskModelQueryLinks
 
 extension TaskModelQueryWhereSortBy
     on QueryBuilder<TaskModel, TaskModel, QSortBy> {
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByAddress() {
+    return addSortByInternal('address', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByAddressDesc() {
+    return addSortByInternal('address', Sort.desc);
+  }
+
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByAssignedTo() {
     return addSortByInternal('assignedTo', Sort.asc);
   }
@@ -1563,12 +2073,47 @@ extension TaskModelQueryWhereSortBy
     return addSortByInternal('longitude', Sort.desc);
   }
 
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByMaterialsStatus() {
+    return addSortByInternal('materialsStatus', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByMaterialsStatusDesc() {
+    return addSortByInternal('materialsStatus', Sort.desc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByParticipantCount() {
+    return addSortByInternal('participantCount', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy>
+      sortByParticipantCountDesc() {
+    return addSortByInternal('participantCount', Sort.desc);
+  }
+
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByPriority() {
     return addSortByInternal('priority', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByPriorityDesc() {
     return addSortByInternal('priority', Sort.desc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy>
+      sortByRequiredParticipants() {
+    return addSortByInternal('requiredParticipants', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy>
+      sortByRequiredParticipantsDesc() {
+    return addSortByInternal('requiredParticipants', Sort.desc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByRoleLabel() {
+    return addSortByInternal('roleLabel', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByRoleLabelDesc() {
+    return addSortByInternal('roleLabel', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByStatus() {
@@ -1598,6 +2143,14 @@ extension TaskModelQueryWhereSortBy
 
 extension TaskModelQueryWhereSortThenBy
     on QueryBuilder<TaskModel, TaskModel, QSortThenBy> {
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByAddress() {
+    return addSortByInternal('address', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByAddressDesc() {
+    return addSortByInternal('address', Sort.desc);
+  }
+
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByAssignedTo() {
     return addSortByInternal('assignedTo', Sort.asc);
   }
@@ -1670,12 +2223,47 @@ extension TaskModelQueryWhereSortThenBy
     return addSortByInternal('longitude', Sort.desc);
   }
 
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByMaterialsStatus() {
+    return addSortByInternal('materialsStatus', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByMaterialsStatusDesc() {
+    return addSortByInternal('materialsStatus', Sort.desc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByParticipantCount() {
+    return addSortByInternal('participantCount', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy>
+      thenByParticipantCountDesc() {
+    return addSortByInternal('participantCount', Sort.desc);
+  }
+
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByPriority() {
     return addSortByInternal('priority', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByPriorityDesc() {
     return addSortByInternal('priority', Sort.desc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy>
+      thenByRequiredParticipants() {
+    return addSortByInternal('requiredParticipants', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy>
+      thenByRequiredParticipantsDesc() {
+    return addSortByInternal('requiredParticipants', Sort.desc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByRoleLabel() {
+    return addSortByInternal('roleLabel', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByRoleLabelDesc() {
+    return addSortByInternal('roleLabel', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByStatus() {
@@ -1705,6 +2293,11 @@ extension TaskModelQueryWhereSortThenBy
 
 extension TaskModelQueryWhereDistinct
     on QueryBuilder<TaskModel, TaskModel, QDistinct> {
+  QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByAddress(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('address', caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByAssignedTo(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('assignedTo', caseSensitive: caseSensitive);
@@ -1745,9 +2338,29 @@ extension TaskModelQueryWhereDistinct
     return addDistinctByInternal('longitude');
   }
 
+  QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByMaterialsStatus(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('materialsStatus',
+        caseSensitive: caseSensitive);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByParticipantCount() {
+    return addDistinctByInternal('participantCount');
+  }
+
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByPriority(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('priority', caseSensitive: caseSensitive);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QDistinct>
+      distinctByRequiredParticipants() {
+    return addDistinctByInternal('requiredParticipants');
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByRoleLabel(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('roleLabel', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByStatus(
@@ -1767,6 +2380,10 @@ extension TaskModelQueryWhereDistinct
 
 extension TaskModelQueryProperty
     on QueryBuilder<TaskModel, TaskModel, QQueryProperty> {
+  QueryBuilder<TaskModel, String?, QQueryOperations> addressProperty() {
+    return addPropertyNameInternal('address');
+  }
+
   QueryBuilder<TaskModel, String?, QQueryOperations> assignedToProperty() {
     return addPropertyNameInternal('assignedTo');
   }
@@ -1807,8 +2424,25 @@ extension TaskModelQueryProperty
     return addPropertyNameInternal('longitude');
   }
 
+  QueryBuilder<TaskModel, String, QQueryOperations> materialsStatusProperty() {
+    return addPropertyNameInternal('materialsStatus');
+  }
+
+  QueryBuilder<TaskModel, int, QQueryOperations> participantCountProperty() {
+    return addPropertyNameInternal('participantCount');
+  }
+
   QueryBuilder<TaskModel, String, QQueryOperations> priorityProperty() {
     return addPropertyNameInternal('priority');
+  }
+
+  QueryBuilder<TaskModel, int, QQueryOperations>
+      requiredParticipantsProperty() {
+    return addPropertyNameInternal('requiredParticipants');
+  }
+
+  QueryBuilder<TaskModel, String?, QQueryOperations> roleLabelProperty() {
+    return addPropertyNameInternal('roleLabel');
   }
 
   QueryBuilder<TaskModel, String, QQueryOperations> statusProperty() {
@@ -1835,8 +2469,14 @@ _$TaskModelImpl _$$TaskModelImplFromJson(Map<String, dynamic> json) =>
       description: json['description'] as String?,
       status: json['status'] as String? ?? 'Open',
       priority: json['priority'] as String? ?? 'Normal',
+      roleLabel: json['role_label'] as String?,
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
+      address: json['address'] as String?,
+      materialsStatus: json['materials_status'] as String? ?? '穩定',
+      participantCount: (json['participant_count'] as num?)?.toInt() ?? 0,
+      requiredParticipants:
+          (json['required_participants'] as num?)?.toInt() ?? 0,
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -1859,8 +2499,13 @@ Map<String, dynamic> _$$TaskModelImplToJson(_$TaskModelImpl instance) =>
       'description': instance.description,
       'status': instance.status,
       'priority': instance.priority,
+      'role_label': instance.roleLabel,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'address': instance.address,
+      'materials_status': instance.materialsStatus,
+      'participant_count': instance.participantCount,
+      'required_participants': instance.requiredParticipants,
       'images': instance.images,
       'assigned_to': instance.assignedTo,
       'created_by': instance.createdBy,

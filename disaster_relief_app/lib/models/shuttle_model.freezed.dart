@@ -33,8 +33,20 @@ mixin _$ShuttleModel {
   double? get routeEndLat => throw _privateConstructorUsedError;
   @JsonKey(name: 'route_end_lng')
   double? get routeEndLng => throw _privateConstructorUsedError;
+  @JsonKey(name: 'origin_address')
+  String? get originAddress => throw _privateConstructorUsedError;
+  @JsonKey(name: 'destination_address')
+  String? get destinationAddress => throw _privateConstructorUsedError;
   @JsonKey(name: 'departure_time')
   DateTime? get departureTime => throw _privateConstructorUsedError;
+  @JsonKey(name: 'signup_deadline')
+  DateTime? get signupDeadline => throw _privateConstructorUsedError;
+  @JsonKey(name: 'cost_type')
+  String get costType => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fare_total')
+  double? get fareTotal => throw _privateConstructorUsedError;
+  @JsonKey(name: 'fare_per_person')
+  double? get farePerPerson => throw _privateConstructorUsedError;
   int get capacity => throw _privateConstructorUsedError;
   @JsonKey(name: 'seats_taken')
   int get seatsTaken => throw _privateConstructorUsedError;
@@ -71,7 +83,13 @@ abstract class $ShuttleModelCopyWith<$Res> {
       @JsonKey(name: 'route_start_lng') double? routeStartLng,
       @JsonKey(name: 'route_end_lat') double? routeEndLat,
       @JsonKey(name: 'route_end_lng') double? routeEndLng,
+      @JsonKey(name: 'origin_address') String? originAddress,
+      @JsonKey(name: 'destination_address') String? destinationAddress,
       @JsonKey(name: 'departure_time') DateTime? departureTime,
+      @JsonKey(name: 'signup_deadline') DateTime? signupDeadline,
+      @JsonKey(name: 'cost_type') String costType,
+      @JsonKey(name: 'fare_total') double? fareTotal,
+      @JsonKey(name: 'fare_per_person') double? farePerPerson,
       int capacity,
       @JsonKey(name: 'seats_taken') int seatsTaken,
       @JsonKey(name: 'driver_id') String? driverId,
@@ -102,7 +120,13 @@ class _$ShuttleModelCopyWithImpl<$Res, $Val extends ShuttleModel>
     Object? routeStartLng = freezed,
     Object? routeEndLat = freezed,
     Object? routeEndLng = freezed,
+    Object? originAddress = freezed,
+    Object? destinationAddress = freezed,
     Object? departureTime = freezed,
+    Object? signupDeadline = freezed,
+    Object? costType = null,
+    Object? fareTotal = freezed,
+    Object? farePerPerson = freezed,
     Object? capacity = null,
     Object? seatsTaken = null,
     Object? driverId = freezed,
@@ -144,10 +168,34 @@ class _$ShuttleModelCopyWithImpl<$Res, $Val extends ShuttleModel>
           ? _value.routeEndLng
           : routeEndLng // ignore: cast_nullable_to_non_nullable
               as double?,
+      originAddress: freezed == originAddress
+          ? _value.originAddress
+          : originAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationAddress: freezed == destinationAddress
+          ? _value.destinationAddress
+          : destinationAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
       departureTime: freezed == departureTime
           ? _value.departureTime
           : departureTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      signupDeadline: freezed == signupDeadline
+          ? _value.signupDeadline
+          : signupDeadline // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      costType: null == costType
+          ? _value.costType
+          : costType // ignore: cast_nullable_to_non_nullable
+              as String,
+      fareTotal: freezed == fareTotal
+          ? _value.fareTotal
+          : fareTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
+      farePerPerson: freezed == farePerPerson
+          ? _value.farePerPerson
+          : farePerPerson // ignore: cast_nullable_to_non_nullable
+              as double?,
       capacity: null == capacity
           ? _value.capacity
           : capacity // ignore: cast_nullable_to_non_nullable
@@ -197,7 +245,13 @@ abstract class _$$ShuttleModelImplCopyWith<$Res>
       @JsonKey(name: 'route_start_lng') double? routeStartLng,
       @JsonKey(name: 'route_end_lat') double? routeEndLat,
       @JsonKey(name: 'route_end_lng') double? routeEndLng,
+      @JsonKey(name: 'origin_address') String? originAddress,
+      @JsonKey(name: 'destination_address') String? destinationAddress,
       @JsonKey(name: 'departure_time') DateTime? departureTime,
+      @JsonKey(name: 'signup_deadline') DateTime? signupDeadline,
+      @JsonKey(name: 'cost_type') String costType,
+      @JsonKey(name: 'fare_total') double? fareTotal,
+      @JsonKey(name: 'fare_per_person') double? farePerPerson,
       int capacity,
       @JsonKey(name: 'seats_taken') int seatsTaken,
       @JsonKey(name: 'driver_id') String? driverId,
@@ -226,7 +280,13 @@ class __$$ShuttleModelImplCopyWithImpl<$Res>
     Object? routeStartLng = freezed,
     Object? routeEndLat = freezed,
     Object? routeEndLng = freezed,
+    Object? originAddress = freezed,
+    Object? destinationAddress = freezed,
     Object? departureTime = freezed,
+    Object? signupDeadline = freezed,
+    Object? costType = null,
+    Object? fareTotal = freezed,
+    Object? farePerPerson = freezed,
     Object? capacity = null,
     Object? seatsTaken = null,
     Object? driverId = freezed,
@@ -268,10 +328,34 @@ class __$$ShuttleModelImplCopyWithImpl<$Res>
           ? _value.routeEndLng
           : routeEndLng // ignore: cast_nullable_to_non_nullable
               as double?,
+      originAddress: freezed == originAddress
+          ? _value.originAddress
+          : originAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationAddress: freezed == destinationAddress
+          ? _value.destinationAddress
+          : destinationAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
       departureTime: freezed == departureTime
           ? _value.departureTime
           : departureTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      signupDeadline: freezed == signupDeadline
+          ? _value.signupDeadline
+          : signupDeadline // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      costType: null == costType
+          ? _value.costType
+          : costType // ignore: cast_nullable_to_non_nullable
+              as String,
+      fareTotal: freezed == fareTotal
+          ? _value.fareTotal
+          : fareTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
+      farePerPerson: freezed == farePerPerson
+          ? _value.farePerPerson
+          : farePerPerson // ignore: cast_nullable_to_non_nullable
+              as double?,
       capacity: null == capacity
           ? _value.capacity
           : capacity // ignore: cast_nullable_to_non_nullable
@@ -316,7 +400,13 @@ class _$ShuttleModelImpl extends _ShuttleModel {
       @JsonKey(name: 'route_start_lng') this.routeStartLng,
       @JsonKey(name: 'route_end_lat') this.routeEndLat,
       @JsonKey(name: 'route_end_lng') this.routeEndLng,
+      @JsonKey(name: 'origin_address') this.originAddress,
+      @JsonKey(name: 'destination_address') this.destinationAddress,
       @JsonKey(name: 'departure_time') this.departureTime,
+      @JsonKey(name: 'signup_deadline') this.signupDeadline,
+      @JsonKey(name: 'cost_type') this.costType = 'free',
+      @JsonKey(name: 'fare_total') this.fareTotal,
+      @JsonKey(name: 'fare_per_person') this.farePerPerson,
       this.capacity = 0,
       @JsonKey(name: 'seats_taken') this.seatsTaken = 0,
       @JsonKey(name: 'driver_id') this.driverId,
@@ -352,8 +442,26 @@ class _$ShuttleModelImpl extends _ShuttleModel {
   @JsonKey(name: 'route_end_lng')
   final double? routeEndLng;
   @override
+  @JsonKey(name: 'origin_address')
+  final String? originAddress;
+  @override
+  @JsonKey(name: 'destination_address')
+  final String? destinationAddress;
+  @override
   @JsonKey(name: 'departure_time')
   final DateTime? departureTime;
+  @override
+  @JsonKey(name: 'signup_deadline')
+  final DateTime? signupDeadline;
+  @override
+  @JsonKey(name: 'cost_type')
+  final String costType;
+  @override
+  @JsonKey(name: 'fare_total')
+  final double? fareTotal;
+  @override
+  @JsonKey(name: 'fare_per_person')
+  final double? farePerPerson;
   @override
   @JsonKey()
   final int capacity;
@@ -379,7 +487,7 @@ class _$ShuttleModelImpl extends _ShuttleModel {
 
   @override
   String toString() {
-    return 'ShuttleModel(id: $id, title: $title, description: $description, status: $status, routeStartLat: $routeStartLat, routeStartLng: $routeStartLng, routeEndLat: $routeEndLat, routeEndLng: $routeEndLng, departureTime: $departureTime, capacity: $capacity, seatsTaken: $seatsTaken, driverId: $driverId, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, isarId: $isarId)';
+    return 'ShuttleModel(id: $id, title: $title, description: $description, status: $status, routeStartLat: $routeStartLat, routeStartLng: $routeStartLng, routeEndLat: $routeEndLat, routeEndLng: $routeEndLng, originAddress: $originAddress, destinationAddress: $destinationAddress, departureTime: $departureTime, signupDeadline: $signupDeadline, costType: $costType, fareTotal: $fareTotal, farePerPerson: $farePerPerson, capacity: $capacity, seatsTaken: $seatsTaken, driverId: $driverId, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, isarId: $isarId)';
   }
 
   @override
@@ -400,8 +508,20 @@ class _$ShuttleModelImpl extends _ShuttleModel {
                 other.routeEndLat == routeEndLat) &&
             (identical(other.routeEndLng, routeEndLng) ||
                 other.routeEndLng == routeEndLng) &&
+            (identical(other.originAddress, originAddress) ||
+                other.originAddress == originAddress) &&
+            (identical(other.destinationAddress, destinationAddress) ||
+                other.destinationAddress == destinationAddress) &&
             (identical(other.departureTime, departureTime) ||
                 other.departureTime == departureTime) &&
+            (identical(other.signupDeadline, signupDeadline) ||
+                other.signupDeadline == signupDeadline) &&
+            (identical(other.costType, costType) ||
+                other.costType == costType) &&
+            (identical(other.fareTotal, fareTotal) ||
+                other.fareTotal == fareTotal) &&
+            (identical(other.farePerPerson, farePerPerson) ||
+                other.farePerPerson == farePerPerson) &&
             (identical(other.capacity, capacity) ||
                 other.capacity == capacity) &&
             (identical(other.seatsTaken, seatsTaken) ||
@@ -419,24 +539,31 @@ class _$ShuttleModelImpl extends _ShuttleModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      description,
-      status,
-      routeStartLat,
-      routeStartLng,
-      routeEndLat,
-      routeEndLng,
-      departureTime,
-      capacity,
-      seatsTaken,
-      driverId,
-      createdBy,
-      createdAt,
-      updatedAt,
-      isarId);
+  int get hashCode => Object.hashAll([
+        runtimeType,
+        id,
+        title,
+        description,
+        status,
+        routeStartLat,
+        routeStartLng,
+        routeEndLat,
+        routeEndLng,
+        originAddress,
+        destinationAddress,
+        departureTime,
+        signupDeadline,
+        costType,
+        fareTotal,
+        farePerPerson,
+        capacity,
+        seatsTaken,
+        driverId,
+        createdBy,
+        createdAt,
+        updatedAt,
+        isarId
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -462,7 +589,13 @@ abstract class _ShuttleModel extends ShuttleModel {
       @JsonKey(name: 'route_start_lng') final double? routeStartLng,
       @JsonKey(name: 'route_end_lat') final double? routeEndLat,
       @JsonKey(name: 'route_end_lng') final double? routeEndLng,
+      @JsonKey(name: 'origin_address') final String? originAddress,
+      @JsonKey(name: 'destination_address') final String? destinationAddress,
       @JsonKey(name: 'departure_time') final DateTime? departureTime,
+      @JsonKey(name: 'signup_deadline') final DateTime? signupDeadline,
+      @JsonKey(name: 'cost_type') final String costType,
+      @JsonKey(name: 'fare_total') final double? fareTotal,
+      @JsonKey(name: 'fare_per_person') final double? farePerPerson,
       final int capacity,
       @JsonKey(name: 'seats_taken') final int seatsTaken,
       @JsonKey(name: 'driver_id') final String? driverId,
@@ -496,8 +629,26 @@ abstract class _ShuttleModel extends ShuttleModel {
   @JsonKey(name: 'route_end_lng')
   double? get routeEndLng;
   @override
+  @JsonKey(name: 'origin_address')
+  String? get originAddress;
+  @override
+  @JsonKey(name: 'destination_address')
+  String? get destinationAddress;
+  @override
   @JsonKey(name: 'departure_time')
   DateTime? get departureTime;
+  @override
+  @JsonKey(name: 'signup_deadline')
+  DateTime? get signupDeadline;
+  @override
+  @JsonKey(name: 'cost_type')
+  String get costType;
+  @override
+  @JsonKey(name: 'fare_total')
+  double? get fareTotal;
+  @override
+  @JsonKey(name: 'fare_per_person')
+  double? get farePerPerson;
   @override
   int get capacity;
   @override

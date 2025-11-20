@@ -16,11 +16,14 @@ class ResourcePoint with _$ResourcePoint {
     @Default('Other') String type, // Water, Shelter, Medical, Food, Other
     required double latitude,
     required double longitude,
+    String? address,
+    @JsonKey(name: 'expires_at') DateTime? expiresAt,
     @JsonKey(name: 'is_active') @Default(true) bool isActive,
     @JsonKey(name: 'created_by') String? createdBy,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
     @Default([]) List<String> images,
+    @Default([]) List<String> tags,
     @JsonKey(ignore: true) @Id() int? isarId,
   }) = _ResourcePoint;
 

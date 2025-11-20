@@ -16,8 +16,13 @@ class TaskModel with _$TaskModel {
     String? description,
     @Default('Open') String status, // Open, In Progress, Completed, Cancelled
     @Default('Normal') String priority, // Low, Normal, High, Emergency
+    @JsonKey(name: 'role_label') String? roleLabel,
     double? latitude,
     double? longitude,
+    String? address,
+    @JsonKey(name: 'materials_status') @Default('穩定') String materialsStatus,
+    @JsonKey(name: 'participant_count') @Default(0) int participantCount,
+    @JsonKey(name: 'required_participants') @Default(0) int requiredParticipants,
     @Default([]) List<String> images,
     @JsonKey(name: 'assigned_to') String? assignedTo,
     @JsonKey(name: 'created_by') String? createdBy,

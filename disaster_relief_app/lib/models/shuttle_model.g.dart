@@ -15,24 +15,30 @@ extension GetShuttleModelCollection on Isar {
 const ShuttleModelSchema = CollectionSchema(
   name: 'ShuttleModel',
   schema:
-      '{"name":"ShuttleModel","idName":"isarId","properties":[{"name":"capacity","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"departureTime","type":"Long"},{"name":"description","type":"String"},{"name":"driverId","type":"String"},{"name":"id","type":"String"},{"name":"routeEndLat","type":"Double"},{"name":"routeEndLng","type":"Double"},{"name":"routeStartLat","type":"Double"},{"name":"routeStartLng","type":"Double"},{"name":"seatsTaken","type":"Long"},{"name":"status","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
+      '{"name":"ShuttleModel","idName":"isarId","properties":[{"name":"capacity","type":"Long"},{"name":"costType","type":"String"},{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"departureTime","type":"Long"},{"name":"description","type":"String"},{"name":"destinationAddress","type":"String"},{"name":"driverId","type":"String"},{"name":"farePerPerson","type":"Double"},{"name":"fareTotal","type":"Double"},{"name":"id","type":"String"},{"name":"originAddress","type":"String"},{"name":"routeEndLat","type":"Double"},{"name":"routeEndLng","type":"Double"},{"name":"routeStartLat","type":"Double"},{"name":"routeStartLng","type":"Double"},{"name":"seatsTaken","type":"Long"},{"name":"signupDeadline","type":"Long"},{"name":"status","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
   idName: 'isarId',
   propertyIds: {
     'capacity': 0,
-    'createdAt': 1,
-    'createdBy': 2,
-    'departureTime': 3,
-    'description': 4,
-    'driverId': 5,
-    'id': 6,
-    'routeEndLat': 7,
-    'routeEndLng': 8,
-    'routeStartLat': 9,
-    'routeStartLng': 10,
-    'seatsTaken': 11,
-    'status': 12,
-    'title': 13,
-    'updatedAt': 14
+    'costType': 1,
+    'createdAt': 2,
+    'createdBy': 3,
+    'departureTime': 4,
+    'description': 5,
+    'destinationAddress': 6,
+    'driverId': 7,
+    'farePerPerson': 8,
+    'fareTotal': 9,
+    'id': 10,
+    'originAddress': 11,
+    'routeEndLat': 12,
+    'routeEndLng': 13,
+    'routeStartLat': 14,
+    'routeStartLng': 15,
+    'seatsTaken': 16,
+    'signupDeadline': 17,
+    'status': 18,
+    'title': 19,
+    'updatedAt': 20
   },
   listProperties: {},
   indexIds: {},
@@ -73,49 +79,70 @@ void _shuttleModelSerializeNative(
   var dynamicSize = 0;
   final value0 = object.capacity;
   final _capacity = value0;
-  final value1 = object.createdAt;
-  final _createdAt = value1;
-  final value2 = object.createdBy;
+  final value1 = object.costType;
+  final _costType = IsarBinaryWriter.utf8Encoder.convert(value1);
+  dynamicSize += (_costType.length) as int;
+  final value2 = object.createdAt;
+  final _createdAt = value2;
+  final value3 = object.createdBy;
   IsarUint8List? _createdBy;
-  if (value2 != null) {
-    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value2);
+  if (value3 != null) {
+    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value3);
   }
   dynamicSize += (_createdBy?.length ?? 0) as int;
-  final value3 = object.departureTime;
-  final _departureTime = value3;
-  final value4 = object.description;
+  final value4 = object.departureTime;
+  final _departureTime = value4;
+  final value5 = object.description;
   IsarUint8List? _description;
-  if (value4 != null) {
-    _description = IsarBinaryWriter.utf8Encoder.convert(value4);
+  if (value5 != null) {
+    _description = IsarBinaryWriter.utf8Encoder.convert(value5);
   }
   dynamicSize += (_description?.length ?? 0) as int;
-  final value5 = object.driverId;
+  final value6 = object.destinationAddress;
+  IsarUint8List? _destinationAddress;
+  if (value6 != null) {
+    _destinationAddress = IsarBinaryWriter.utf8Encoder.convert(value6);
+  }
+  dynamicSize += (_destinationAddress?.length ?? 0) as int;
+  final value7 = object.driverId;
   IsarUint8List? _driverId;
-  if (value5 != null) {
-    _driverId = IsarBinaryWriter.utf8Encoder.convert(value5);
+  if (value7 != null) {
+    _driverId = IsarBinaryWriter.utf8Encoder.convert(value7);
   }
   dynamicSize += (_driverId?.length ?? 0) as int;
-  final value6 = object.id;
-  final _id = IsarBinaryWriter.utf8Encoder.convert(value6);
+  final value8 = object.farePerPerson;
+  final _farePerPerson = value8;
+  final value9 = object.fareTotal;
+  final _fareTotal = value9;
+  final value10 = object.id;
+  final _id = IsarBinaryWriter.utf8Encoder.convert(value10);
   dynamicSize += (_id.length) as int;
-  final value7 = object.routeEndLat;
-  final _routeEndLat = value7;
-  final value8 = object.routeEndLng;
-  final _routeEndLng = value8;
-  final value9 = object.routeStartLat;
-  final _routeStartLat = value9;
-  final value10 = object.routeStartLng;
-  final _routeStartLng = value10;
-  final value11 = object.seatsTaken;
-  final _seatsTaken = value11;
-  final value12 = object.status;
-  final _status = IsarBinaryWriter.utf8Encoder.convert(value12);
+  final value11 = object.originAddress;
+  IsarUint8List? _originAddress;
+  if (value11 != null) {
+    _originAddress = IsarBinaryWriter.utf8Encoder.convert(value11);
+  }
+  dynamicSize += (_originAddress?.length ?? 0) as int;
+  final value12 = object.routeEndLat;
+  final _routeEndLat = value12;
+  final value13 = object.routeEndLng;
+  final _routeEndLng = value13;
+  final value14 = object.routeStartLat;
+  final _routeStartLat = value14;
+  final value15 = object.routeStartLng;
+  final _routeStartLng = value15;
+  final value16 = object.seatsTaken;
+  final _seatsTaken = value16;
+  final value17 = object.signupDeadline;
+  final _signupDeadline = value17;
+  final value18 = object.status;
+  final _status = IsarBinaryWriter.utf8Encoder.convert(value18);
   dynamicSize += (_status.length) as int;
-  final value13 = object.title;
-  final _title = IsarBinaryWriter.utf8Encoder.convert(value13);
+  final value19 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value19);
   dynamicSize += (_title.length) as int;
-  final value14 = object.updatedAt;
-  final _updatedAt = value14;
+  final value20 = object.updatedAt;
+  final _updatedAt = value20;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
@@ -123,20 +150,26 @@ void _shuttleModelSerializeNative(
   final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
   final writer = IsarBinaryWriter(buffer, staticSize);
   writer.writeLong(offsets[0], _capacity);
-  writer.writeDateTime(offsets[1], _createdAt);
-  writer.writeBytes(offsets[2], _createdBy);
-  writer.writeDateTime(offsets[3], _departureTime);
-  writer.writeBytes(offsets[4], _description);
-  writer.writeBytes(offsets[5], _driverId);
-  writer.writeBytes(offsets[6], _id);
-  writer.writeDouble(offsets[7], _routeEndLat);
-  writer.writeDouble(offsets[8], _routeEndLng);
-  writer.writeDouble(offsets[9], _routeStartLat);
-  writer.writeDouble(offsets[10], _routeStartLng);
-  writer.writeLong(offsets[11], _seatsTaken);
-  writer.writeBytes(offsets[12], _status);
-  writer.writeBytes(offsets[13], _title);
-  writer.writeDateTime(offsets[14], _updatedAt);
+  writer.writeBytes(offsets[1], _costType);
+  writer.writeDateTime(offsets[2], _createdAt);
+  writer.writeBytes(offsets[3], _createdBy);
+  writer.writeDateTime(offsets[4], _departureTime);
+  writer.writeBytes(offsets[5], _description);
+  writer.writeBytes(offsets[6], _destinationAddress);
+  writer.writeBytes(offsets[7], _driverId);
+  writer.writeDouble(offsets[8], _farePerPerson);
+  writer.writeDouble(offsets[9], _fareTotal);
+  writer.writeBytes(offsets[10], _id);
+  writer.writeBytes(offsets[11], _originAddress);
+  writer.writeDouble(offsets[12], _routeEndLat);
+  writer.writeDouble(offsets[13], _routeEndLng);
+  writer.writeDouble(offsets[14], _routeStartLat);
+  writer.writeDouble(offsets[15], _routeStartLng);
+  writer.writeLong(offsets[16], _seatsTaken);
+  writer.writeDateTime(offsets[17], _signupDeadline);
+  writer.writeBytes(offsets[18], _status);
+  writer.writeBytes(offsets[19], _title);
+  writer.writeDateTime(offsets[20], _updatedAt);
 }
 
 ShuttleModel _shuttleModelDeserializeNative(
@@ -146,21 +179,27 @@ ShuttleModel _shuttleModelDeserializeNative(
     List<int> offsets) {
   final object = ShuttleModel(
     capacity: reader.readLong(offsets[0]),
-    createdAt: reader.readDateTimeOrNull(offsets[1]),
-    createdBy: reader.readStringOrNull(offsets[2]),
-    departureTime: reader.readDateTimeOrNull(offsets[3]),
-    description: reader.readStringOrNull(offsets[4]),
-    driverId: reader.readStringOrNull(offsets[5]),
-    id: reader.readString(offsets[6]),
+    costType: reader.readString(offsets[1]),
+    createdAt: reader.readDateTimeOrNull(offsets[2]),
+    createdBy: reader.readStringOrNull(offsets[3]),
+    departureTime: reader.readDateTimeOrNull(offsets[4]),
+    description: reader.readStringOrNull(offsets[5]),
+    destinationAddress: reader.readStringOrNull(offsets[6]),
+    driverId: reader.readStringOrNull(offsets[7]),
+    farePerPerson: reader.readDoubleOrNull(offsets[8]),
+    fareTotal: reader.readDoubleOrNull(offsets[9]),
+    id: reader.readString(offsets[10]),
     isarId: id,
-    routeEndLat: reader.readDoubleOrNull(offsets[7]),
-    routeEndLng: reader.readDoubleOrNull(offsets[8]),
-    routeStartLat: reader.readDoubleOrNull(offsets[9]),
-    routeStartLng: reader.readDoubleOrNull(offsets[10]),
-    seatsTaken: reader.readLong(offsets[11]),
-    status: reader.readString(offsets[12]),
-    title: reader.readString(offsets[13]),
-    updatedAt: reader.readDateTimeOrNull(offsets[14]),
+    originAddress: reader.readStringOrNull(offsets[11]),
+    routeEndLat: reader.readDoubleOrNull(offsets[12]),
+    routeEndLng: reader.readDoubleOrNull(offsets[13]),
+    routeStartLat: reader.readDoubleOrNull(offsets[14]),
+    routeStartLng: reader.readDoubleOrNull(offsets[15]),
+    seatsTaken: reader.readLong(offsets[16]),
+    signupDeadline: reader.readDateTimeOrNull(offsets[17]),
+    status: reader.readString(offsets[18]),
+    title: reader.readString(offsets[19]),
+    updatedAt: reader.readDateTimeOrNull(offsets[20]),
   );
   return object;
 }
@@ -173,32 +212,44 @@ P _shuttleModelDeserializePropNative<P>(
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
-      return (reader.readDateTimeOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
-    case 3:
       return (reader.readDateTimeOrNull(offset)) as P;
-    case 4:
+    case 3:
       return (reader.readStringOrNull(offset)) as P;
+    case 4:
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 7:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 8:
       return (reader.readDoubleOrNull(offset)) as P;
     case 9:
       return (reader.readDoubleOrNull(offset)) as P;
     case 10:
-      return (reader.readDoubleOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 11:
-      return (reader.readLong(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 12:
-      return (reader.readString(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 13:
-      return (reader.readString(offset)) as P;
+      return (reader.readDoubleOrNull(offset)) as P;
     case 14:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 15:
+      return (reader.readDoubleOrNull(offset)) as P;
+    case 16:
+      return (reader.readLong(offset)) as P;
+    case 17:
+      return (reader.readDateTimeOrNull(offset)) as P;
+    case 18:
+      return (reader.readString(offset)) as P;
+    case 19:
+      return (reader.readString(offset)) as P;
+    case 20:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -209,20 +260,28 @@ dynamic _shuttleModelSerializeWeb(
     IsarCollection<ShuttleModel> collection, ShuttleModel object) {
   final jsObj = IsarNative.newJsObject();
   IsarNative.jsObjectSet(jsObj, 'capacity', object.capacity);
+  IsarNative.jsObjectSet(jsObj, 'costType', object.costType);
   IsarNative.jsObjectSet(
       jsObj, 'createdAt', object.createdAt?.toUtc().millisecondsSinceEpoch);
   IsarNative.jsObjectSet(jsObj, 'createdBy', object.createdBy);
   IsarNative.jsObjectSet(jsObj, 'departureTime',
       object.departureTime?.toUtc().millisecondsSinceEpoch);
   IsarNative.jsObjectSet(jsObj, 'description', object.description);
+  IsarNative.jsObjectSet(
+      jsObj, 'destinationAddress', object.destinationAddress);
   IsarNative.jsObjectSet(jsObj, 'driverId', object.driverId);
+  IsarNative.jsObjectSet(jsObj, 'farePerPerson', object.farePerPerson);
+  IsarNative.jsObjectSet(jsObj, 'fareTotal', object.fareTotal);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
   IsarNative.jsObjectSet(jsObj, 'isarId', object.isarId);
+  IsarNative.jsObjectSet(jsObj, 'originAddress', object.originAddress);
   IsarNative.jsObjectSet(jsObj, 'routeEndLat', object.routeEndLat);
   IsarNative.jsObjectSet(jsObj, 'routeEndLng', object.routeEndLng);
   IsarNative.jsObjectSet(jsObj, 'routeStartLat', object.routeStartLat);
   IsarNative.jsObjectSet(jsObj, 'routeStartLng', object.routeStartLng);
   IsarNative.jsObjectSet(jsObj, 'seatsTaken', object.seatsTaken);
+  IsarNative.jsObjectSet(jsObj, 'signupDeadline',
+      object.signupDeadline?.toUtc().millisecondsSinceEpoch);
   IsarNative.jsObjectSet(jsObj, 'status', object.status);
   IsarNative.jsObjectSet(jsObj, 'title', object.title);
   IsarNative.jsObjectSet(
@@ -235,6 +294,7 @@ ShuttleModel _shuttleModelDeserializeWeb(
   final object = ShuttleModel(
     capacity:
         IsarNative.jsObjectGet(jsObj, 'capacity') ?? double.negativeInfinity,
+    costType: IsarNative.jsObjectGet(jsObj, 'costType') ?? '',
     createdAt: IsarNative.jsObjectGet(jsObj, 'createdAt') != null
         ? DateTime.fromMillisecondsSinceEpoch(
                 IsarNative.jsObjectGet(jsObj, 'createdAt'),
@@ -249,15 +309,25 @@ ShuttleModel _shuttleModelDeserializeWeb(
             .toLocal()
         : null,
     description: IsarNative.jsObjectGet(jsObj, 'description'),
+    destinationAddress: IsarNative.jsObjectGet(jsObj, 'destinationAddress'),
     driverId: IsarNative.jsObjectGet(jsObj, 'driverId'),
+    farePerPerson: IsarNative.jsObjectGet(jsObj, 'farePerPerson'),
+    fareTotal: IsarNative.jsObjectGet(jsObj, 'fareTotal'),
     id: IsarNative.jsObjectGet(jsObj, 'id') ?? '',
     isarId: IsarNative.jsObjectGet(jsObj, 'isarId'),
+    originAddress: IsarNative.jsObjectGet(jsObj, 'originAddress'),
     routeEndLat: IsarNative.jsObjectGet(jsObj, 'routeEndLat'),
     routeEndLng: IsarNative.jsObjectGet(jsObj, 'routeEndLng'),
     routeStartLat: IsarNative.jsObjectGet(jsObj, 'routeStartLat'),
     routeStartLng: IsarNative.jsObjectGet(jsObj, 'routeStartLng'),
     seatsTaken:
         IsarNative.jsObjectGet(jsObj, 'seatsTaken') ?? double.negativeInfinity,
+    signupDeadline: IsarNative.jsObjectGet(jsObj, 'signupDeadline') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'signupDeadline'),
+                isUtc: true)
+            .toLocal()
+        : null,
     status: IsarNative.jsObjectGet(jsObj, 'status') ?? '',
     title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
     updatedAt: IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
@@ -275,6 +345,8 @@ P _shuttleModelDeserializePropWeb<P>(Object jsObj, String propertyName) {
     case 'capacity':
       return (IsarNative.jsObjectGet(jsObj, 'capacity') ??
           double.negativeInfinity) as P;
+    case 'costType':
+      return (IsarNative.jsObjectGet(jsObj, 'costType') ?? '') as P;
     case 'createdAt':
       return (IsarNative.jsObjectGet(jsObj, 'createdAt') != null
           ? DateTime.fromMillisecondsSinceEpoch(
@@ -293,12 +365,20 @@ P _shuttleModelDeserializePropWeb<P>(Object jsObj, String propertyName) {
           : null) as P;
     case 'description':
       return (IsarNative.jsObjectGet(jsObj, 'description')) as P;
+    case 'destinationAddress':
+      return (IsarNative.jsObjectGet(jsObj, 'destinationAddress')) as P;
     case 'driverId':
       return (IsarNative.jsObjectGet(jsObj, 'driverId')) as P;
+    case 'farePerPerson':
+      return (IsarNative.jsObjectGet(jsObj, 'farePerPerson')) as P;
+    case 'fareTotal':
+      return (IsarNative.jsObjectGet(jsObj, 'fareTotal')) as P;
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id') ?? '') as P;
     case 'isarId':
       return (IsarNative.jsObjectGet(jsObj, 'isarId')) as P;
+    case 'originAddress':
+      return (IsarNative.jsObjectGet(jsObj, 'originAddress')) as P;
     case 'routeEndLat':
       return (IsarNative.jsObjectGet(jsObj, 'routeEndLat')) as P;
     case 'routeEndLng':
@@ -310,6 +390,13 @@ P _shuttleModelDeserializePropWeb<P>(Object jsObj, String propertyName) {
     case 'seatsTaken':
       return (IsarNative.jsObjectGet(jsObj, 'seatsTaken') ??
           double.negativeInfinity) as P;
+    case 'signupDeadline':
+      return (IsarNative.jsObjectGet(jsObj, 'signupDeadline') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'signupDeadline'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
     case 'status':
       return (IsarNative.jsObjectGet(jsObj, 'status') ?? '') as P;
     case 'title':
@@ -446,6 +533,113 @@ extension ShuttleModelQueryFilter
       includeLower: includeLower,
       upper: upper,
       includeUpper: includeUpper,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      costTypeEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'costType',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      costTypeGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'costType',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      costTypeLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'costType',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      costTypeBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'costType',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      costTypeStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'costType',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      costTypeEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'costType',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      costTypeContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'costType',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      costTypeMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'costType',
+      value: pattern,
+      caseSensitive: caseSensitive,
     ));
   }
 
@@ -802,6 +996,122 @@ extension ShuttleModelQueryFilter
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'destinationAddress',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'destinationAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressGreaterThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'destinationAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'destinationAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressBetween(
+    String? lower,
+    String? upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'destinationAddress',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'destinationAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'destinationAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'destinationAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      destinationAddressMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'destinationAddress',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       driverIdIsNull() {
     return addFilterConditionInternal(FilterCondition(
       type: ConditionType.isNull,
@@ -914,6 +1224,86 @@ extension ShuttleModelQueryFilter
       property: 'driverId',
       value: pattern,
       caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      farePerPersonIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'farePerPerson',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      farePerPersonGreaterThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'farePerPerson',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      farePerPersonLessThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'farePerPerson',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      farePerPersonBetween(double? lower, double? upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'farePerPerson',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      fareTotalIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'fareTotal',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      fareTotalGreaterThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'fareTotal',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      fareTotalLessThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'fareTotal',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      fareTotalBetween(double? lower, double? upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'fareTotal',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
     ));
   }
 
@@ -1076,6 +1466,122 @@ extension ShuttleModelQueryFilter
       includeLower: includeLower,
       upper: upper,
       includeUpper: includeUpper,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'originAddress',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'originAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressGreaterThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'originAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'originAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressBetween(
+    String? lower,
+    String? upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'originAddress',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'originAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'originAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'originAddress',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      originAddressMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'originAddress',
+      value: pattern,
+      caseSensitive: caseSensitive,
     ));
   }
 
@@ -1283,6 +1789,66 @@ extension ShuttleModelQueryFilter
   }) {
     return addFilterConditionInternal(FilterCondition.between(
       property: 'seatsTaken',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      signupDeadlineIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'signupDeadline',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      signupDeadlineEqualTo(DateTime? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'signupDeadline',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      signupDeadlineGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'signupDeadline',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      signupDeadlineLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'signupDeadline',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
+      signupDeadlineBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'signupDeadline',
       lower: lower,
       includeLower: includeLower,
       upper: upper,
@@ -1575,6 +2141,14 @@ extension ShuttleModelQueryWhereSortBy
     return addSortByInternal('capacity', Sort.desc);
   }
 
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCostType() {
+    return addSortByInternal('costType', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCostTypeDesc() {
+    return addSortByInternal('costType', Sort.desc);
+  }
+
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
@@ -1609,12 +2183,39 @@ extension ShuttleModelQueryWhereSortBy
     return addSortByInternal('description', Sort.desc);
   }
 
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      sortByDestinationAddress() {
+    return addSortByInternal('destinationAddress', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      sortByDestinationAddressDesc() {
+    return addSortByInternal('destinationAddress', Sort.desc);
+  }
+
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByDriverId() {
     return addSortByInternal('driverId', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByDriverIdDesc() {
     return addSortByInternal('driverId', Sort.desc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByFarePerPerson() {
+    return addSortByInternal('farePerPerson', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      sortByFarePerPersonDesc() {
+    return addSortByInternal('farePerPerson', Sort.desc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByFareTotal() {
+    return addSortByInternal('fareTotal', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByFareTotalDesc() {
+    return addSortByInternal('fareTotal', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortById() {
@@ -1631,6 +2232,15 @@ extension ShuttleModelQueryWhereSortBy
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByIsarIdDesc() {
     return addSortByInternal('isarId', Sort.desc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByOriginAddress() {
+    return addSortByInternal('originAddress', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      sortByOriginAddressDesc() {
+    return addSortByInternal('originAddress', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByRouteEndLat() {
@@ -1678,6 +2288,16 @@ extension ShuttleModelQueryWhereSortBy
     return addSortByInternal('seatsTaken', Sort.desc);
   }
 
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      sortBySignupDeadline() {
+    return addSortByInternal('signupDeadline', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      sortBySignupDeadlineDesc() {
+    return addSortByInternal('signupDeadline', Sort.desc);
+  }
+
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByStatus() {
     return addSortByInternal('status', Sort.asc);
   }
@@ -1711,6 +2331,14 @@ extension ShuttleModelQueryWhereSortThenBy
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCapacityDesc() {
     return addSortByInternal('capacity', Sort.desc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCostType() {
+    return addSortByInternal('costType', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCostTypeDesc() {
+    return addSortByInternal('costType', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCreatedAt() {
@@ -1747,12 +2375,39 @@ extension ShuttleModelQueryWhereSortThenBy
     return addSortByInternal('description', Sort.desc);
   }
 
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      thenByDestinationAddress() {
+    return addSortByInternal('destinationAddress', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      thenByDestinationAddressDesc() {
+    return addSortByInternal('destinationAddress', Sort.desc);
+  }
+
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByDriverId() {
     return addSortByInternal('driverId', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByDriverIdDesc() {
     return addSortByInternal('driverId', Sort.desc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByFarePerPerson() {
+    return addSortByInternal('farePerPerson', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      thenByFarePerPersonDesc() {
+    return addSortByInternal('farePerPerson', Sort.desc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByFareTotal() {
+    return addSortByInternal('fareTotal', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByFareTotalDesc() {
+    return addSortByInternal('fareTotal', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenById() {
@@ -1769,6 +2424,15 @@ extension ShuttleModelQueryWhereSortThenBy
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByIsarIdDesc() {
     return addSortByInternal('isarId', Sort.desc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByOriginAddress() {
+    return addSortByInternal('originAddress', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      thenByOriginAddressDesc() {
+    return addSortByInternal('originAddress', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByRouteEndLat() {
@@ -1816,6 +2480,16 @@ extension ShuttleModelQueryWhereSortThenBy
     return addSortByInternal('seatsTaken', Sort.desc);
   }
 
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      thenBySignupDeadline() {
+    return addSortByInternal('signupDeadline', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
+      thenBySignupDeadlineDesc() {
+    return addSortByInternal('signupDeadline', Sort.desc);
+  }
+
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByStatus() {
     return addSortByInternal('status', Sort.asc);
   }
@@ -1847,6 +2521,11 @@ extension ShuttleModelQueryWhereDistinct
     return addDistinctByInternal('capacity');
   }
 
+  QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByCostType(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('costType', caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByCreatedAt() {
     return addDistinctByInternal('createdAt');
   }
@@ -1866,9 +2545,24 @@ extension ShuttleModelQueryWhereDistinct
     return addDistinctByInternal('description', caseSensitive: caseSensitive);
   }
 
+  QueryBuilder<ShuttleModel, ShuttleModel, QDistinct>
+      distinctByDestinationAddress({bool caseSensitive = true}) {
+    return addDistinctByInternal('destinationAddress',
+        caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByDriverId(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('driverId', caseSensitive: caseSensitive);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QDistinct>
+      distinctByFarePerPerson() {
+    return addDistinctByInternal('farePerPerson');
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByFareTotal() {
+    return addDistinctByInternal('fareTotal');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctById(
@@ -1878,6 +2572,11 @@ extension ShuttleModelQueryWhereDistinct
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByIsarId() {
     return addDistinctByInternal('isarId');
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByOriginAddress(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('originAddress', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByRouteEndLat() {
@@ -1902,6 +2601,11 @@ extension ShuttleModelQueryWhereDistinct
     return addDistinctByInternal('seatsTaken');
   }
 
+  QueryBuilder<ShuttleModel, ShuttleModel, QDistinct>
+      distinctBySignupDeadline() {
+    return addDistinctByInternal('signupDeadline');
+  }
+
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByStatus(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('status', caseSensitive: caseSensitive);
@@ -1923,6 +2627,10 @@ extension ShuttleModelQueryProperty
     return addPropertyNameInternal('capacity');
   }
 
+  QueryBuilder<ShuttleModel, String, QQueryOperations> costTypeProperty() {
+    return addPropertyNameInternal('costType');
+  }
+
   QueryBuilder<ShuttleModel, DateTime?, QQueryOperations> createdAtProperty() {
     return addPropertyNameInternal('createdAt');
   }
@@ -1940,8 +2648,22 @@ extension ShuttleModelQueryProperty
     return addPropertyNameInternal('description');
   }
 
+  QueryBuilder<ShuttleModel, String?, QQueryOperations>
+      destinationAddressProperty() {
+    return addPropertyNameInternal('destinationAddress');
+  }
+
   QueryBuilder<ShuttleModel, String?, QQueryOperations> driverIdProperty() {
     return addPropertyNameInternal('driverId');
+  }
+
+  QueryBuilder<ShuttleModel, double?, QQueryOperations>
+      farePerPersonProperty() {
+    return addPropertyNameInternal('farePerPerson');
+  }
+
+  QueryBuilder<ShuttleModel, double?, QQueryOperations> fareTotalProperty() {
+    return addPropertyNameInternal('fareTotal');
   }
 
   QueryBuilder<ShuttleModel, String, QQueryOperations> idProperty() {
@@ -1950,6 +2672,11 @@ extension ShuttleModelQueryProperty
 
   QueryBuilder<ShuttleModel, int?, QQueryOperations> isarIdProperty() {
     return addPropertyNameInternal('isarId');
+  }
+
+  QueryBuilder<ShuttleModel, String?, QQueryOperations>
+      originAddressProperty() {
+    return addPropertyNameInternal('originAddress');
   }
 
   QueryBuilder<ShuttleModel, double?, QQueryOperations> routeEndLatProperty() {
@@ -1972,6 +2699,11 @@ extension ShuttleModelQueryProperty
 
   QueryBuilder<ShuttleModel, int, QQueryOperations> seatsTakenProperty() {
     return addPropertyNameInternal('seatsTaken');
+  }
+
+  QueryBuilder<ShuttleModel, DateTime?, QQueryOperations>
+      signupDeadlineProperty() {
+    return addPropertyNameInternal('signupDeadline');
   }
 
   QueryBuilder<ShuttleModel, String, QQueryOperations> statusProperty() {
@@ -2001,9 +2733,17 @@ _$ShuttleModelImpl _$$ShuttleModelImplFromJson(Map<String, dynamic> json) =>
       routeStartLng: (json['route_start_lng'] as num?)?.toDouble(),
       routeEndLat: (json['route_end_lat'] as num?)?.toDouble(),
       routeEndLng: (json['route_end_lng'] as num?)?.toDouble(),
+      originAddress: json['origin_address'] as String?,
+      destinationAddress: json['destination_address'] as String?,
       departureTime: json['departure_time'] == null
           ? null
           : DateTime.parse(json['departure_time'] as String),
+      signupDeadline: json['signup_deadline'] == null
+          ? null
+          : DateTime.parse(json['signup_deadline'] as String),
+      costType: json['cost_type'] as String? ?? 'free',
+      fareTotal: (json['fare_total'] as num?)?.toDouble(),
+      farePerPerson: (json['fare_per_person'] as num?)?.toDouble(),
       capacity: (json['capacity'] as num?)?.toInt() ?? 0,
       seatsTaken: (json['seats_taken'] as num?)?.toInt() ?? 0,
       driverId: json['driver_id'] as String?,
@@ -2026,7 +2766,13 @@ Map<String, dynamic> _$$ShuttleModelImplToJson(_$ShuttleModelImpl instance) =>
       'route_start_lng': instance.routeStartLng,
       'route_end_lat': instance.routeEndLat,
       'route_end_lng': instance.routeEndLng,
+      'origin_address': instance.originAddress,
+      'destination_address': instance.destinationAddress,
       'departure_time': instance.departureTime?.toIso8601String(),
+      'signup_deadline': instance.signupDeadline?.toIso8601String(),
+      'cost_type': instance.costType,
+      'fare_total': instance.fareTotal,
+      'fare_per_person': instance.farePerPerson,
       'capacity': instance.capacity,
       'seats_taken': instance.seatsTaken,
       'driver_id': instance.driverId,

@@ -15,22 +15,25 @@ extension GetResourcePointCollection on Isar {
 const ResourcePointSchema = CollectionSchema(
   name: 'ResourcePoint',
   schema:
-      '{"name":"ResourcePoint","idName":"isarId","properties":[{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"description","type":"String"},{"name":"id","type":"String"},{"name":"images","type":"StringList"},{"name":"isActive","type":"Bool"},{"name":"latitude","type":"Double"},{"name":"longitude","type":"Double"},{"name":"title","type":"String"},{"name":"type","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
+      '{"name":"ResourcePoint","idName":"isarId","properties":[{"name":"address","type":"String"},{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"description","type":"String"},{"name":"expiresAt","type":"Long"},{"name":"id","type":"String"},{"name":"images","type":"StringList"},{"name":"isActive","type":"Bool"},{"name":"latitude","type":"Double"},{"name":"longitude","type":"Double"},{"name":"tags","type":"StringList"},{"name":"title","type":"String"},{"name":"type","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
   idName: 'isarId',
   propertyIds: {
-    'createdAt': 0,
-    'createdBy': 1,
-    'description': 2,
-    'id': 3,
-    'images': 4,
-    'isActive': 5,
-    'latitude': 6,
-    'longitude': 7,
-    'title': 8,
-    'type': 9,
-    'updatedAt': 10
+    'address': 0,
+    'createdAt': 1,
+    'createdBy': 2,
+    'description': 3,
+    'expiresAt': 4,
+    'id': 5,
+    'images': 6,
+    'isActive': 7,
+    'latitude': 8,
+    'longitude': 9,
+    'tags': 10,
+    'title': 11,
+    'type': 12,
+    'updatedAt': 13
   },
-  listProperties: {'images'},
+  listProperties: {'images', 'tags'},
   indexIds: {},
   indexValueTypes: {},
   linkIds: {},
@@ -67,63 +70,83 @@ void _resourcePointSerializeNative(
     List<int> offsets,
     AdapterAlloc alloc) {
   var dynamicSize = 0;
-  final value0 = object.createdAt;
-  final _createdAt = value0;
-  final value1 = object.createdBy;
+  final value0 = object.address;
+  IsarUint8List? _address;
+  if (value0 != null) {
+    _address = IsarBinaryWriter.utf8Encoder.convert(value0);
+  }
+  dynamicSize += (_address?.length ?? 0) as int;
+  final value1 = object.createdAt;
+  final _createdAt = value1;
+  final value2 = object.createdBy;
   IsarUint8List? _createdBy;
-  if (value1 != null) {
-    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value1);
+  if (value2 != null) {
+    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value2);
   }
   dynamicSize += (_createdBy?.length ?? 0) as int;
-  final value2 = object.description;
+  final value3 = object.description;
   IsarUint8List? _description;
-  if (value2 != null) {
-    _description = IsarBinaryWriter.utf8Encoder.convert(value2);
+  if (value3 != null) {
+    _description = IsarBinaryWriter.utf8Encoder.convert(value3);
   }
   dynamicSize += (_description?.length ?? 0) as int;
-  final value3 = object.id;
-  final _id = IsarBinaryWriter.utf8Encoder.convert(value3);
+  final value4 = object.expiresAt;
+  final _expiresAt = value4;
+  final value5 = object.id;
+  final _id = IsarBinaryWriter.utf8Encoder.convert(value5);
   dynamicSize += (_id.length) as int;
-  final value4 = object.images;
-  dynamicSize += (value4.length) * 8;
-  final bytesList4 = <IsarUint8List>[];
-  for (var str in value4) {
+  final value6 = object.images;
+  dynamicSize += (value6.length) * 8;
+  final bytesList6 = <IsarUint8List>[];
+  for (var str in value6) {
     final bytes = IsarBinaryWriter.utf8Encoder.convert(str);
-    bytesList4.add(bytes);
+    bytesList6.add(bytes);
     dynamicSize += bytes.length as int;
   }
-  final _images = bytesList4;
-  final value5 = object.isActive;
-  final _isActive = value5;
-  final value6 = object.latitude;
-  final _latitude = value6;
-  final value7 = object.longitude;
-  final _longitude = value7;
-  final value8 = object.title;
-  final _title = IsarBinaryWriter.utf8Encoder.convert(value8);
+  final _images = bytesList6;
+  final value7 = object.isActive;
+  final _isActive = value7;
+  final value8 = object.latitude;
+  final _latitude = value8;
+  final value9 = object.longitude;
+  final _longitude = value9;
+  final value10 = object.tags;
+  dynamicSize += (value10.length) * 8;
+  final bytesList10 = <IsarUint8List>[];
+  for (var str in value10) {
+    final bytes = IsarBinaryWriter.utf8Encoder.convert(str);
+    bytesList10.add(bytes);
+    dynamicSize += bytes.length as int;
+  }
+  final _tags = bytesList10;
+  final value11 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value11);
   dynamicSize += (_title.length) as int;
-  final value9 = object.type;
-  final _type = IsarBinaryWriter.utf8Encoder.convert(value9);
+  final value12 = object.type;
+  final _type = IsarBinaryWriter.utf8Encoder.convert(value12);
   dynamicSize += (_type.length) as int;
-  final value10 = object.updatedAt;
-  final _updatedAt = value10;
+  final value13 = object.updatedAt;
+  final _updatedAt = value13;
   final size = staticSize + dynamicSize;
 
   rawObj.buffer = alloc(size);
   rawObj.buffer_length = size;
   final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
   final writer = IsarBinaryWriter(buffer, staticSize);
-  writer.writeDateTime(offsets[0], _createdAt);
-  writer.writeBytes(offsets[1], _createdBy);
-  writer.writeBytes(offsets[2], _description);
-  writer.writeBytes(offsets[3], _id);
-  writer.writeStringList(offsets[4], _images);
-  writer.writeBool(offsets[5], _isActive);
-  writer.writeDouble(offsets[6], _latitude);
-  writer.writeDouble(offsets[7], _longitude);
-  writer.writeBytes(offsets[8], _title);
-  writer.writeBytes(offsets[9], _type);
-  writer.writeDateTime(offsets[10], _updatedAt);
+  writer.writeBytes(offsets[0], _address);
+  writer.writeDateTime(offsets[1], _createdAt);
+  writer.writeBytes(offsets[2], _createdBy);
+  writer.writeBytes(offsets[3], _description);
+  writer.writeDateTime(offsets[4], _expiresAt);
+  writer.writeBytes(offsets[5], _id);
+  writer.writeStringList(offsets[6], _images);
+  writer.writeBool(offsets[7], _isActive);
+  writer.writeDouble(offsets[8], _latitude);
+  writer.writeDouble(offsets[9], _longitude);
+  writer.writeStringList(offsets[10], _tags);
+  writer.writeBytes(offsets[11], _title);
+  writer.writeBytes(offsets[12], _type);
+  writer.writeDateTime(offsets[13], _updatedAt);
 }
 
 ResourcePoint _resourcePointDeserializeNative(
@@ -132,18 +155,21 @@ ResourcePoint _resourcePointDeserializeNative(
     IsarBinaryReader reader,
     List<int> offsets) {
   final object = ResourcePoint(
-    createdAt: reader.readDateTimeOrNull(offsets[0]),
-    createdBy: reader.readStringOrNull(offsets[1]),
-    description: reader.readStringOrNull(offsets[2]),
-    id: reader.readString(offsets[3]),
-    images: reader.readStringList(offsets[4]) ?? [],
-    isActive: reader.readBool(offsets[5]),
+    address: reader.readStringOrNull(offsets[0]),
+    createdAt: reader.readDateTimeOrNull(offsets[1]),
+    createdBy: reader.readStringOrNull(offsets[2]),
+    description: reader.readStringOrNull(offsets[3]),
+    expiresAt: reader.readDateTimeOrNull(offsets[4]),
+    id: reader.readString(offsets[5]),
+    images: reader.readStringList(offsets[6]) ?? [],
+    isActive: reader.readBool(offsets[7]),
     isarId: id,
-    latitude: reader.readDouble(offsets[6]),
-    longitude: reader.readDouble(offsets[7]),
-    title: reader.readString(offsets[8]),
-    type: reader.readString(offsets[9]),
-    updatedAt: reader.readDateTimeOrNull(offsets[10]),
+    latitude: reader.readDouble(offsets[8]),
+    longitude: reader.readDouble(offsets[9]),
+    tags: reader.readStringList(offsets[10]) ?? [],
+    title: reader.readString(offsets[11]),
+    type: reader.readString(offsets[12]),
+    updatedAt: reader.readDateTimeOrNull(offsets[13]),
   );
   return object;
 }
@@ -154,26 +180,32 @@ P _resourcePointDeserializePropNative<P>(
     case -1:
       return id as P;
     case 0:
-      return (reader.readDateTimeOrNull(offset)) as P;
-    case 1:
       return (reader.readStringOrNull(offset)) as P;
+    case 1:
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 2:
       return (reader.readStringOrNull(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 4:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readDateTimeOrNull(offset)) as P;
     case 5:
-      return (reader.readBool(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 6:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 7:
-      return (reader.readDouble(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 8:
-      return (reader.readString(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 9:
-      return (reader.readString(offset)) as P;
+      return (reader.readDouble(offset)) as P;
     case 10:
+      return (reader.readStringList(offset) ?? []) as P;
+    case 11:
+      return (reader.readString(offset)) as P;
+    case 12:
+      return (reader.readString(offset)) as P;
+    case 13:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
       throw 'Illegal propertyIndex';
@@ -183,16 +215,20 @@ P _resourcePointDeserializePropNative<P>(
 dynamic _resourcePointSerializeWeb(
     IsarCollection<ResourcePoint> collection, ResourcePoint object) {
   final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, 'address', object.address);
   IsarNative.jsObjectSet(
       jsObj, 'createdAt', object.createdAt?.toUtc().millisecondsSinceEpoch);
   IsarNative.jsObjectSet(jsObj, 'createdBy', object.createdBy);
   IsarNative.jsObjectSet(jsObj, 'description', object.description);
+  IsarNative.jsObjectSet(
+      jsObj, 'expiresAt', object.expiresAt?.toUtc().millisecondsSinceEpoch);
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
   IsarNative.jsObjectSet(jsObj, 'images', object.images);
   IsarNative.jsObjectSet(jsObj, 'isActive', object.isActive);
   IsarNative.jsObjectSet(jsObj, 'isarId', object.isarId);
   IsarNative.jsObjectSet(jsObj, 'latitude', object.latitude);
   IsarNative.jsObjectSet(jsObj, 'longitude', object.longitude);
+  IsarNative.jsObjectSet(jsObj, 'tags', object.tags);
   IsarNative.jsObjectSet(jsObj, 'title', object.title);
   IsarNative.jsObjectSet(jsObj, 'type', object.type);
   IsarNative.jsObjectSet(
@@ -203,6 +239,7 @@ dynamic _resourcePointSerializeWeb(
 ResourcePoint _resourcePointDeserializeWeb(
     IsarCollection<ResourcePoint> collection, dynamic jsObj) {
   final object = ResourcePoint(
+    address: IsarNative.jsObjectGet(jsObj, 'address'),
     createdAt: IsarNative.jsObjectGet(jsObj, 'createdAt') != null
         ? DateTime.fromMillisecondsSinceEpoch(
                 IsarNative.jsObjectGet(jsObj, 'createdAt'),
@@ -211,6 +248,12 @@ ResourcePoint _resourcePointDeserializeWeb(
         : null,
     createdBy: IsarNative.jsObjectGet(jsObj, 'createdBy'),
     description: IsarNative.jsObjectGet(jsObj, 'description'),
+    expiresAt: IsarNative.jsObjectGet(jsObj, 'expiresAt') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'expiresAt'),
+                isUtc: true)
+            .toLocal()
+        : null,
     id: IsarNative.jsObjectGet(jsObj, 'id') ?? '',
     images: (IsarNative.jsObjectGet(jsObj, 'images') as List?)
             ?.map((e) => e ?? '')
@@ -223,6 +266,11 @@ ResourcePoint _resourcePointDeserializeWeb(
         IsarNative.jsObjectGet(jsObj, 'latitude') ?? double.negativeInfinity,
     longitude:
         IsarNative.jsObjectGet(jsObj, 'longitude') ?? double.negativeInfinity,
+    tags: (IsarNative.jsObjectGet(jsObj, 'tags') as List?)
+            ?.map((e) => e ?? '')
+            .toList()
+            .cast<String>() ??
+        [],
     title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
     type: IsarNative.jsObjectGet(jsObj, 'type') ?? '',
     updatedAt: IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
@@ -237,6 +285,8 @@ ResourcePoint _resourcePointDeserializeWeb(
 
 P _resourcePointDeserializePropWeb<P>(Object jsObj, String propertyName) {
   switch (propertyName) {
+    case 'address':
+      return (IsarNative.jsObjectGet(jsObj, 'address')) as P;
     case 'createdAt':
       return (IsarNative.jsObjectGet(jsObj, 'createdAt') != null
           ? DateTime.fromMillisecondsSinceEpoch(
@@ -248,6 +298,13 @@ P _resourcePointDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'createdBy')) as P;
     case 'description':
       return (IsarNative.jsObjectGet(jsObj, 'description')) as P;
+    case 'expiresAt':
+      return (IsarNative.jsObjectGet(jsObj, 'expiresAt') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'expiresAt'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id') ?? '') as P;
     case 'images':
@@ -266,6 +323,12 @@ P _resourcePointDeserializePropWeb<P>(Object jsObj, String propertyName) {
     case 'longitude':
       return (IsarNative.jsObjectGet(jsObj, 'longitude') ??
           double.negativeInfinity) as P;
+    case 'tags':
+      return ((IsarNative.jsObjectGet(jsObj, 'tags') as List?)
+              ?.map((e) => e ?? '')
+              .toList()
+              .cast<String>() ??
+          []) as P;
     case 'title':
       return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
     case 'type':
@@ -353,6 +416,122 @@ extension ResourcePointQueryWhere
 
 extension ResourcePointQueryFilter
     on QueryBuilder<ResourcePoint, ResourcePoint, QFilterCondition> {
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'address',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressGreaterThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressBetween(
+    String? lower,
+    String? upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'address',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'address',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      addressMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'address',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdAtIsNull() {
     return addFilterConditionInternal(FilterCondition(
@@ -642,6 +821,66 @@ extension ResourcePointQueryFilter
       property: 'description',
       value: pattern,
       caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      expiresAtIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'expiresAt',
+      value: null,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      expiresAtEqualTo(DateTime? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'expiresAt',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      expiresAtGreaterThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'expiresAt',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      expiresAtLessThan(
+    DateTime? value, {
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'expiresAt',
+      value: value,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      expiresAtBetween(
+    DateTime? lower,
+    DateTime? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'expiresAt',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
     ));
   }
 
@@ -989,6 +1228,113 @@ extension ResourcePointQueryFilter
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      tagsAnyEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'tags',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      tagsAnyGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'tags',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      tagsAnyLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'tags',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      tagsAnyBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'tags',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      tagsAnyStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'tags',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      tagsAnyEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'tags',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      tagsAnyContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'tags',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+      tagsAnyMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'tags',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       titleEqualTo(
     String value, {
     bool caseSensitive = true,
@@ -1267,6 +1613,14 @@ extension ResourcePointQueryLinks
 
 extension ResourcePointQueryWhereSortBy
     on QueryBuilder<ResourcePoint, ResourcePoint, QSortBy> {
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByAddress() {
+    return addSortByInternal('address', Sort.asc);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByAddressDesc() {
+    return addSortByInternal('address', Sort.desc);
+  }
+
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
@@ -1292,6 +1646,15 @@ extension ResourcePointQueryWhereSortBy
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       sortByDescriptionDesc() {
     return addSortByInternal('description', Sort.desc);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByExpiresAt() {
+    return addSortByInternal('expiresAt', Sort.asc);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
+      sortByExpiresAtDesc() {
+    return addSortByInternal('expiresAt', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortById() {
@@ -1365,6 +1728,14 @@ extension ResourcePointQueryWhereSortBy
 
 extension ResourcePointQueryWhereSortThenBy
     on QueryBuilder<ResourcePoint, ResourcePoint, QSortThenBy> {
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByAddress() {
+    return addSortByInternal('address', Sort.asc);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByAddressDesc() {
+    return addSortByInternal('address', Sort.desc);
+  }
+
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByCreatedAt() {
     return addSortByInternal('createdAt', Sort.asc);
   }
@@ -1390,6 +1761,15 @@ extension ResourcePointQueryWhereSortThenBy
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       thenByDescriptionDesc() {
     return addSortByInternal('description', Sort.desc);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByExpiresAt() {
+    return addSortByInternal('expiresAt', Sort.asc);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
+      thenByExpiresAtDesc() {
+    return addSortByInternal('expiresAt', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenById() {
@@ -1463,6 +1843,11 @@ extension ResourcePointQueryWhereSortThenBy
 
 extension ResourcePointQueryWhereDistinct
     on QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> {
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByAddress(
+      {bool caseSensitive = true}) {
+    return addDistinctByInternal('address', caseSensitive: caseSensitive);
+  }
+
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByCreatedAt() {
     return addDistinctByInternal('createdAt');
   }
@@ -1475,6 +1860,10 @@ extension ResourcePointQueryWhereDistinct
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
     return addDistinctByInternal('description', caseSensitive: caseSensitive);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByExpiresAt() {
+    return addDistinctByInternal('expiresAt');
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctById(
@@ -1515,6 +1904,10 @@ extension ResourcePointQueryWhereDistinct
 
 extension ResourcePointQueryProperty
     on QueryBuilder<ResourcePoint, ResourcePoint, QQueryProperty> {
+  QueryBuilder<ResourcePoint, String?, QQueryOperations> addressProperty() {
+    return addPropertyNameInternal('address');
+  }
+
   QueryBuilder<ResourcePoint, DateTime?, QQueryOperations> createdAtProperty() {
     return addPropertyNameInternal('createdAt');
   }
@@ -1525,6 +1918,10 @@ extension ResourcePointQueryProperty
 
   QueryBuilder<ResourcePoint, String?, QQueryOperations> descriptionProperty() {
     return addPropertyNameInternal('description');
+  }
+
+  QueryBuilder<ResourcePoint, DateTime?, QQueryOperations> expiresAtProperty() {
+    return addPropertyNameInternal('expiresAt');
   }
 
   QueryBuilder<ResourcePoint, String, QQueryOperations> idProperty() {
@@ -1549,6 +1946,10 @@ extension ResourcePointQueryProperty
 
   QueryBuilder<ResourcePoint, double, QQueryOperations> longitudeProperty() {
     return addPropertyNameInternal('longitude');
+  }
+
+  QueryBuilder<ResourcePoint, List<String>, QQueryOperations> tagsProperty() {
+    return addPropertyNameInternal('tags');
   }
 
   QueryBuilder<ResourcePoint, String, QQueryOperations> titleProperty() {
@@ -1576,6 +1977,10 @@ _$ResourcePointImpl _$$ResourcePointImplFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String? ?? 'Other',
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
+      address: json['address'] as String?,
+      expiresAt: json['expires_at'] == null
+          ? null
+          : DateTime.parse(json['expires_at'] as String),
       isActive: json['is_active'] as bool? ?? true,
       createdBy: json['created_by'] as String?,
       createdAt: json['created_at'] == null
@@ -1588,6 +1993,9 @@ _$ResourcePointImpl _$$ResourcePointImplFromJson(Map<String, dynamic> json) =>
               ?.map((e) => e as String)
               .toList() ??
           const [],
+      tags:
+          (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
+              const [],
     );
 
 Map<String, dynamic> _$$ResourcePointImplToJson(_$ResourcePointImpl instance) =>
@@ -1598,9 +2006,12 @@ Map<String, dynamic> _$$ResourcePointImplToJson(_$ResourcePointImpl instance) =>
       'type': instance.type,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
+      'address': instance.address,
+      'expires_at': instance.expiresAt?.toIso8601String(),
       'is_active': instance.isActive,
       'created_by': instance.createdBy,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
       'images': instance.images,
+      'tags': instance.tags,
     };
