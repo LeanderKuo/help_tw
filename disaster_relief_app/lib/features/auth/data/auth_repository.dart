@@ -37,10 +37,14 @@ class AuthRepository {
   }
 
   Future<bool> signInWithGoogle() async {
-    // For web, let Supabase use the current origin; for mobile, use the deep link.
+    // Force redirect back to current origin on web; keep app deep-link on mobile.
+    final redirect = kIsWeb
+        ? '${Uri.base.scheme}://${Uri.base.host}${Uri.base.hasPort ? ':${Uri.base.port}' : ''}/'
+        : 'tw.help.disasterrelief://login-callback';
+
     await _client.auth.signInWithOAuth(
       OAuthProvider.google,
-      redirectTo: kIsWeb ? null : 'tw.help.disasterrelief://login-callback',
+      redirectTo: redirect,
     );
     return true;
   }
