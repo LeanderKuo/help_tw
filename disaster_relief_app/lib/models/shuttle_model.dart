@@ -41,19 +41,45 @@ class ShuttleModel with _$ShuttleModel {
 
   /// Parse Supabase `shuttles` rows (geography + snake_case fields).
   factory ShuttleModel.fromSupabase(Map<String, dynamic> json) {
+    final origin = json['origin'];
+    final destination = json['destination'];
+
+    double? startLat = _toDouble(json['origin_lat'] ?? json['route_start_lat']);
+    double? startLng = _toDouble(json['origin_lng'] ?? json['route_start_lng']);
+    double? endLat =
+        _toDouble(json['destination_lat'] ?? json['route_end_lat']);
+    double? endLng =
+        _toDouble(json['destination_lng'] ?? json['route_end_lng']);
+
+    if ((startLat == null || startLng == null) &&
+        origin is Map &&
+        origin['coordinates'] is List) {
+      final coords = origin['coordinates'] as List;
+      if (coords.length >= 2) {
+        startLng = _toDouble(coords[0]) ?? startLng;
+        startLat = _toDouble(coords[1]) ?? startLat;
+      }
+    }
+
+    if ((endLat == null || endLng == null) &&
+        destination is Map &&
+        destination['coordinates'] is List) {
+      final coords = destination['coordinates'] as List;
+      if (coords.length >= 2) {
+        endLng = _toDouble(coords[0]) ?? endLng;
+        endLat = _toDouble(coords[1]) ?? endLat;
+      }
+    }
+
     return ShuttleModel(
       id: json['id'] as String,
       title: (json['title'] ?? '') as String,
       description: json['description'] as String?,
       status: (json['status'] as String?) ?? 'open',
-      routeStartLat: _toDouble(
-          json['origin_lat'] ?? json['route_start_lat']),
-      routeStartLng: _toDouble(
-          json['origin_lng'] ?? json['route_start_lng']),
-      routeEndLat:
-          _toDouble(json['destination_lat'] ?? json['route_end_lat']),
-      routeEndLng:
-          _toDouble(json['destination_lng'] ?? json['route_end_lng']),
+      routeStartLat: startLat,
+      routeStartLng: startLng,
+      routeEndLat: endLat,
+      routeEndLng: endLng,
       originAddress: json['origin_address'] as String?,
       destinationAddress: json['destination_address'] as String?,
       departureTime: _parseDate(json['depart_at'] ?? json['departure_time']),
@@ -75,16 +101,20 @@ class ShuttleModel with _$ShuttleModel {
   /// Build payload matching Supabase column names and types.
   Map<String, dynamic> toSupabasePayload({String? creatorId}) {
     final normalizedStatus = _normalizeShuttleStatus(status);
+    final startLat = routeStartLat;
+    final startLng = routeStartLng;
+    final endLat = routeEndLat;
+    final endLng = routeEndLng;
     return {
       'id': id,
       'title': title,
       'description': description,
       'status': normalizedStatus,
-      'origin': routeStartLat != null && routeStartLng != null
-          ? 'POINT($routeStartLng $routeStartLat)'
+      'origin': startLat != null && startLng != null
+          ? 'POINT($startLng $startLat)'
           : null,
-      'destination': routeEndLat != null && routeEndLng != null
-          ? 'POINT($routeEndLng $routeEndLat)'
+      'destination': endLat != null && endLng != null
+          ? 'POINT($endLng $endLat)'
           : null,
       'origin_address': originAddress,
       'destination_address': destinationAddress,

@@ -44,10 +44,8 @@ class ShuttleRepository {
         'signup_deadline',
         'created_at',
         'updated_at',
-        'origin_lat: ST_Y(origin::geometry)',
-        'origin_lng: ST_X(origin::geometry)',
-        'destination_lat: ST_Y(destination::geometry)',
-        'destination_lng: ST_X(destination::geometry)',
+        'origin',
+        'destination',
       ];
       final data = await _supabase
           .from('shuttles')

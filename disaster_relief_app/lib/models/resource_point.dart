@@ -50,8 +50,9 @@ class ResourcePoint with _$ResourcePoint {
       }
     }
     final rawType = (json['resource_type'] as String?) ?? 'other';
-    final normalizedType =
-        rawType.isEmpty ? 'other' : '${rawType[0].toUpperCase()}${rawType.substring(1)}';
+    final normalizedType = rawType.isEmpty
+        ? 'other'
+        : '${rawType[0].toUpperCase()}${rawType.substring(1)}';
 
     return ResourcePoint(
       id: json['id'] as String,
@@ -66,10 +67,7 @@ class ResourcePoint with _$ResourcePoint {
       createdBy: json['created_by'] as String?,
       createdAt: _parseDate(json['created_at']),
       updatedAt: _parseDate(json['updated_at']),
-      tags: (json['tags'] as List?)
-              ?.whereType<String>()
-              .toList() ??
-          const [],
+      tags: (json['tags'] as List?)?.whereType<String>().toList() ?? const [],
     );
   }
 
@@ -87,7 +85,7 @@ class ResourcePoint with _$ResourcePoint {
       'resource_type': normalizedType,
       'category': category,
       'address': address,
-      if (lng != null && lat != null) 'location': 'POINT($lng $lat)',
+      if (lat != null) 'location': 'POINT($lng $lat)',
       'expires_at': expiresAt?.toIso8601String(),
       'is_active': isActive,
       'tags': tags,
