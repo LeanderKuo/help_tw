@@ -27,9 +27,13 @@ mixin _$ResourcePoint {
       throw _privateConstructorUsedError; // Water, Shelter, Medical, Food, Other
   double get latitude => throw _privateConstructorUsedError;
   double get longitude => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_active')
   bool get isActive => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_by')
   String? get createdBy => throw _privateConstructorUsedError;
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -55,10 +59,10 @@ abstract class $ResourcePointCopyWith<$Res> {
       String type,
       double latitude,
       double longitude,
-      bool isActive,
-      String? createdBy,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @JsonKey(name: 'is_active') bool isActive,
+      @JsonKey(name: 'created_by') String? createdBy,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
       List<String> images,
       @JsonKey(ignore: true) @Id() int? isarId});
 }
@@ -157,10 +161,10 @@ abstract class _$$ResourcePointImplCopyWith<$Res>
       String type,
       double latitude,
       double longitude,
-      bool isActive,
-      String? createdBy,
-      DateTime? createdAt,
-      DateTime? updatedAt,
+      @JsonKey(name: 'is_active') bool isActive,
+      @JsonKey(name: 'created_by') String? createdBy,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
       List<String> images,
       @JsonKey(ignore: true) @Id() int? isarId});
 }
@@ -252,10 +256,10 @@ class _$ResourcePointImpl extends _ResourcePoint {
       this.type = 'Other',
       required this.latitude,
       required this.longitude,
-      this.isActive = true,
-      this.createdBy,
-      this.createdAt,
-      this.updatedAt,
+      @JsonKey(name: 'is_active') this.isActive = true,
+      @JsonKey(name: 'created_by') this.createdBy,
+      @JsonKey(name: 'created_at') this.createdAt,
+      @JsonKey(name: 'updated_at') this.updatedAt,
       final List<String> images = const [],
       @JsonKey(ignore: true) @Id() this.isarId})
       : _images = images,
@@ -279,13 +283,16 @@ class _$ResourcePointImpl extends _ResourcePoint {
   @override
   final double longitude;
   @override
-  @JsonKey()
+  @JsonKey(name: 'is_active')
   final bool isActive;
   @override
+  @JsonKey(name: 'created_by')
   final String? createdBy;
   @override
+  @JsonKey(name: 'created_at')
   final DateTime? createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
   final List<String> _images;
   @override
@@ -371,10 +378,10 @@ abstract class _ResourcePoint extends ResourcePoint {
       final String type,
       required final double latitude,
       required final double longitude,
-      final bool isActive,
-      final String? createdBy,
-      final DateTime? createdAt,
-      final DateTime? updatedAt,
+      @JsonKey(name: 'is_active') final bool isActive,
+      @JsonKey(name: 'created_by') final String? createdBy,
+      @JsonKey(name: 'created_at') final DateTime? createdAt,
+      @JsonKey(name: 'updated_at') final DateTime? updatedAt,
       final List<String> images,
       @JsonKey(ignore: true) @Id() final int? isarId}) = _$ResourcePointImpl;
   const _ResourcePoint._() : super._();
@@ -395,12 +402,16 @@ abstract class _ResourcePoint extends ResourcePoint {
   @override
   double get longitude;
   @override
+  @JsonKey(name: 'is_active')
   bool get isActive;
   @override
+  @JsonKey(name: 'created_by')
   String? get createdBy;
   @override
+  @JsonKey(name: 'created_at')
   DateTime? get createdAt;
   @override
+  @JsonKey(name: 'updated_at')
   DateTime? get updatedAt;
   @override
   List<String> get images;

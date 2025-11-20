@@ -1576,14 +1576,14 @@ _$ResourcePointImpl _$$ResourcePointImplFromJson(Map<String, dynamic> json) =>
       type: json['type'] as String? ?? 'Other',
       latitude: (json['latitude'] as num).toDouble(),
       longitude: (json['longitude'] as num).toDouble(),
-      isActive: json['isActive'] as bool? ?? true,
-      createdBy: json['createdBy'] as String?,
-      createdAt: json['createdAt'] == null
+      isActive: json['is_active'] as bool? ?? true,
+      createdBy: json['created_by'] as String?,
+      createdAt: json['created_at'] == null
           ? null
-          : DateTime.parse(json['createdAt'] as String),
-      updatedAt: json['updatedAt'] == null
+          : DateTime.parse(json['created_at'] as String),
+      updatedAt: json['updated_at'] == null
           ? null
-          : DateTime.parse(json['updatedAt'] as String),
+          : DateTime.parse(json['updated_at'] as String),
       images: (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
@@ -1598,9 +1598,9 @@ Map<String, dynamic> _$$ResourcePointImplToJson(_$ResourcePointImpl instance) =>
       'type': instance.type,
       'latitude': instance.latitude,
       'longitude': instance.longitude,
-      'isActive': instance.isActive,
-      'createdBy': instance.createdBy,
-      'createdAt': instance.createdAt?.toIso8601String(),
-      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'is_active': instance.isActive,
+      'created_by': instance.createdBy,
+      'created_at': instance.createdAt?.toIso8601String(),
+      'updated_at': instance.updatedAt?.toIso8601String(),
       'images': instance.images,
     };

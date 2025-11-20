@@ -27,7 +27,7 @@ class ResourceRepository {
       final data = await _supabase
           .from('resource_points')
           .select()
-          .eq('isActive', true); // Only fetch active resources
+          .eq('is_active', true); // Only fetch active resources
 
       final resources = (data as List)
           .map((json) => ResourcePoint.fromJson(json))
