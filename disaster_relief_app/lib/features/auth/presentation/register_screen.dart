@@ -57,7 +57,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
       } else if (!next.isLoading && !next.hasError && next.hasValue) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('註冊成功！請檢查您的電子郵件。'),
+            content: Text('Registration successful. Please verify your email.'),
             backgroundColor: AppColors.success,
           ),
         );
@@ -84,7 +84,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
-                    '建立新帳號',
+                    'Create an account',
                     style: TextStyle(
                       fontSize: isMobile ? 24 : 28,
                       fontWeight: FontWeight.bold,
@@ -93,7 +93,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '請填寫以下資訊以註冊救災資源平台',
+                    'Join the disaster relief platform by filling in the information below.',
                     style: TextStyle(
                       fontSize: 14,
                       color: AppColors.textSecondaryLight,
@@ -103,13 +103,13 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   TextFormField(
                     controller: _fullNameController,
                     decoration: const InputDecoration(
-                      labelText: '全名',
-                      hintText: '請輸入您的全名',
+                      labelText: 'Full name',
+                      hintText: 'Enter your full name',
                       prefixIcon: Icon(Icons.person_outline),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '請輸入您的全名';
+                        return 'Full name is required';
                       }
                       return null;
                     },
@@ -120,15 +120,15 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       labelText: l10n.email,
-                      hintText: '請輸入電子郵件',
+                      hintText: 'Enter your email',
                       prefixIcon: const Icon(Icons.email_outlined),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '請輸入電子郵件';
+                        return 'Email is required';
                       }
                       if (!value.contains('@')) {
-                        return '請輸入有效的電子郵件';
+                        return 'Enter a valid email address';
                       }
                       return null;
                     },
@@ -139,7 +139,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       labelText: l10n.password,
-                      hintText: '至少 6 個字元',
+                      hintText: 'At least 6 characters',
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -156,10 +156,10 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return '請輸入密碼';
+                        return 'Password is required';
                       }
                       if (value.length < 6) {
-                        return '密碼必須至少 6 個字元';
+                        return 'Password must be at least 6 characters';
                       }
                       return null;
                     },
@@ -169,8 +169,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     controller: _confirmPasswordController,
                     obscureText: _obscureConfirmPassword,
                     decoration: InputDecoration(
-                      labelText: '確認密碼',
-                      hintText: '再次輸入密碼',
+                      labelText: 'Confirm password',
+                      hintText: 'Re-enter your password',
                       prefixIcon: const Icon(Icons.lock_outline),
                       suffixIcon: IconButton(
                         icon: Icon(
@@ -187,7 +187,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     ),
                     validator: (value) {
                       if (value != _passwordController.text) {
-                        return '密碼不匹配';
+                        return 'Passwords do not match';
                       }
                       return null;
                     },
@@ -211,7 +211,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        '已經有帳號？',
+                        'Already have an account?',
                         style: TextStyle(color: AppColors.textSecondaryLight),
                       ),
                       TextButton(

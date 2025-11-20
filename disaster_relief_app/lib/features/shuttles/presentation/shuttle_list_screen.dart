@@ -39,7 +39,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MY SHUTTLES\n我的班車'),
+        title: const Text('MY SHUTTLES\nTransport'),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -63,17 +63,17 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       onPressed: () {
-                        // TODO: 創建新班車
+                        // TODO: Create shuttle
                       },
                       icon: const Icon(Icons.directions_bus),
-                      label: const Text('回班車列表'),
+                      label: const Text('Create shuttle'),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: '搜尋班車、目的地或描述',
+                      hintText: 'Search shuttles by title or location',
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -100,9 +100,9 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               unselectedLabelColor: AppColors.textSecondaryLight,
               indicatorColor: AppColors.primary,
               tabs: const [
-                Tab(text: '我是主揪'),
-                Tab(text: '加入班車'),
-                Tab(text: '完成車次'),
+                Tab(text: 'Hosting'),
+                Tab(text: 'Joined'),
+                Tab(text: 'Completed'),
               ],
             ),
             Expanded(
@@ -117,13 +117,13 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                     return true;
                   }).toList();
 
-                  final myShuttles = filteredShuttles
+                  final hosting = filteredShuttles
                       .where((s) => s.status != 'Arrived' && s.status != 'Cancelled')
                       .toList();
-                  final joinedShuttles = filteredShuttles
+                  final joined = filteredShuttles
                       .where((s) => s.status == 'En Route')
                       .toList();
-                  final completedShuttles = filteredShuttles
+                  final completed = filteredShuttles
                       .where((s) => s.status == 'Arrived' || s.status == 'Cancelled')
                       .toList();
 
@@ -131,16 +131,16 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                     controller: _tabController,
                     children: [
                       _ShuttleListView(
-                        shuttles: myShuttles,
-                        emptyMessage: '您尚未建立任何班車',
+                        shuttles: hosting,
+                        emptyMessage: 'No shuttles created yet.',
                       ),
                       _ShuttleListView(
-                        shuttles: joinedShuttles,
-                        emptyMessage: '您尚未加入任何班車',
+                        shuttles: joined,
+                        emptyMessage: 'No joined shuttles yet.',
                       ),
                       _ShuttleListView(
-                        shuttles: completedShuttles,
-                        emptyMessage: '尚無完成的車次',
+                        shuttles: completed,
+                        emptyMessage: 'No completed trips.',
                         isCompleted: true,
                       ),
                     ],
@@ -149,7 +149,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => EmptyState(
                   icon: Icons.error_outline,
-                  title: '載入失敗',
+                  title: 'Load failed',
                   message: error.toString(),
                 ),
               ),
@@ -178,7 +178,7 @@ class _ShuttleListView extends StatelessWidget {
       return EmptyState(
         icon: Icons.directions_bus_outlined,
         title: emptyMessage,
-        message: '嘗試建立新班車或加入現有班車',
+        message: 'Try creating a shuttle or joining one.',
       );
     }
 
@@ -307,10 +307,10 @@ class _ShuttleCard extends StatelessWidget {
                     Expanded(
                       child: OutlinedButton.icon(
                         onPressed: () {
-                          // TODO: 導航功能
+                          // TODO: Navigation to pickup
                         },
                         icon: const Icon(Icons.navigation, size: 16),
-                        label: const Text('導航'),
+                        label: const Text('Navigate'),
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                         ),
@@ -321,7 +321,7 @@ class _ShuttleCard extends StatelessWidget {
                       child: ElevatedButton.icon(
                         onPressed: () => context.push('/shuttles/${shuttle.id}'),
                         icon: const Icon(Icons.info_outline, size: 16),
-                        label: const Text('查看詳情'),
+                        label: const Text('Details'),
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 8),
                         ),
@@ -355,20 +355,20 @@ class _ShuttleCard extends StatelessWidget {
   String _getStatusText(String status) {
     switch (status.toLowerCase()) {
       case 'scheduled':
-        return '已排程';
+        return 'Scheduled';
       case 'en route':
-        return '行駛中';
+        return 'On the way';
       case 'arrived':
-        return '已抵達';
+        return 'Arrived';
       case 'cancelled':
-        return '已取消';
+        return 'Cancelled';
       default:
         return status;
     }
   }
 
   String _formatTime(DateTime? time) {
-    if (time == null) return '未設定時間';
-    return '${time.month}月${time.day}日 ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
+    if (time == null) return 'Time not set';
+    return '${time.month}/${time.day} ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
   }
 }

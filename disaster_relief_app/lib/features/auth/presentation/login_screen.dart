@@ -82,7 +82,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      '登入以存取救災資源平台',
+                      'Sign in to the relief coordination platform',
                       style: TextStyle(
                         fontSize: 14,
                         color: AppColors.textSecondaryLight,
@@ -95,15 +95,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                         labelText: l10n.email,
-                        hintText: '請輸入電子郵件',
+                        hintText: 'Enter your email',
                         prefixIcon: const Icon(Icons.email_outlined),
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return '請輸入電子郵件';
+                          return 'Email is required';
                         }
                         if (!value.contains('@')) {
-                          return '請輸入有效的電子郵件';
+                          return 'Enter a valid email address';
                         }
                         return null;
                       },
@@ -114,7 +114,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         labelText: l10n.password,
-                        hintText: '請輸入密碼',
+                        hintText: 'Enter your password',
                         prefixIcon: const Icon(Icons.lock_outline),
                         suffixIcon: IconButton(
                           icon: Icon(
@@ -131,7 +131,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return '請輸入密碼';
+                          return 'Password is required';
                         }
                         return null;
                       },
@@ -143,7 +143,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onPressed: () {
                           // TODO: Forgot password
                         },
-                        child: const Text('忘記密碼？'),
+                        child: const Text('Forgot password?'),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -167,7 +167,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: Text(
-                            '或使用',
+                            'Or continue with',
                             style: TextStyle(
                               color: AppColors.textSecondaryLight,
                               fontSize: 12,
@@ -185,7 +185,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               .read(authControllerProvider.notifier)
                               .signInWithGoogle(),
                       icon: const Icon(Icons.g_mobiledata, size: 28),
-                      label: const Text('使用 Google 登入'),
+                      label: const Text('Continue with Google'),
                     ),
                     const SizedBox(height: 12),
                     OutlinedButton.icon(
@@ -195,14 +195,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                               .read(authControllerProvider.notifier)
                               .signInWithLine(),
                       icon: const Icon(Icons.chat_bubble_outline, size: 20),
-                      label: const Text('使用 LINE 登入'),
+                      label: const Text('Continue with LINE'),
                     ),
                     const SizedBox(height: 32),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          '還沒有帳號？',
+                          'No account yet?',
                           style: TextStyle(color: AppColors.textSecondaryLight),
                         ),
                         TextButton(

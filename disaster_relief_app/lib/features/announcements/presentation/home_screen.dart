@@ -69,7 +69,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Text(
-            '整合救災任務、人力、物資與資源點，提供地區現場化與時序分析，支援台灣災急狀況高效應對。',
+            'Coordinate relief tasks, people, supplies, resource sites, and transport in one shared place to respond faster.',
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.9),
               fontSize: 14,
@@ -88,7 +88,7 @@ class HomeScreen extends StatelessWidget {
           child: ElevatedButton.icon(
             onPressed: () => context.push('/tasks'),
             icon: const Icon(Icons.search),
-            label: const Text('查看任務'),
+            label: const Text('Browse tasks'),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
@@ -101,7 +101,7 @@ class HomeScreen extends StatelessWidget {
               // TODO: Navigate to register
             },
             icon: const Icon(Icons.app_registration),
-            label: const Text('立即註冊'),
+            label: const Text('Register now'),
             style: OutlinedButton.styleFrom(
               padding: const EdgeInsets.symmetric(vertical: 16),
             ),
@@ -116,7 +116,7 @@ class HomeScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          '平台功能介紹',
+          'Platform highlights',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.bold,
@@ -129,29 +129,33 @@ class HomeScreen extends StatelessWidget {
             children: [
               _buildFeatureCard(
                 icon: Icons.map,
-                title: '地區視覺化',
-                description: '以地圖為中心，直觀顯示在各個資源點與人力分布，支援地理定位與搜尋。',
+                title: 'Map overview',
+                description:
+                    'See people, resource points, and transport routes on a shared map to coordinate field response.',
                 color: AppColors.primary,
               ),
               const SizedBox(height: 12),
               _buildFeatureCard(
                 icon: Icons.assignment,
-                title: '任務管理',
-                description: '建立與管理救災任務，支援協作、即時更新與狀態追蹤。',
+                title: 'Task board',
+                description:
+                    'Create, prioritize, and track missions with real-time updates and assignees.',
                 color: AppColors.secondary,
               ),
               const SizedBox(height: 12),
               _buildFeatureCard(
                 icon: Icons.directions_bus,
-                title: '班車調度',
-                description: '管理救災交通班車，提供路線規劃與座位管理。',
+                title: 'Shuttle dispatch',
+                description:
+                    'Manage relief transportation, routes, and seat availability for responders and supplies.',
                 color: AppColors.warning,
               ),
               const SizedBox(height: 12),
               _buildFeatureCard(
                 icon: Icons.inventory_2,
-                title: '資源管理',
-                description: '追蹤與管理物資資源點，確保資源有效分配。',
+                title: 'Resource tracking',
+                description:
+                    'Monitor supply points, quantities, and status to keep critical items available.',
                 color: AppColors.success,
               ),
             ],
@@ -166,26 +170,30 @@ class HomeScreen extends StatelessWidget {
             children: [
               _buildFeatureCard(
                 icon: Icons.map,
-                title: '地區視覺化',
-                description: '以地圖為中心，直觀顯示在各個資源點與人力分布。',
+                title: 'Map overview',
+                description:
+                    'See people, resource points, and transport routes on a shared map to coordinate field response.',
                 color: AppColors.primary,
               ),
               _buildFeatureCard(
                 icon: Icons.assignment,
-                title: '任務管理',
-                description: '建立與管理救災任務，支援協作與即時更新。',
+                title: 'Task board',
+                description:
+                    'Create, prioritize, and track missions with real-time updates and assignees.',
                 color: AppColors.secondary,
               ),
               _buildFeatureCard(
                 icon: Icons.directions_bus,
-                title: '班車調度',
-                description: '管理救災交通班車，提供路線規劃。',
+                title: 'Shuttle dispatch',
+                description:
+                    'Manage relief transportation, routes, and seat availability for responders and supplies.',
                 color: AppColors.warning,
               ),
               _buildFeatureCard(
                 icon: Icons.inventory_2,
-                title: '資源管理',
-                description: '追蹤與管理物資資源點。',
+                title: 'Resource tracking',
+                description:
+                    'Monitor supply points, quantities, and status to keep critical items available.',
                 color: AppColors.success,
               ),
             ],

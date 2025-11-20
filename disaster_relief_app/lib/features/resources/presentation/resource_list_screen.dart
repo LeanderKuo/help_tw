@@ -17,7 +17,7 @@ class ResourceListScreen extends ConsumerStatefulWidget {
 class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
   final _searchController = TextEditingController();
   String _searchQuery = '';
-  String _selectedType = '全部';
+  String _selectedType = 'All';
 
   @override
   void dispose() {
@@ -31,7 +31,7 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('COMMUNITY RESOURCES\n資源點管理'),
+        title: const Text('COMMUNITY RESOURCES\nResource directory'),
         actions: [
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -56,14 +56,14 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                     child: ElevatedButton.icon(
                       onPressed: () => context.push('/resources/create'),
                       icon: const Icon(Icons.add),
-                      label: const Text('新增資源點'),
+                      label: const Text('Add resource'),
                     ),
                   ),
                   const SizedBox(height: 16),
                   TextField(
                     controller: _searchController,
                     decoration: InputDecoration(
-                      hintText: '搜尋地點或資源',
+                      hintText: 'Search resources or locations',
                       prefixIcon: const Icon(Icons.search),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(24),
@@ -86,13 +86,15 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       children: [
-                        _buildFilterChip('全部', null),
+                        _buildFilterChip('All', null),
                         const SizedBox(width: 8),
-                        _buildFilterChip('暫時據點', AppColors.chipShelter),
+                        _buildFilterChip('Shelter', AppColors.chipShelter),
                         const SizedBox(width: 8),
-                        _buildFilterChip('水資源', AppColors.chipWater),
+                        _buildFilterChip('Water', AppColors.chipWater),
                         const SizedBox(width: 8),
-                        _buildFilterChip('物資', AppColors.chipClothes),
+                        _buildFilterChip('Food', AppColors.chipClothes),
+                        const SizedBox(width: 8),
+                        _buildFilterChip('Medical', AppColors.error),
                       ],
                     ),
                   ),
@@ -110,7 +112,7 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                           .toLowerCase()
                           .contains(_searchQuery.toLowerCase());
                     }
-                    if (_selectedType != '全部') {
+                    if (_selectedType != 'All') {
                       return r.type == _getTypeFromChip(_selectedType);
                     }
                     return true;
@@ -119,12 +121,12 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                   if (filteredResources.isEmpty) {
                     return EmptyState(
                       icon: Icons.place_outlined,
-                      title: '沒有找到資源點',
-                      message: '嘗試調整搜尋條件或新增資源點',
+                      title: 'No resources found',
+                      message: 'Try adjusting filters or add a resource.',
                       action: ElevatedButton.icon(
                         onPressed: () => context.push('/resources/create'),
                         icon: const Icon(Icons.add),
-                        label: const Text('新增資源點'),
+                        label: const Text('Add resource'),
                       ),
                     );
                   }
@@ -141,7 +143,7 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => EmptyState(
                   icon: Icons.error_outline,
-                  title: '載入失敗',
+                  title: 'Load failed',
                   message: error.toString(),
                 ),
               ),
@@ -159,7 +161,7 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
       selected: isSelected,
       onSelected: (selected) {
         setState(() {
-          _selectedType = selected ? label : '全部';
+          _selectedType = selected ? label : 'All';
         });
       },
       backgroundColor: color?.withValues(alpha: 0.1) ?? AppColors.backgroundLight,
@@ -173,12 +175,14 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
 
   String _getTypeFromChip(String chip) {
     switch (chip) {
-      case '暫時據點':
+      case 'Shelter':
         return 'Shelter';
-      case '水資源':
+      case 'Water':
         return 'Water';
-      case '物資':
+      case 'Food':
         return 'Food';
+      case 'Medical':
+        return 'Medical';
       default:
         return 'Other';
     }
@@ -250,7 +254,7 @@ class _ResourceCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                resource.isActive ? '啟用中' : '已停用',
+                                resource.isActive ? 'Active' : 'Inactive',
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w500,
@@ -356,20 +360,20 @@ class _ResourceCard extends StatelessWidget {
   String _getTypeLabel(String type) {
     switch (type) {
       case 'Water':
-        return '水資源';
+        return 'Water';
       case 'Shelter':
-        return '暫時據點';
+        return 'Shelter';
       case 'Medical':
-        return '醫療';
+        return 'Medical';
       case 'Food':
-        return '食物';
+        return 'Food';
       default:
-        return '其他';
+        return 'Other';
     }
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return '未知時間';
-    return '更新於 ${date.month}月${date.day}日 ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+    if (date == null) return 'Unknown';
+    return 'Updated ${date.month}/${date.day} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 }

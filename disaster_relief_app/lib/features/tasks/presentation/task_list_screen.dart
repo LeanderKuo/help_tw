@@ -19,8 +19,8 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
   late TabController _tabController;
   final _searchController = TextEditingController();
   String _searchQuery = '';
-  String _selectedFilter = '全部類型';
-  String _selectedSort = '最新建立';
+  String _selectedFilter = 'All categories';
+  String _selectedSort = 'Newest';
 
   @override
   void initState() {
@@ -41,7 +41,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('MISSION BOARD\n任務一覽'),
+        title: const Text('MISSION BOARD\nTasks'),
         actions: [
           IconButton(
             icon: const Icon(Icons.sync),
@@ -73,17 +73,17 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         child: ElevatedButton.icon(
                           onPressed: () => context.push('/tasks/create'),
                           icon: const Icon(Icons.add),
-                          label: const Text('建立任務'),
+                          label: const Text('Create task'),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: OutlinedButton.icon(
                           onPressed: () {
-                            // TODO: 定位我附近
+                            // TODO: Location picker
                           },
                           icon: const Icon(Icons.my_location),
-                          label: const Text('定位我附近'),
+                          label: const Text('Use my location'),
                         ),
                       ),
                     ],
@@ -95,7 +95,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         child: TextField(
                           controller: _searchController,
                           decoration: InputDecoration(
-                            hintText: '搜尋任務、目的地或描述',
+                            hintText: 'Search tasks by title or location',
                             prefixIcon: const Icon(Icons.search),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(24),
@@ -131,15 +131,16 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          items: ['全部類型', '一般任務', '緊急任務', '進行中']
+                          items: ['All categories', 'General', 'Urgent', 'My drafts']
                               .map((filter) => DropdownMenuItem(
                                     value: filter,
                                     child: Text(filter, style: const TextStyle(fontSize: 14)),
                                   ))
                               .toList(),
                           onChanged: (value) {
+                            if (value == null) return;
                             setState(() {
-                              _selectedFilter = value!;
+                              _selectedFilter = value;
                             });
                           },
                         ),
@@ -157,22 +158,23 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                               borderRadius: BorderRadius.circular(8),
                             ),
                           ),
-                          items: ['最新建立', '距離排序', '優先度']
+                          items: ['Newest', 'Nearest', 'Priority']
                               .map((sort) => DropdownMenuItem(
                                     value: sort,
                                     child: Text(sort, style: const TextStyle(fontSize: 14)),
                                   ))
                               .toList(),
                           onChanged: (value) {
+                            if (value == null) return;
                             setState(() {
-                              _selectedSort = value!;
+                              _selectedSort = value;
                             });
                           },
                         ),
                       ),
                     ],
                   ),
-                </Column>
+                ],
               ),
             ),
             TabBar(
@@ -181,8 +183,8 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
               unselectedLabelColor: AppColors.textSecondaryLight,
               indicatorColor: AppColors.primary,
               tabs: const [
-                Tab(text: '招募中'),
-                Tab(text: '我發起的'),
+                Tab(text: 'Open tasks'),
+                Tab(text: 'My drafts'),
               ],
             ),
             Expanded(
@@ -207,11 +209,11 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                     children: [
                       _TaskListView(
                         tasks: filteredTasks,
-                        emptyMessage: '目前沒有招募中的任務',
+                        emptyMessage: 'No active tasks match your filters.',
                       ),
                       _TaskListView(
                         tasks: myTasks,
-                        emptyMessage: '您尚未建立任何任務',
+                        emptyMessage: 'You have not created any drafts.',
                         isMyTasks: true,
                       ),
                     ],
@@ -220,7 +222,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 loading: () => const Center(child: CircularProgressIndicator()),
                 error: (error, stack) => EmptyState(
                   icon: Icons.error_outline,
-                  title: '載入失敗',
+                  title: 'Load failed',
                   message: error.toString(),
                 ),
               ),
@@ -249,7 +251,7 @@ class _TaskListView extends StatelessWidget {
       return EmptyState(
         icon: Icons.assignment_outlined,
         title: emptyMessage,
-        message: '嘗試建立新任務或調整篩選條件',
+        message: 'Try creating a new task or adjusting the filters.',
       );
     }
 
@@ -338,7 +340,7 @@ class _TaskCard extends StatelessWidget {
                     child: Text(
                       task.latitude != null && task.longitude != null
                           ? '${task.latitude}, ${task.longitude}'
-                          : '未設定地點',
+                          : 'Location not set',
                       style: const TextStyle(
                         fontSize: 12,
                         color: AppColors.textSecondaryLight,
@@ -442,18 +444,18 @@ class _TaskCard extends StatelessWidget {
   }
 
   String _formatDate(DateTime? date) {
-    if (date == null) return '未知時間';
+    if (date == null) return 'Unknown';
     final now = DateTime.now();
     final difference = now.difference(date);
 
     if (difference.inMinutes < 1) {
-      return '剛剛';
+      return 'Just now';
     } else if (difference.inHours < 1) {
-      return '${difference.inMinutes} 分鐘前';
+      return '${difference.inMinutes} min ago';
     } else if (difference.inDays < 1) {
-      return '${difference.inHours} 小時前';
+      return '${difference.inHours} h ago';
     } else {
-      return '${difference.inDays} 天前';
+      return '${difference.inDays} d ago';
     }
   }
 }
