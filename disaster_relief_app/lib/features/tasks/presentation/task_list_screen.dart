@@ -9,6 +9,7 @@ import '../../../core/widgets/common_widgets.dart';
 import '../../../core/widgets/global_chrome.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/task_model.dart';
+import '../../../services/location_service.dart';
 
 class TaskListScreen extends ConsumerStatefulWidget {
   const TaskListScreen({super.key});
@@ -26,8 +27,8 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
 
   String _searchQuery = '';
   double _distanceKm = 25;
-  String _selectedFilter = '全部任務';
-  String _selectedSort = '最新建立';
+  String _selectedFilter = 'All tasks';
+  String _selectedSort = 'Newest';
 
   @override
   void initState() {
@@ -44,6 +45,25 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
     super.dispose();
   }
 
+  Future<void> _fillWithCurrentLocation() async {
+    final position = await LocationService.currentPosition();
+    if (!mounted) return;
+
+    if (position == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to fetch location. Please enable permissions and location services.'),
+        ),
+      );
+      return;
+    }
+
+    setState(() {
+      _latController.text = position.latitude.toStringAsFixed(5);
+      _lngController.text = position.longitude.toStringAsFixed(5);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final tasksAsync = ref.watch(taskControllerProvider);
@@ -51,8 +71,8 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
 
     return Scaffold(
       appBar: GlobalTopNavBar(
-        title: '救災資源整合平台',
-        onNotificationTap: () {},
+        title: l10n.appTitle,
+        onNotificationTap: () => context.push('/announcements'),
         onAvatarTap: () => context.push('/profile'),
       ),
       body: ResponsiveLayout(
@@ -154,9 +174,9 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: () {},
+                    onPressed: _fillWithCurrentLocation,
                     icon: const Icon(Icons.my_location),
-                    label: const Text('定位我附近'),
+                    label: const Text('Use my location'),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -173,9 +193,9 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 Expanded(
                   child: TextField(
                     controller: _lngController,
-                    decoration: InputDecoration(
-                      hintText: '經度',
-                      prefixIcon: const Icon(Icons.place_outlined),
+                    decoration: const InputDecoration(
+                      hintText: 'Longitude',
+                      prefixIcon: Icon(Icons.place_outlined),
                     ),
                   ),
                 ),
@@ -183,9 +203,9 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 Expanded(
                   child: TextField(
                     controller: _latController,
-                    decoration: InputDecoration(
-                      hintText: '緯度',
-                      prefixIcon: const Icon(Icons.place_outlined),
+                    decoration: const InputDecoration(
+                      hintText: 'Latitude',
+                      prefixIcon: Icon(Icons.place_outlined),
                     ),
                   ),
                 ),
@@ -217,7 +237,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
             Row(
               children: [
                 Text(
-                  '距離 0-100 公里',
+                  'Distance 0-100 km',
                   style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimaryLight,
@@ -241,7 +261,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    initialValue: _selectedFilter,
+                    value: _selectedFilter,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -251,7 +271,12 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    items: const ['全部任務', '一般任務', '緊急任務', '我的草稿']
+                    items: const [
+                      'All tasks',
+                      'My tasks',
+                      'Urgent',
+                      'Drafts',
+                    ]
                         .map(
                           (filter) => DropdownMenuItem(
                             value: filter,
@@ -270,7 +295,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    initialValue: _selectedSort,
+                    value: _selectedSort,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -280,7 +305,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    items: const ['最新建立', '最近更新', '距離最近']
+                    items: const ['Newest', 'Recently updated', 'Nearest']
                         .map(
                           (sort) =>
                               DropdownMenuItem(value: sort, child: Text(sort)),
@@ -353,6 +378,10 @@ class _TaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final requiredText = task.requiredParticipants <= 0
+        ? 'n/a'
+        : task.requiredParticipants.toString();
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -367,7 +396,7 @@ class _TaskCard extends StatelessWidget {
               Row(
                 children: [
                   StatusChip(
-                    label: task.roleLabel ?? '任務發起人',
+                    label: task.roleLabel ?? 'Task',
                     backgroundColor: AppColors.primary.withValues(alpha: 0.12),
                     textColor: AppColors.primary,
                   ),
@@ -404,7 +433,7 @@ class _TaskCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      '剩餘 $remainingSlots 人',
+                      'Open slots: $remainingSlots',
                       style: const TextStyle(
                         color: AppColors.secondary,
                         fontSize: 12,
@@ -436,16 +465,16 @@ class _TaskCard extends StatelessWidget {
                   ),
                   _infoTile(
                     icon: Icons.update,
-                    label: '最近更新：${_formatDate(task.updatedAt)}',
+                    label: 'Updated ${_formatDate(task.updatedAt)}',
                   ),
                   _infoTile(
                     icon: Icons.inventory_2_outlined,
-                    label: '物資需求：${task.materialsStatus}',
+                    label: 'Need: ${task.materialsStatus}',
                   ),
                   _infoTile(
                     icon: Icons.people_alt_outlined,
                     label:
-                        '參與情況：${task.participantCount}/${task.requiredParticipants <= 0 ? '—' : task.requiredParticipants}',
+                        'Participants: ${task.participantCount}/$requiredText',
                   ),
                 ],
               ),
@@ -456,7 +485,7 @@ class _TaskCard extends StatelessWidget {
                     child: OutlinedButton.icon(
                       onPressed: () {},
                       icon: const Icon(Icons.navigation, size: 18),
-                      label: const Text('導航'),
+                      label: const Text('Navigate'),
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                       ),
@@ -467,7 +496,7 @@ class _TaskCard extends StatelessWidget {
                     child: ElevatedButton.icon(
                       onPressed: () => context.push('/tasks/${task.id}'),
                       icon: const Icon(Icons.info_outline, size: 18),
-                      label: const Text('查看詳情 / 加入'),
+                      label: const Text('Details / Join'),
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(vertical: 10),
                       ),
@@ -625,7 +654,7 @@ class _MissionHeader extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           const Text(
-            '任務一覽・搜尋、篩選並快速加入救災任務',
+            'Browse missions, filter quickly, and jump into the details.',
             style: TextStyle(color: AppColors.textSecondaryLight),
           ),
         ],

@@ -6,6 +6,7 @@ import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
 import '../../features/announcements/presentation/home_screen.dart';
+import '../../features/announcements/presentation/announcement_list_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
 import '../../features/map/presentation/map_screen.dart';
 import '../../features/resources/presentation/resource_list_screen.dart';
@@ -43,6 +44,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/home',
             builder: (context, state) => const HomeScreen(),
+          ),
+          GoRoute(
+            path: '/announcements',
+            builder: (context, state) => const AnnouncementListScreen(),
           ),
           GoRoute(
             path: '/map',

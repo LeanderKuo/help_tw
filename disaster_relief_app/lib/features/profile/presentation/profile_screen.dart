@@ -6,6 +6,8 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/utils/responsive.dart';
 import '../../auth/presentation/auth_controller.dart';
 import '../../auth/data/auth_repository.dart';
+import '../../../core/auth/role.dart';
+import '../../../core/auth/role_providers.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -14,6 +16,13 @@ class ProfileScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(authRepositoryProvider).currentUser;
+    final profileAsync = ref.watch(currentUserProfileProvider);
+    final roleAsync = ref.watch(currentUserRoleProvider);
+    final profile = profileAsync.valueOrNull;
+    final role = roleAsync.valueOrNull ?? AppRole.user;
+    final rawDisplayName = profile?.nickname ?? user?.email ?? l10n.noEmail;
+    final displayName = rawDisplayName.trim().isEmpty ? l10n.noEmail : rawDisplayName;
+    final displayInitial = displayName.isNotEmpty ? displayName[0].toUpperCase() : 'U';
 
     return Scaffold(
       appBar: AppBar(
@@ -45,7 +54,7 @@ class ProfileScreen extends ConsumerWidget {
                       radius: 50,
                       backgroundColor: Colors.white,
                       child: Text(
-                        user?.email?.substring(0, 1).toUpperCase() ?? 'U',
+                        displayInitial,
                         style: const TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
@@ -55,7 +64,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      user?.email ?? l10n.noEmail,
+                      displayName,
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w600,
@@ -73,7 +82,7 @@ class ProfileScreen extends ConsumerWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Text(
-                        l10n.roleUser,
+                        role.label,
                         style: const TextStyle(fontSize: 12, color: Colors.white),
                       ),
                     ),
@@ -99,6 +108,12 @@ class ProfileScreen extends ConsumerWidget {
                           icon: Icons.badge_outlined,
                           label: l10n.userIdLabel,
                           value: user?.id ?? 'N/A',
+                        ),
+                        const Divider(),
+                        _buildInfoTile(
+                          icon: Icons.verified_user_outlined,
+                          label: l10n.roleUser,
+                          value: role.label,
                         ),
                       ],
                     ),

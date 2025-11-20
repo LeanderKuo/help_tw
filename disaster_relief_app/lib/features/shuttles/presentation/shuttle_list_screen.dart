@@ -9,6 +9,7 @@ import '../../../core/widgets/common_widgets.dart';
 import '../../../core/widgets/global_chrome.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../models/shuttle_model.dart';
+import '../../../services/location_service.dart';
 
 class ShuttleListScreen extends ConsumerStatefulWidget {
   const ShuttleListScreen({super.key});
@@ -25,7 +26,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
   final _lngController = TextEditingController();
 
   String _searchQuery = '';
-  String _costType = '全部費用';
+  String _costType = 'All costs';
   double _distanceKm = 25;
 
   @override
@@ -43,6 +44,23 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
     super.dispose();
   }
 
+  Future<void> _fillWithCurrentLocation() async {
+    final position = await LocationService.currentPosition();
+    if (!mounted) return;
+    if (position == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Unable to fetch location. Please enable permissions and location services.'),
+        ),
+      );
+      return;
+    }
+    setState(() {
+      _latController.text = position.latitude.toStringAsFixed(5);
+      _lngController.text = position.longitude.toStringAsFixed(5);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final shuttlesAsync = ref.watch(shuttleControllerProvider);
@@ -50,8 +68,8 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
 
     return Scaffold(
       appBar: GlobalTopNavBar(
-        title: '救災資源整合平台',
-        onNotificationTap: () {},
+        title: l10n.appTitle,
+        onNotificationTap: () => context.push('/announcements'),
         onAvatarTap: () => context.push('/profile'),
       ),
       body: ResponsiveLayout(
@@ -66,9 +84,9 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               unselectedLabelColor: AppColors.textSecondaryLight,
               indicatorColor: AppColors.primary,
               tabs: const [
-                Tab(text: '我是主揪'),
-                Tab(text: '加入班車'),
-                Tab(text: '完成車次'),
+                Tab(text: 'Hosting'),
+                Tab(text: 'Joined'),
+                Tab(text: 'History'),
               ],
             ),
             Expanded(
@@ -78,24 +96,31 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                     final matchesSearch =
                         _searchQuery.isEmpty ||
                         s.title.toLowerCase().contains(
-                          _searchQuery.toLowerCase(),
-                        );
+                              _searchQuery.toLowerCase(),
+                            );
                     final matchesCost =
-                        _costType == '全部費用' || s.costType == _costType;
+                        _costType == 'All costs' || s.costType == _costType;
                     return matchesSearch && matchesCost;
                   }).toList();
 
                   final hosting = filtered
                       .where(
-                        (s) => s.status != 'Arrived' && s.status != 'Cancelled',
+                        (s) =>
+                            s.status != 'done' &&
+                            s.status != 'canceled' &&
+                            s.status.toLowerCase() != 'arrived',
                       )
                       .toList();
                   final joined = filtered
-                      .where((s) => s.status == 'En Route')
+                      .where((s) =>
+                          s.status.toLowerCase() == 'in_progress' ||
+                          s.status.toLowerCase() == 'en route')
                       .toList();
                   final completed = filtered
                       .where(
-                        (s) => s.status == 'Arrived' || s.status == 'Cancelled',
+                        (s) =>
+                            s.status.toLowerCase() == 'done' ||
+                            s.status.toLowerCase() == 'canceled',
                       )
                       .toList();
 
@@ -158,9 +183,15 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () {},
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Create shuttle flow is not wired yet.'),
+                        ),
+                      );
+                    },
                     icon: const Icon(Icons.directions_bus),
-                    label: const Text('發起班車'),
+                    label: const Text('Create shuttle'),
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -172,9 +203,9 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: OutlinedButton.icon(
-                    onPressed: () {},
+                    onPressed: _fillWithCurrentLocation,
                     icon: const Icon(Icons.my_location),
-                    label: const Text('定位我附近'),
+                    label: const Text('Use my location'),
                     style: OutlinedButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
@@ -192,7 +223,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                   child: TextField(
                     controller: _lngController,
                     decoration: const InputDecoration(
-                      hintText: '經度',
+                      hintText: 'Longitude',
                       prefixIcon: Icon(Icons.place_outlined),
                     ),
                   ),
@@ -202,7 +233,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                   child: TextField(
                     controller: _latController,
                     decoration: const InputDecoration(
-                      hintText: '緯度',
+                      hintText: 'Latitude',
                       prefixIcon: Icon(Icons.place_outlined),
                     ),
                   ),
@@ -212,32 +243,23 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
             const SizedBox(height: 12),
             TextField(
               controller: _searchController,
-              decoration: InputDecoration(
-                hintText: '搜尋班車、目的地或描述',
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 10,
-                ),
+              decoration: const InputDecoration(
+                hintText: 'Search shuttles',
+                prefixIcon: Icon(Icons.search),
               ),
-              onChanged: (value) => setState(() => _searchQuery = value),
+              onChanged: (v) => setState(() => _searchQuery = v),
             ),
             const SizedBox(height: 12),
             Row(
               children: [
-                const Text(
-                  '定位後可依距離 (0-100 公里) 篩選',
-                  style: TextStyle(
+                Text(
+                  'Distance 0-100 km',
+                  style: const TextStyle(
                     fontWeight: FontWeight.w600,
                     color: AppColors.textPrimaryLight,
                   ),
                 ),
-                const Spacer(),
+                const SizedBox(width: 8),
                 Text(
                   '${_distanceKm.toStringAsFixed(0)} km',
                   style: const TextStyle(color: AppColors.primary),
@@ -255,52 +277,23 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    initialValue: _costType,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    items: const ['全部費用', '免費', '分攤油費', '付費車']
-                        .map(
-                          (value) => DropdownMenuItem(
-                            value: value,
-                            child: Text(value),
-                          ),
-                        )
+                    value: _costType,
+                    items: const [
+                      'All costs',
+                      'free',
+                      'share_gas',
+                      'paid',
+                    ]
+                        .map((cost) =>
+                            DropdownMenuItem(value: cost, child: Text(cost)))
                         .toList(),
-                    onChanged: (value) {
-                      if (value == null) return;
-                      setState(() => _costType = value);
+                    onChanged: (v) {
+                      if (v == null) return;
+                      setState(() => _costType = v);
                     },
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    initialValue: '最新建立',
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 10,
-                      ),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
+                    decoration: const InputDecoration(
+                      labelText: 'Cost type',
                     ),
-                    items: const ['最新建立', '出發時間', '優先度']
-                        .map(
-                          (value) => DropdownMenuItem(
-                            value: value,
-                            child: Text(value),
-                          ),
-                        )
-                        .toList(),
-                    onChanged: (_) {},
                   ),
                 ),
               ],
@@ -313,11 +306,6 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
 }
 
 class _ShuttleListView extends StatelessWidget {
-  final List<ShuttleModel> shuttles;
-  final String emptyMessage;
-  final bool isCompleted;
-  final AppLocalizations l10n;
-
   const _ShuttleListView({
     required this.shuttles,
     required this.emptyMessage,
@@ -325,13 +313,18 @@ class _ShuttleListView extends StatelessWidget {
     this.isCompleted = false,
   });
 
+  final List<ShuttleModel> shuttles;
+  final String emptyMessage;
+  final AppLocalizations l10n;
+  final bool isCompleted;
+
   @override
   Widget build(BuildContext context) {
     if (shuttles.isEmpty) {
       return EmptyState(
         icon: Icons.directions_bus_outlined,
         title: emptyMessage,
-        message: l10n.shuttleEmptyMessage,
+        message: isCompleted ? l10n.noShuttlesCompleted : l10n.noShuttlesHosting,
       );
     }
 
@@ -340,40 +333,23 @@ class _ShuttleListView extends StatelessWidget {
       itemCount: shuttles.length,
       itemBuilder: (context, index) {
         final shuttle = shuttles[index];
-        return _ShuttleCard(
-          shuttle: shuttle,
-          isCompleted: isCompleted,
-          l10n: l10n,
-        );
+        return _ShuttleCard(shuttle: shuttle, l10n: l10n);
       },
     );
   }
 }
 
 class _ShuttleCard extends StatelessWidget {
+  const _ShuttleCard({required this.shuttle, required this.l10n});
+
   final ShuttleModel shuttle;
-  final bool isCompleted;
   final AppLocalizations l10n;
 
-  const _ShuttleCard({
-    required this.shuttle,
-    required this.l10n,
-    this.isCompleted = false,
-  });
+  int get remainingSeats =>
+      (shuttle.capacity - shuttle.seatsTaken).clamp(0, shuttle.capacity);
 
   @override
   Widget build(BuildContext context) {
-    final startLabel =
-        shuttle.originAddress ??
-        (shuttle.routeStartLat != null && shuttle.routeStartLng != null
-            ? '${shuttle.routeStartLat!.toStringAsFixed(4)}, ${shuttle.routeStartLng!.toStringAsFixed(4)}'
-            : '起點未設定');
-    final endLabel =
-        shuttle.destinationAddress ??
-        (shuttle.routeEndLat != null && shuttle.routeEndLng != null
-            ? '${shuttle.routeEndLat!.toStringAsFixed(4)}, ${shuttle.routeEndLng!.toStringAsFixed(4)}'
-            : '終點未設定');
-
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -388,17 +364,18 @@ class _ShuttleCard extends StatelessWidget {
               Row(
                 children: [
                   StatusChip(
-                    label: _costLabel(shuttle.costType),
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.1),
+                    label: shuttle.status,
+                    backgroundColor:
+                        AppColors.primary.withValues(alpha: 0.12),
                     textColor: AppColors.primary,
                   ),
                   const Spacer(),
-                  StatusChip(
-                    label: _getStatusText(shuttle.status),
-                    backgroundColor: _getStatusColor(
-                      shuttle.status,
-                    ).withValues(alpha: 0.12),
-                    textColor: _getStatusColor(shuttle.status),
+                  Text(
+                    _formatDate(shuttle.departureTime),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.textSecondaryLight,
+                    ),
                   ),
                 ],
               ),
@@ -413,30 +390,18 @@ class _ShuttleCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Icon(Icons.route, color: AppColors.primary, size: 18),
+                  Expanded(
+                    child: _infoTile(
+                      icon: Icons.place_outlined,
+                      label: shuttle.originAddress ?? 'Origin TBD',
+                    ),
+                  ),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '起點：$startLabel',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppColors.textSecondaryLight,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '終點：$endLabel',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppColors.textSecondaryLight,
-                          ),
-                        ),
-                      ],
+                    child: _infoTile(
+                      icon: Icons.place,
+                      label: shuttle.destinationAddress ?? 'Destination TBD',
                     ),
                   ),
                 ],
@@ -444,64 +409,50 @@ class _ShuttleCard extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Icon(
-                    Icons.access_time,
-                    size: 16,
-                    color: AppColors.textSecondaryLight,
+                  _infoChip(
+                    icon: Icons.event,
+                    label: _formatDate(shuttle.departureTime),
                   ),
-                  const SizedBox(width: 6),
-                  Text(
-                    _formatTime(shuttle.departureTime),
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textSecondaryLight,
+                  const SizedBox(width: 8),
+                  _infoChip(
+                    icon: Icons.airline_seat_recline_normal,
+                    label: 'Seats: ${shuttle.seatsTaken}/${shuttle.capacity}',
+                  ),
+                  const SizedBox(width: 8),
+                  _infoChip(
+                    icon: Icons.access_time,
+                    label: shuttle.signupDeadline != null
+                        ? 'Deadline: ${_formatDate(shuttle.signupDeadline)}'
+                        : 'No deadline',
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton.icon(
+                      onPressed: () {},
+                      icon: const Icon(Icons.navigation, size: 18),
+                      label: const Text('Navigate'),
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
                     ),
                   ),
-                  const SizedBox(width: 16),
-                  const Icon(
-                    Icons.people_outline,
-                    size: 16,
-                    color: AppColors.textSecondaryLight,
-                  ),
-                  const SizedBox(width: 6),
-                  Text(
-                    '${shuttle.seatsTaken}/${shuttle.capacity} 人',
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: AppColors.textSecondaryLight,
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: ElevatedButton.icon(
+                      onPressed: () => context.push('/shuttles/${shuttle.id}'),
+                      icon: const Icon(Icons.info_outline, size: 18),
+                      label: const Text('Details'),
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                      ),
                     ),
                   ),
                 ],
               ),
-              if (!isCompleted) ...[
-                const SizedBox(height: 12),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton.icon(
-                        onPressed: () {},
-                        icon: const Icon(Icons.navigation, size: 16),
-                        label: const Text('導航'),
-                        style: OutlinedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: ElevatedButton.icon(
-                        onPressed: () =>
-                            context.push('/shuttles/${shuttle.id}'),
-                        icon: const Icon(Icons.directions_bus, size: 16),
-                        label: const Text('加入班車'),
-                        style: ElevatedButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 10),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
             ],
           ),
         ),
@@ -509,61 +460,32 @@ class _ShuttleCard extends StatelessWidget {
     );
   }
 
-  Color _getStatusColor(String status) {
-    switch (status.toLowerCase()) {
-      case 'open':
-      case 'scheduled':
-        return AppColors.primary;
-      case 'in_progress':
-      case 'en route':
-        return AppColors.warning;
-      case 'done':
-      case 'arrived':
-        return AppColors.success;
-      case 'cancelled':
-      case 'canceled':
-        return AppColors.statusCompleted;
-      default:
-        return AppColors.textSecondaryLight;
-    }
+  Widget _infoTile({required IconData icon, required String label}) {
+    return Row(
+      children: [
+        Icon(icon, size: 18, color: AppColors.textSecondaryLight),
+        const SizedBox(width: 6),
+        Expanded(
+          child: Text(
+            label,
+            style: const TextStyle(color: AppColors.textSecondaryLight),
+          ),
+        ),
+      ],
+    );
   }
 
-  String _getStatusText(String status) {
-    switch (status.toLowerCase()) {
-      case 'open':
-      case 'scheduled':
-        return l10n.shuttleStatusScheduled;
-      case 'in_progress':
-      case 'en route':
-        return l10n.shuttleStatusEnRoute;
-      case 'done':
-      case 'arrived':
-        return l10n.shuttleStatusArrived;
-      case 'cancelled':
-      case 'canceled':
-        return l10n.shuttleStatusCancelled;
-      default:
-        return status;
-    }
+  Widget _infoChip({required IconData icon, required String label}) {
+    return Chip(
+      avatar: Icon(icon, size: 16, color: AppColors.primary),
+      label: Text(label),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+    );
   }
 
-  String _formatTime(DateTime? time) {
-    if (time == null) return l10n.timeNotSet;
-    return '${time.month}/${time.day} ${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}';
-  }
-
-  String _costLabel(String? costType) {
-    switch (costType?.toLowerCase()) {
-      case 'free':
-        return '免費';
-      case '分攤油費':
-      case 'share_gas':
-        return '分攤油費';
-      case 'paid':
-        return '付費車';
-      default:
-        return '班車';
-    }
+  String _formatDate(DateTime? date) {
+    if (date == null) return 'TBD';
+    return '${date.month}/${date.day} ${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
   }
 }
 
@@ -574,28 +496,23 @@ class _ShuttleHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
+        children: [
           Text(
-            'MY SHUTTLES',
+            'SHUTTLE DISPATCH',
             style: TextStyle(
-              color: AppColors.primary,
-              letterSpacing: 1.6,
+              color: AppColors.primary.withValues(alpha: 0.8),
               fontWeight: FontWeight.w700,
+              letterSpacing: 1.5,
             ),
           ),
-          SizedBox(height: 4),
-          Text(
-            '我的班車',
+          const SizedBox(height: 4),
+          const Text(
+            'Coordinate transport routes, seats, and pickup points.',
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
               color: AppColors.textPrimaryLight,
             ),
-          ),
-          SizedBox(height: 4),
-          Text(
-            '管理你發起或加入的班車，快速進行狀態更新與操作。',
-            style: TextStyle(color: AppColors.textSecondaryLight),
           ),
         ],
       ),

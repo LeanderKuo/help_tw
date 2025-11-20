@@ -10,7 +10,7 @@ _version: 2025-10-10 • locale: Asia/Taipei • status: Extended/Final_
 
 ---
 
-## 1. 角色與權限矩陣（RBAC）— **含班車 Shuttle 欄**
+## 1. 角色與權限矩陣（RBAC）— 
 
 > MFA：Leader / Admin / Superadmin 建議啟用（至少 SMS 或 Authenticator）。  
 > Rate Limit：**一般使用者**建立任務「每小時 1 次」；**Leader/Admin 豁免**；Superadmin 亦豁免。

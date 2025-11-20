@@ -58,5 +58,9 @@
 			</array>
 		</dict>
 	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Location access is required to show nearby shuttles, tasks, and resource points.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Allow background location so navigation and proximity alerts remain accurate.</string>
 </dict>
 </plist>

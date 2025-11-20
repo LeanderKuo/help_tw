@@ -24,6 +24,21 @@ class ProfileRepository {
       return null;
     }
   }
+
+  Stream<UserProfile?> watchProfile(String userId) {
+    return _client
+        .from('profiles_public')
+        .stream(primaryKey: ['id'])
+        .eq('id', userId)
+        .map((rows) {
+      if (rows.isEmpty) return null;
+      final first = rows.first;
+      if (first is Map<String, dynamic>) {
+        return UserProfile.fromJson(first);
+      }
+      return UserProfile.fromJson(Map<String, dynamic>.from(first as Map));
+    });
+  }
   
   // TODO: Add update profile methods
 }

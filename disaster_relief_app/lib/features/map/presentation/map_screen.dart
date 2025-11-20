@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:go_router/go_router.dart';
 import '../../resources/presentation/resource_controller.dart';
 import '../../../models/resource_point.dart';
 import '../../../l10n/app_localizations.dart';
+import '../../../services/location_service.dart';
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
@@ -17,6 +18,9 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen> {
   final Completer<GoogleMapController> _controller = Completer();
+  Position? _userPosition;
+  bool _locationLoading = false;
+  String? _locationError;
   
   // Default to Taiwan center
   static const CameraPosition _kDefaultLocation = CameraPosition(
@@ -27,11 +31,54 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   void initState() {
     super.initState();
-    _requestPermission();
+    _initLocation();
   }
 
-  Future<void> _requestPermission() async {
-    await Permission.location.request();
+  CameraPosition get _initialCamera {
+    if (_userPosition != null) {
+      return CameraPosition(
+        target: LatLng(_userPosition!.latitude, _userPosition!.longitude),
+        zoom: 13.5,
+      );
+    }
+    return _kDefaultLocation;
+  }
+
+  Future<void> _initLocation() async {
+    setState(() {
+      _locationLoading = true;
+      _locationError = null;
+    });
+
+    final position = await LocationService.currentPosition();
+    if (!mounted) return;
+
+    if (position == null) {
+      setState(() {
+        _locationError = '無法取得定位，請確認權限與定位服務。';
+        _locationLoading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      _userPosition = position;
+      _locationLoading = false;
+      _locationError = null;
+    });
+    await _moveCamera(
+      LatLng(position.latitude, position.longitude),
+      zoom: 14.0,
+    );
+  }
+
+  Future<void> _moveCamera(LatLng target, {double zoom = 14}) async {
+    final controller = await _controller.future;
+    await controller.animateCamera(
+      CameraUpdate.newCameraPosition(
+        CameraPosition(target: target, zoom: zoom),
+      ),
+    );
   }
 
   Set<Marker> _createMarkers(List<ResourcePoint> resources) {
@@ -71,25 +118,88 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
-      body: resourcesAsync.when(
-        data: (resources) {
-          return GoogleMap(
-            mapType: MapType.normal,
-            initialCameraPosition: _kDefaultLocation,
-            myLocationEnabled: true,
-            myLocationButtonEnabled: true,
-            markers: _createMarkers(resources),
-            onMapCreated: (GoogleMapController controller) {
-              _controller.complete(controller);
+      body: Stack(
+        children: [
+          resourcesAsync.when(
+            data: (resources) {
+              return GoogleMap(
+                mapType: MapType.normal,
+                initialCameraPosition: _initialCamera,
+                myLocationEnabled: true,
+                myLocationButtonEnabled: true,
+                markers: _createMarkers(resources),
+                onMapCreated: (GoogleMapController controller) {
+                  if (!_controller.isCompleted) {
+                    _controller.complete(controller);
+                  }
+                },
+              );
             },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (error, stack) => Center(child: Text(l10n.errorWithMessage('$error'))),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (error, stack) =>
+                Center(child: Text(l10n.errorWithMessage('$error'))),
+          ),
+          if (_locationLoading)
+            const Positioned(
+              top: 16,
+              left: 16,
+              right: 16,
+              child: Card(
+                child: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      SizedBox(width: 12),
+                      Text('正在取得定位…'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          if (_locationError != null)
+            Positioned(
+              top: 16,
+              left: 16,
+              right: 16,
+              child: Card(
+                color: Colors.red.shade50,
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.error_outline, color: Colors.red),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          _locationError!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: _initLocation,
+                        child: const Text('重試'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
       floatingActionButton: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
+          FloatingActionButton(
+            heroTag: 'locate',
+            onPressed: _initLocation,
+            child: const Icon(Icons.my_location),
+          ),
+          const SizedBox(height: 16),
           FloatingActionButton(
             heroTag: 'list',
             onPressed: () => context.push('/map/resources'),

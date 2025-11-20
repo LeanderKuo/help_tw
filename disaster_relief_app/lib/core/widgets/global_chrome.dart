@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../theme/app_colors.dart';
 import '../../features/announcements/data/announcement_repository.dart';
@@ -55,7 +56,8 @@ class GlobalTopNavBar extends StatelessWidget implements PreferredSizeWidget {
               Row(
                 children: [
                   IconButton(
-                    onPressed: onNotificationTap,
+                    onPressed:
+                        onNotificationTap ?? () => GoRouter.of(context).push('/announcements'),
                     icon: const Icon(Icons.notifications_none_rounded,
                         color: AppColors.textPrimaryLight),
                     tooltip: '通知',
@@ -164,7 +166,7 @@ class _EmergencyMarqueeState extends ConsumerState<EmergencyMarquee>
                           ),
                           const SizedBox(width: 24),
                           Text(
-                            announcement.headline ?? '緊急公告',
+                            announcement.title,
                             style: TextStyle(
                               color: Colors.white.withValues(alpha: 0.75),
                             ),
