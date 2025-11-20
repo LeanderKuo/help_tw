@@ -76,8 +76,11 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 data: (tasks) {
                   final filteredTasks = tasks.where((t) {
                     if (t.isDraft) return false;
-                    final matchesSearch = _searchQuery.isEmpty ||
-                        t.title.toLowerCase().contains(_searchQuery.toLowerCase());
+                    final matchesSearch =
+                        _searchQuery.isEmpty ||
+                        t.title.toLowerCase().contains(
+                          _searchQuery.toLowerCase(),
+                        );
                     return matchesSearch;
                   }).toList();
 
@@ -199,8 +202,10 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 ),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
               ),
               onChanged: (value) {
                 setState(() {
@@ -211,13 +216,18 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
             const SizedBox(height: 12),
             Row(
               children: [
-                Text('距離 0-100 公里',
-                    style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textPrimaryLight)),
+                Text(
+                  '距離 0-100 公里',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimaryLight,
+                  ),
+                ),
                 const SizedBox(width: 8),
-                Text('${_distanceKm.toStringAsFixed(0)} km',
-                    style: const TextStyle(color: AppColors.primary)),
+                Text(
+                  '${_distanceKm.toStringAsFixed(0)} km',
+                  style: const TextStyle(color: AppColors.primary),
+                ),
               ],
             ),
             Slider(
@@ -231,7 +241,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _selectedFilter,
+                    initialValue: _selectedFilter,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -241,16 +251,13 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    items: const [
-                      '全部任務',
-                      '一般任務',
-                      '緊急任務',
-                      '我的草稿',
-                    ]
-                        .map((filter) => DropdownMenuItem(
-                              value: filter,
-                              child: Text(filter),
-                            ))
+                    items: const ['全部任務', '一般任務', '緊急任務', '我的草稿']
+                        .map(
+                          (filter) => DropdownMenuItem(
+                            value: filter,
+                            child: Text(filter),
+                          ),
+                        )
                         .toList(),
                     onChanged: (value) {
                       if (value == null) return;
@@ -263,7 +270,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _selectedSort,
+                    initialValue: _selectedSort,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -273,15 +280,11 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    items: const [
-                      '最新建立',
-                      '最近更新',
-                      '距離最近',
-                    ]
-                        .map((sort) => DropdownMenuItem(
-                              value: sort,
-                              child: Text(sort),
-                            ))
+                    items: const ['最新建立', '最近更新', '距離最近']
+                        .map(
+                          (sort) =>
+                              DropdownMenuItem(value: sort, child: Text(sort)),
+                        )
                         .toList(),
                     onChanged: (value) {
                       if (value == null) return;
@@ -392,7 +395,10 @@ class _TaskCard extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 10,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: AppColors.secondary.withValues(alpha: 0.12),
                       borderRadius: BorderRadius.circular(12),
@@ -470,7 +476,9 @@ class _TaskCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   StatusChip(
                     label: _statusLabel(task.status),
-                    backgroundColor: _getStatusColor(task.status).withValues(alpha: 0.12),
+                    backgroundColor: _getStatusColor(
+                      task.status,
+                    ).withValues(alpha: 0.12),
                     textColor: _getStatusColor(task.status),
                     icon: _getPriorityIcon(task.priority),
                   ),
@@ -618,9 +626,7 @@ class _MissionHeader extends StatelessWidget {
           const SizedBox(height: 4),
           const Text(
             '任務一覽・搜尋、篩選並快速加入救災任務',
-            style: TextStyle(
-              color: AppColors.textSecondaryLight,
-            ),
+            style: TextStyle(color: AppColors.textSecondaryLight),
           ),
         ],
       ),

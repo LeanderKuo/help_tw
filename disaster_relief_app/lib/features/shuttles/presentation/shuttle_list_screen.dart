@@ -75,20 +75,28 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               child: shuttlesAsync.when(
                 data: (shuttles) {
                   final filtered = shuttles.where((s) {
-                    final matchesSearch = _searchQuery.isEmpty ||
-                        s.title.toLowerCase().contains(_searchQuery.toLowerCase());
+                    final matchesSearch =
+                        _searchQuery.isEmpty ||
+                        s.title.toLowerCase().contains(
+                          _searchQuery.toLowerCase(),
+                        );
                     final matchesCost =
                         _costType == '全部費用' || s.costType == _costType;
                     return matchesSearch && matchesCost;
                   }).toList();
 
                   final hosting = filtered
-                      .where((s) => s.status != 'Arrived' && s.status != 'Cancelled')
+                      .where(
+                        (s) => s.status != 'Arrived' && s.status != 'Cancelled',
+                      )
                       .toList();
-                  final joined =
-                      filtered.where((s) => s.status == 'En Route').toList();
+                  final joined = filtered
+                      .where((s) => s.status == 'En Route')
+                      .toList();
                   final completed = filtered
-                      .where((s) => s.status == 'Arrived' || s.status == 'Cancelled')
+                      .where(
+                        (s) => s.status == 'Arrived' || s.status == 'Cancelled',
+                      )
                       .toList();
 
                   return TabBarView(
@@ -212,8 +220,10 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                 ),
                 filled: true,
                 fillColor: Colors.white,
-                contentPadding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 10,
+                ),
               ),
               onChanged: (value) => setState(() => _searchQuery = value),
             ),
@@ -245,7 +255,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _costType,
+                    initialValue: _costType,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -255,12 +265,14 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    items: const [
-                      '全部費用',
-                      '免費',
-                      '分攤油費',
-                      '付費車',
-                    ].map((value) => DropdownMenuItem(value: value, child: Text(value))).toList(),
+                    items: const ['全部費用', '免費', '分攤油費', '付費車']
+                        .map(
+                          (value) => DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          ),
+                        )
+                        .toList(),
                     onChanged: (value) {
                       if (value == null) return;
                       setState(() => _costType = value);
@@ -270,7 +282,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: '最新建立',
+                    initialValue: '最新建立',
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -280,11 +292,14 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    items: const [
-                      '最新建立',
-                      '出發時間',
-                      '優先度',
-                    ].map((value) => DropdownMenuItem(value: value, child: Text(value))).toList(),
+                    items: const ['最新建立', '出發時間', '優先度']
+                        .map(
+                          (value) => DropdownMenuItem(
+                            value: value,
+                            child: Text(value),
+                          ),
+                        )
+                        .toList(),
                     onChanged: (_) {},
                   ),
                 ),
@@ -348,11 +363,13 @@ class _ShuttleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final startLabel = shuttle.originAddress ??
+    final startLabel =
+        shuttle.originAddress ??
         (shuttle.routeStartLat != null && shuttle.routeStartLng != null
             ? '${shuttle.routeStartLat!.toStringAsFixed(4)}, ${shuttle.routeStartLng!.toStringAsFixed(4)}'
             : '起點未設定');
-    final endLabel = shuttle.destinationAddress ??
+    final endLabel =
+        shuttle.destinationAddress ??
         (shuttle.routeEndLat != null && shuttle.routeEndLng != null
             ? '${shuttle.routeEndLat!.toStringAsFixed(4)}, ${shuttle.routeEndLng!.toStringAsFixed(4)}'
             : '終點未設定');
@@ -378,8 +395,9 @@ class _ShuttleCard extends StatelessWidget {
                   const Spacer(),
                   StatusChip(
                     label: _getStatusText(shuttle.status),
-                    backgroundColor:
-                        _getStatusColor(shuttle.status).withValues(alpha: 0.12),
+                    backgroundColor: _getStatusColor(
+                      shuttle.status,
+                    ).withValues(alpha: 0.12),
                     textColor: _getStatusColor(shuttle.status),
                   ),
                 ],
@@ -426,7 +444,11 @@ class _ShuttleCard extends StatelessWidget {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Icon(Icons.access_time, size: 16, color: AppColors.textSecondaryLight),
+                  const Icon(
+                    Icons.access_time,
+                    size: 16,
+                    color: AppColors.textSecondaryLight,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     _formatTime(shuttle.departureTime),
@@ -436,8 +458,11 @@ class _ShuttleCard extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Icon(Icons.people_outline,
-                      size: 16, color: AppColors.textSecondaryLight),
+                  const Icon(
+                    Icons.people_outline,
+                    size: 16,
+                    color: AppColors.textSecondaryLight,
+                  ),
                   const SizedBox(width: 6),
                   Text(
                     '${shuttle.seatsTaken}/${shuttle.capacity} 人',
@@ -465,7 +490,8 @@ class _ShuttleCard extends StatelessWidget {
                     const SizedBox(width: 8),
                     Expanded(
                       child: ElevatedButton.icon(
-                        onPressed: () => context.push('/shuttles/${shuttle.id}'),
+                        onPressed: () =>
+                            context.push('/shuttles/${shuttle.id}'),
                         icon: const Icon(Icons.directions_bus, size: 16),
                         label: const Text('加入班車'),
                         style: ElevatedButton.styleFrom(
