@@ -16,11 +16,13 @@ void main() async {
   runApp(const ProviderScope(child: DisasterReliefApp()));
 }
 
-class DisasterReliefApp extends StatelessWidget {
+class DisasterReliefApp extends ConsumerWidget {
   const DisasterReliefApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(routerProvider);
+    
     return MaterialApp.router(
       title: AppConfig.appName,
       theme: AppTheme.lightTheme,
@@ -28,7 +30,7 @@ class DisasterReliefApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       
       // Routing
-      routerConfig: AppRouter.router,
+      routerConfig: router,
       
       // Localization
       localizationsDelegates: const [

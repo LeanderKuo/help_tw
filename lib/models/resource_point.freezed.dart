@@ -1,0 +1,387 @@
+// coverage:ignore-file
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
+// ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
+
+part of 'resource_point.dart';
+
+// **************************************************************************
+// FreezedGenerator
+// **************************************************************************
+
+T _$identity<T>(T value) => value;
+
+final _privateConstructorUsedError = UnsupportedError(
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+
+ResourcePoint _$ResourcePointFromJson(Map<String, dynamic> json) {
+  return _ResourcePoint.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ResourcePoint {
+  String get id => throw _privateConstructorUsedError;
+  String get title => throw _privateConstructorUsedError;
+  String? get description => throw _privateConstructorUsedError;
+  String get type =>
+      throw _privateConstructorUsedError; // Water, Shelter, Medical, Food, Other
+  double get latitude => throw _privateConstructorUsedError;
+  double get longitude => throw _privateConstructorUsedError;
+  bool get isActive => throw _privateConstructorUsedError;
+  String? get createdBy => throw _privateConstructorUsedError;
+  DateTime? get createdAt => throw _privateConstructorUsedError;
+  DateTime? get updatedAt => throw _privateConstructorUsedError;
+  List<String> get images => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ResourcePointCopyWith<ResourcePoint> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ResourcePointCopyWith<$Res> {
+  factory $ResourcePointCopyWith(
+          ResourcePoint value, $Res Function(ResourcePoint) then) =
+      _$ResourcePointCopyWithImpl<$Res, ResourcePoint>;
+  @useResult
+  $Res call(
+      {String id,
+      String title,
+      String? description,
+      String type,
+      double latitude,
+      double longitude,
+      bool isActive,
+      String? createdBy,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      List<String> images});
+}
+
+/// @nodoc
+class _$ResourcePointCopyWithImpl<$Res, $Val extends ResourcePoint>
+    implements $ResourcePointCopyWith<$Res> {
+  _$ResourcePointCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? description = freezed,
+    Object? type = null,
+    Object? latitude = null,
+    Object? longitude = null,
+    Object? isActive = null,
+    Object? createdBy = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? images = null,
+  }) {
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      isActive: null == isActive
+          ? _value.isActive
+          : isActive // ignore: cast_nullable_to_non_nullable
+              as bool,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      images: null == images
+          ? _value.images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ResourcePointImplCopyWith<$Res>
+    implements $ResourcePointCopyWith<$Res> {
+  factory _$$ResourcePointImplCopyWith(
+          _$ResourcePointImpl value, $Res Function(_$ResourcePointImpl) then) =
+      __$$ResourcePointImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String id,
+      String title,
+      String? description,
+      String type,
+      double latitude,
+      double longitude,
+      bool isActive,
+      String? createdBy,
+      DateTime? createdAt,
+      DateTime? updatedAt,
+      List<String> images});
+}
+
+/// @nodoc
+class __$$ResourcePointImplCopyWithImpl<$Res>
+    extends _$ResourcePointCopyWithImpl<$Res, _$ResourcePointImpl>
+    implements _$$ResourcePointImplCopyWith<$Res> {
+  __$$ResourcePointImplCopyWithImpl(
+      _$ResourcePointImpl _value, $Res Function(_$ResourcePointImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? id = null,
+    Object? title = null,
+    Object? description = freezed,
+    Object? type = null,
+    Object? latitude = null,
+    Object? longitude = null,
+    Object? isActive = null,
+    Object? createdBy = freezed,
+    Object? createdAt = freezed,
+    Object? updatedAt = freezed,
+    Object? images = null,
+  }) {
+    return _then(_$ResourcePointImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: null == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as String,
+      latitude: null == latitude
+          ? _value.latitude
+          : latitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      longitude: null == longitude
+          ? _value.longitude
+          : longitude // ignore: cast_nullable_to_non_nullable
+              as double,
+      isActive: null == isActive
+          ? _value.isActive
+          : isActive // ignore: cast_nullable_to_non_nullable
+              as bool,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      images: null == images
+          ? _value._images
+          : images // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ResourcePointImpl extends _ResourcePoint {
+  const _$ResourcePointImpl(
+      {required this.id,
+      required this.title,
+      this.description,
+      this.type = 'Other',
+      required this.latitude,
+      required this.longitude,
+      this.isActive = true,
+      this.createdBy,
+      this.createdAt,
+      this.updatedAt,
+      final List<String> images = const []})
+      : _images = images,
+        super._();
+
+  factory _$ResourcePointImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ResourcePointImplFromJson(json);
+
+  @override
+  final String id;
+  @override
+  final String title;
+  @override
+  final String? description;
+  @override
+  @JsonKey()
+  final String type;
+// Water, Shelter, Medical, Food, Other
+  @override
+  final double latitude;
+  @override
+  final double longitude;
+  @override
+  @JsonKey()
+  final bool isActive;
+  @override
+  final String? createdBy;
+  @override
+  final DateTime? createdAt;
+  @override
+  final DateTime? updatedAt;
+  final List<String> _images;
+  @override
+  @JsonKey()
+  List<String> get images {
+    if (_images is EqualUnmodifiableListView) return _images;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_images);
+  }
+
+  @override
+  String toString() {
+    return 'ResourcePoint(id: $id, title: $title, description: $description, type: $type, latitude: $latitude, longitude: $longitude, isActive: $isActive, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, images: $images)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ResourcePointImpl &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.title, title) || other.title == title) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.latitude, latitude) ||
+                other.latitude == latitude) &&
+            (identical(other.longitude, longitude) ||
+                other.longitude == longitude) &&
+            (identical(other.isActive, isActive) ||
+                other.isActive == isActive) &&
+            (identical(other.createdBy, createdBy) ||
+                other.createdBy == createdBy) &&
+            (identical(other.createdAt, createdAt) ||
+                other.createdAt == createdAt) &&
+            (identical(other.updatedAt, updatedAt) ||
+                other.updatedAt == updatedAt) &&
+            const DeepCollectionEquality().equals(other._images, _images));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      title,
+      description,
+      type,
+      latitude,
+      longitude,
+      isActive,
+      createdBy,
+      createdAt,
+      updatedAt,
+      const DeepCollectionEquality().hash(_images));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ResourcePointImplCopyWith<_$ResourcePointImpl> get copyWith =>
+      __$$ResourcePointImplCopyWithImpl<_$ResourcePointImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ResourcePointImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ResourcePoint extends ResourcePoint {
+  const factory _ResourcePoint(
+      {required final String id,
+      required final String title,
+      final String? description,
+      final String type,
+      required final double latitude,
+      required final double longitude,
+      final bool isActive,
+      final String? createdBy,
+      final DateTime? createdAt,
+      final DateTime? updatedAt,
+      final List<String> images}) = _$ResourcePointImpl;
+  const _ResourcePoint._() : super._();
+
+  factory _ResourcePoint.fromJson(Map<String, dynamic> json) =
+      _$ResourcePointImpl.fromJson;
+
+  @override
+  String get id;
+  @override
+  String get title;
+  @override
+  String? get description;
+  @override
+  String get type;
+  @override // Water, Shelter, Medical, Food, Other
+  double get latitude;
+  @override
+  double get longitude;
+  @override
+  bool get isActive;
+  @override
+  String? get createdBy;
+  @override
+  DateTime? get createdAt;
+  @override
+  DateTime? get updatedAt;
+  @override
+  List<String> get images;
+  @override
+  @JsonKey(ignore: true)
+  _$$ResourcePointImplCopyWith<_$ResourcePointImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}
