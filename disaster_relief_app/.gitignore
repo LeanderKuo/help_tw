@@ -43,6 +43,7 @@ GoogleService-Info.plist
 **/firebase_app_id_file.json
 *.pem
 *.p12
+docs/uiux\ sample/*.png
 
 # Symbolication related
 app.*.symbols
