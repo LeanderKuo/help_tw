@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/responsive.dart';
 import 'auth_controller.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -16,6 +17,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _obscurePassword = true;
 
   @override
   void dispose() {
@@ -37,145 +39,181 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final state = ref.watch(authControllerProvider);
+    final isMobile = Responsive.isMobile(context);
 
     ref.listen<AsyncValue<void>>(authControllerProvider, (previous, next) {
       if (next.hasError) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(next.error.toString())),
+          SnackBar(
+            content: Text(next.error.toString()),
+            backgroundColor: AppColors.error,
+          ),
         );
       }
     });
 
     return Scaffold(
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Logo or Title
-                Text(
-                  l10n.appTitle,
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 48),
-
-                // Email Field
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: l10n.email,
-                    prefixIcon: const Icon(Icons.email_outlined),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-
-                // Password Field
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    labelText: l10n.password,
-                    prefixIcon: const Icon(Icons.lock_outline),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  obscureText: true,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 24),
-
-                // Login Button
-                ElevatedButton(
-                  onPressed: state.isLoading ? null : _signIn,
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: state.isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : Text(l10n.login),
-                ),
-                const SizedBox(height: 24),
-
-                // Divider
-                const Row(
+      body: SafeArea(
+        child: ResponsiveLayout(
+          maxWidth: 500,
+          child: Center(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(isMobile ? 24.0 : 48.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(child: Divider()),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      child: Text('OR'),
+                    Icon(
+                      Icons.emergency,
+                      size: 64,
+                      color: AppColors.primary,
                     ),
-                    Expanded(child: Divider()),
+                    const SizedBox(height: 16),
+                    Text(
+                      l10n.appTitle,
+                      style: TextStyle(
+                        fontSize: isMobile ? 24 : 28,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.textPrimaryLight,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      '登入以存取救災資源平台',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textSecondaryLight,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 48),
+                    TextFormField(
+                      controller: _emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        labelText: l10n.email,
+                        hintText: '請輸入電子郵件',
+                        prefixIcon: const Icon(Icons.email_outlined),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '請輸入電子郵件';
+                        }
+                        if (!value.contains('@')) {
+                          return '請輸入有效的電子郵件';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    TextFormField(
+                      controller: _passwordController,
+                      obscureText: _obscurePassword,
+                      decoration: InputDecoration(
+                        labelText: l10n.password,
+                        hintText: '請輸入密碼',
+                        prefixIcon: const Icon(Icons.lock_outline),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _obscurePassword
+                                ? Icons.visibility_outlined
+                                : Icons.visibility_off_outlined,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return '請輸入密碼';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: TextButton(
+                        onPressed: () {
+                          // TODO: Forgot password
+                        },
+                        child: const Text('忘記密碼？'),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton(
+                      onPressed: state.isLoading ? null : _signIn,
+                      child: state.isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(l10n.login),
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(child: Divider(color: AppColors.dividerLight)),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            '或使用',
+                            style: TextStyle(
+                              color: AppColors.textSecondaryLight,
+                              fontSize: 12,
+                            ),
+                          ),
+                        ),
+                        Expanded(child: Divider(color: AppColors.dividerLight)),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    OutlinedButton.icon(
+                      onPressed: state.isLoading
+                          ? null
+                          : () => ref
+                              .read(authControllerProvider.notifier)
+                              .signInWithGoogle(),
+                      icon: const Icon(Icons.g_mobiledata, size: 28),
+                      label: const Text('使用 Google 登入'),
+                    ),
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: state.isLoading
+                          ? null
+                          : () => ref
+                              .read(authControllerProvider.notifier)
+                              .signInWithLine(),
+                      icon: const Icon(Icons.chat_bubble_outline, size: 20),
+                      label: const Text('使用 LINE 登入'),
+                    ),
+                    const SizedBox(height: 32),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          '還沒有帳號？',
+                          style: TextStyle(color: AppColors.textSecondaryLight),
+                        ),
+                        TextButton(
+                          onPressed: () => context.push('/register'),
+                          child: Text(l10n.register),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-                const SizedBox(height: 24),
-
-                // Social Login Buttons
-                OutlinedButton.icon(
-                  onPressed: state.isLoading
-                      ? null
-                      : () => ref
-                          .read(authControllerProvider.notifier)
-                          .signInWithGoogle(),
-                  icon: const Icon(Icons.g_mobiledata, size: 28),
-                  label: const Text('Sign in with Google'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                OutlinedButton.icon(
-                  onPressed: state.isLoading
-                      ? null
-                      : () => ref
-                          .read(authControllerProvider.notifier)
-                          .signInWithLine(),
-                  icon: const Icon(Icons.chat_bubble_outline, size: 24),
-                  label: const Text('Sign in with LINE'),
-                  style: OutlinedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // Register Link
-                TextButton(
-                  onPressed: () => context.push('/register'),
-                  child: Text("Don't have an account? ${l10n.register}"),
-                ),
-              ],
+              ),
             ),
           ),
         ),
