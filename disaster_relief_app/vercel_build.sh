@@ -11,6 +11,10 @@ if command -v apt-get >/dev/null 2>&1; then
   apt-get install -y xz-utils unzip libglu1-mesa
 elif command -v apk >/dev/null 2>&1; then
   apk add --no-cache xz unzip mesa-gl
+elif command -v yum >/dev/null 2>&1; then
+  yum install -y xz unzip mesa-libGL
+elif command -v dnf >/dev/null 2>&1; then
+  dnf install -y xz unzip mesa-libGL
 fi
 
 rm -rf "$FH"
@@ -19,6 +23,9 @@ curl -Ls "https://storage.googleapis.com/flutter_infra_release/releases/stable/l
   | tar -xJ --strip-components=1 -C "$FH"
 
 export PATH="$FH/bin:$PATH"
+
+# Avoid git safety prompts inside the Flutter SDK.
+git config --global --add safe.directory "$FH" || true
 
 flutter config --no-analytics
 flutter pub get
