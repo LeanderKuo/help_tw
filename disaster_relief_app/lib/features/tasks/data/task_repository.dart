@@ -38,7 +38,6 @@ class TaskRepository {
         'materials_status',
         'required_participants',
         'participant_count',
-        'assigned_to',
         'author_id',
         'created_at',
         'updated_at',

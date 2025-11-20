@@ -21,7 +21,7 @@ class ResourceListScreen extends ConsumerStatefulWidget {
 class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
   final _searchController = TextEditingController();
   String _searchQuery = '';
-  String _selectedType = 'All';
+  final Set<String> _selectedTypes = {};
 
   @override
   void dispose() {
@@ -36,14 +36,14 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
 
     return Scaffold(
       appBar: GlobalTopNavBar(
-        title: '救災資源整合平台',
-        onNotificationTap: () {},
+        title: l10n.appTitle,
+        onNotificationTap: () => context.push('/announcements'),
         onAvatarTap: () => context.push('/profile'),
       ),
       body: ResponsiveLayout(
         child: Column(
           children: [
-            _ResourceHeader(),
+            const _ResourceHeader(),
             const SizedBox(height: 12),
             _buildMapView(context),
             const SizedBox(height: 12),
@@ -80,6 +80,8 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                         _buildFilterChip('Food', AppColors.chipFood, l10n),
                         const SizedBox(width: 8),
                         _buildFilterChip('Medical', AppColors.error, l10n),
+                        const SizedBox(width: 8),
+                        _buildFilterChip('Other', AppColors.textSecondaryLight, l10n),
                       ],
                     ),
                   ),
@@ -93,14 +95,10 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                   final filteredResources = resources.where((r) {
                     if (!r.isActive) return false;
                     if (_searchQuery.isNotEmpty) {
-                      return r.title
-                          .toLowerCase()
-                          .contains(_searchQuery.toLowerCase());
+                      return r.title.toLowerCase().contains(_searchQuery.toLowerCase());
                     }
-                    if (_selectedType != 'All') {
-                      return r.type == _getTypeFromChip(_selectedType);
-                    }
-                    return true;
+                    if (_selectedTypes.isEmpty) return true;
+                    return _selectedTypes.contains(_normalizeType(r.type));
                   }).toList();
 
                   if (filteredResources.isEmpty) {
@@ -139,158 +137,146 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
     );
   }
 
-  Widget _buildMapView(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(
-                child: Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _pillButton(
-                      label: '定位',
-                      icon: Icons.my_location,
-                      background: AppColors.primary.withValues(alpha: 0.1),
-                      foreground: AppColors.primary,
-                      onTap: () {},
-                    ),
-                    _pillButton(
-                      label: '新增資源點',
-                      icon: Icons.add_location_alt_outlined,
-                      background: AppColors.secondary.withValues(alpha: 0.1),
-                      foreground: AppColors.secondary,
-                      onTap: () => context.push('/resources/create'),
-                    ),
-                  ],
-                ),
-              ),
-              TextButton.icon(
-                onPressed: () {},
-                icon: const Icon(Icons.open_in_new),
-                label: const Text('官方地圖'),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Container(
-            height: 200,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(18),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
-                  blurRadius: 10,
-                  offset: const Offset(0, 6),
-                ),
-              ],
-            ),
-            child: Stack(
+  Widget _buildMapView(BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
+          children: [
+            Row(
               children: [
-                Positioned.fill(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.primary.withValues(alpha: 0.05),
-                          AppColors.secondary.withValues(alpha: 0.05),
-                        ],
-                      ),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '地圖模式預留區域',
-                        style: TextStyle(color: AppColors.textSecondaryLight),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  right: 12,
-                  top: 12,
-                  child: Column(
+                Expanded(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
-                      _zoomButton(Icons.add),
-                      const SizedBox(height: 8),
-                      _zoomButton(Icons.remove),
+                      _pillButton(
+                        label: 'Locate me',
+                        icon: Icons.my_location,
+                        background: AppColors.primary.withValues(alpha: 0.1),
+                        foreground: AppColors.primary,
+                        onTap: () {},
+                      ),
+                      _pillButton(
+                        label: 'Add resource',
+                        icon: Icons.add_location_alt_outlined,
+                        background: AppColors.secondary.withValues(alpha: 0.1),
+                        foreground: AppColors.secondary,
+                        onTap: () => context.push('/resources/create'),
+                      ),
                     ],
                   ),
                 ),
-                Positioned(
-                  left: 12,
-                  right: 12,
-                  bottom: 12,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.05),
-                          blurRadius: 8,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: const [
-                        Icon(Icons.search, color: AppColors.textSecondaryLight),
-                        SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            '搜尋資源點或輸入地址',
-                            style: TextStyle(color: AppColors.textSecondaryLight),
-                          ),
-                        ),
-                        Text(
-                          '篩選中',
-                          style: TextStyle(color: AppColors.primary),
-                        ),
-                      ],
-                    ),
-                  ),
+                TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.open_in_new),
+                  label: const Text('Open map'),
                 ),
               ],
             ),
-          ),
-        ],
-      ),
-    );
-  }
+            const SizedBox(height: 12),
+            Container(
+              height: 200,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 6),
+                  ),
+                ],
+              ),
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            AppColors.primary.withValues(alpha: 0.05),
+                            AppColors.secondary.withValues(alpha: 0.05),
+                          ],
+                        ),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          'Map preview coming soon',
+                          style: TextStyle(color: AppColors.textSecondaryLight),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    right: 12,
+                    top: 12,
+                    child: Column(
+                      children: [
+                        _zoomButton(Icons.add),
+                        const SizedBox(height: 8),
+                        _zoomButton(Icons.remove),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    left: 12,
+                    right: 12,
+                    bottom: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.05),
+                            blurRadius: 8,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: const [
+                          Icon(Icons.search, color: AppColors.textSecondaryLight),
+                          SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              'Search resource points or address',
+                              style: TextStyle(color: AppColors.textSecondaryLight),
+                            ),
+                          ),
+                          Text(
+                            'Filter',
+                            style: TextStyle(color: AppColors.primary),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
 
   Widget _pillButton({
     required String label,
     required IconData icon,
     required Color background,
     required Color foreground,
-    VoidCallback? onTap,
+    required VoidCallback onTap,
   }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-        decoration: BoxDecoration(
-          color: background,
-          borderRadius: BorderRadius.circular(24),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(icon, color: foreground, size: 18),
-            const SizedBox(width: 8),
-            Text(
-              label,
-              style: TextStyle(
-                color: foreground,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        color: background,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: TextButton.icon(
+        onPressed: onTap,
+        icon: Icon(icon, color: foreground),
+        label: Text(
+          label,
+          style: TextStyle(color: foreground, fontWeight: FontWeight.w700),
         ),
       ),
     );
@@ -317,13 +303,22 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
   }
 
   Widget _buildFilterChip(String label, Color? color, AppLocalizations l10n) {
-    final isSelected = _selectedType == label;
+    final isSelected =
+        label == 'All' ? _selectedTypes.isEmpty : _selectedTypes.contains(label);
     return FilterChip(
       label: Text(_getTypeLabel(label, l10n)),
       selected: isSelected,
       onSelected: (selected) {
         setState(() {
-          _selectedType = selected ? label : 'All';
+          if (label == 'All') {
+            _selectedTypes.clear();
+            return;
+          }
+          if (selected) {
+            _selectedTypes.add(label);
+          } else {
+            _selectedTypes.remove(label);
+          }
         });
       },
       backgroundColor: color?.withValues(alpha: 0.1) ?? AppColors.backgroundLight,
@@ -333,21 +328,6 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
         fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
       ),
     );
-  }
-
-  String _getTypeFromChip(String chip) {
-    switch (chip) {
-      case 'Shelter':
-        return 'Shelter';
-      case 'Water':
-        return 'Water';
-      case 'Food':
-        return 'Food';
-      case 'Medical':
-        return 'Medical';
-      default:
-        return 'Other';
-    }
   }
 
   String _getTypeLabel(String type, AppLocalizations l10n) {
@@ -361,9 +341,26 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
       case 'Medical':
         return l10n.resourceTypeMedical;
       case 'All':
-        return l10n.resourceTypeAll;
+        return 'All types';
       default:
         return l10n.resourceTypeOther;
+    }
+  }
+
+  String _normalizeType(String raw) {
+    if (raw.isEmpty) return 'Other';
+    final lower = raw.toLowerCase();
+    switch (lower) {
+      case 'water':
+        return 'Water';
+      case 'shelter':
+        return 'Shelter';
+      case 'medical':
+        return 'Medical';
+      case 'food':
+        return 'Food';
+      default:
+        return 'Other';
     }
   }
 }
@@ -390,9 +387,9 @@ class _ResourceCard extends StatelessWidget {
               Row(
                 children: [
                   StatusChip(
-                    label: _getTypeLabel(resource.type),
-                    backgroundColor: _getTypeColor(resource.type).withValues(alpha: 0.12),
-                    textColor: _getTypeColor(resource.type),
+                    label: _typeLabel(resource.type),
+                    backgroundColor: _typeColor(resource.type).withValues(alpha: 0.12),
+                    textColor: _typeColor(resource.type),
                   ),
                   const Spacer(),
                   StatusChip(
@@ -400,12 +397,11 @@ class _ResourceCard extends StatelessWidget {
                     backgroundColor: resource.isActive
                         ? AppColors.success.withValues(alpha: 0.12)
                         : AppColors.statusCompleted.withValues(alpha: 0.12),
-                    textColor:
-                        resource.isActive ? AppColors.success : AppColors.statusCompleted,
+                    textColor: resource.isActive ? AppColors.success : AppColors.statusCompleted,
                   ),
                   TextButton(
                     onPressed: () {},
-                    child: const Text('查看詳情'),
+                    child: const Text('Details'),
                   ),
                 ],
               ),
@@ -432,7 +428,7 @@ class _ResourceCard extends StatelessWidget {
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
-                children: (resource.tags.isEmpty ? ['基礎補給'] : resource.tags)
+                children: (resource.tags.isEmpty ? const ['no-tag'] : resource.tags)
                     .map((tag) => Chip(
                           label: Text(
                             tag,
@@ -443,14 +439,16 @@ class _ResourceCard extends StatelessWidget {
                     .toList(),
               ),
               const SizedBox(height: 10),
-              _infoRow(Icons.location_on_outlined,
-                  resource.address ?? '${resource.latitude.toStringAsFixed(4)}, ${resource.longitude.toStringAsFixed(4)}'),
+              _infoRow(
+                Icons.location_on_outlined,
+                resource.address ??
+                    '${resource.latitude.toStringAsFixed(4)}, ${resource.longitude.toStringAsFixed(4)}',
+              ),
               const SizedBox(height: 4),
               _infoRow(Icons.access_time, _formatDate(resource.updatedAt ?? resource.createdAt)),
               if (resource.expiresAt != null) ...[
                 const SizedBox(height: 4),
-                _infoRow(Icons.hourglass_bottom,
-                    '到期：${_formatDate(resource.expiresAt)}'),
+                _infoRow(Icons.hourglass_bottom, 'Expires: ${_formatDate(resource.expiresAt)}'),
               ],
             ],
           ),
@@ -467,34 +465,14 @@ class _ResourceCard extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textSecondaryLight,
-            ),
+            style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryLight),
           ),
         ),
       ],
     );
   }
 
-  // Used for future type-specific pin styling; ignore analyzer unused warning for now.
-  // ignore: unused_element
-  IconData _getIconForType(String type) {
-    switch (type) {
-      case 'Water':
-        return Icons.water_drop;
-      case 'Shelter':
-        return Icons.home;
-      case 'Medical':
-        return Icons.local_hospital;
-      case 'Food':
-        return Icons.restaurant;
-      default:
-        return Icons.place;
-    }
-  }
-
-  Color _getTypeColor(String type) {
+  Color _typeColor(String type) {
     switch (type) {
       case 'Water':
         return AppColors.chipWater;
@@ -509,7 +487,7 @@ class _ResourceCard extends StatelessWidget {
     }
   }
 
-  String _getTypeLabel(String type) {
+  String _typeLabel(String type) {
     switch (type) {
       case 'Water':
         return l10n.resourceTypeWater;
@@ -532,6 +510,8 @@ class _ResourceCard extends StatelessWidget {
 }
 
 class _ResourceHeader extends StatelessWidget {
+  const _ResourceHeader();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -549,7 +529,7 @@ class _ResourceHeader extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            '資源點管理',
+            'Resource points',
             style: TextStyle(
               fontSize: 22,
               fontWeight: FontWeight.w800,
@@ -558,7 +538,7 @@ class _ResourceHeader extends StatelessWidget {
           ),
           SizedBox(height: 4),
           Text(
-            '切換地圖或列表模式，快速瀏覽、定位與管理資源點。',
+            'Browse and manage supply locations quickly from map or list.',
             style: TextStyle(color: AppColors.textSecondaryLight),
           ),
         ],

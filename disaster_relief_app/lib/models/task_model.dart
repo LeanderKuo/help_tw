@@ -1,4 +1,4 @@
-// ignore_for_file: invalid_annotation_target
+﻿// ignore_for_file: invalid_annotation_target
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
@@ -21,7 +21,7 @@ class TaskModel with _$TaskModel {
     double? latitude,
     double? longitude,
     String? address,
-    @JsonKey(name: 'materials_status') @Default('穩定') String materialsStatus,
+    @JsonKey(name: 'materials_status') @Default('蝛拙?') String materialsStatus,
     @JsonKey(name: 'participant_count') @Default(0) int participantCount,
     @JsonKey(name: 'required_participants') @Default(0) int requiredParticipants,
     @Default([]) List<String> images,
@@ -54,7 +54,7 @@ class TaskModel with _$TaskModel {
       latitude: lat,
       longitude: lng,
       address: json['address'] as String?,
-      materialsStatus: (json['materials_status'] as String?) ?? '穩定',
+      materialsStatus: (json['materials_status'] as String?) ?? '蝛拙?',
       participantCount: (json['participant_count'] as num?)?.toInt() ?? 0,
       requiredParticipants:
           (json['required_participants'] as num?)?.toInt() ?? 0,
@@ -87,7 +87,6 @@ class TaskModel with _$TaskModel {
       'author_id': authorId ?? createdBy,
       if (longitude != null && latitude != null)
         'location': 'POINT($longitude $latitude)',
-      'assigned_to': assignedTo,
     }..removeWhere((key, value) => value == null);
   }
 }
@@ -110,3 +109,4 @@ String _normalizeTaskStatus(String status) {
   if (lower == 'cancelled') return 'canceled';
   return lower;
 }
+
