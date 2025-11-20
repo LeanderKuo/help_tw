@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
@@ -23,14 +25,19 @@ class ShuttleRepository {
 
   Future<List<ShuttleModel>> getShuttles() async {
     try {
-      final data = await _supabase.from('shuttles').select();
+      final data = await _supabase
+          .from('shuttles')
+          .select()
+          .timeout(const Duration(seconds: 12));
       final shuttles = (data as List)
           .map((json) => ShuttleModel.fromJson(json))
           .toList();
       final shuttlesWithIds = shuttles
           .map((s) => s.copyWith(isarId: fastHash(s.id)))
           .toList();
-      
+
+      if (kIsWeb) return shuttlesWithIds;
+
       // Cache
       final isar = await _isarService.db;
       await isar.writeTxn((isar) async {
@@ -39,6 +46,11 @@ class ShuttleRepository {
 
       return shuttlesWithIds;
     } catch (e) {
+      if (kIsWeb) {
+        debugPrint('Shuttle fetch failed on web: $e');
+        rethrow;
+      }
+
       final isar = await _isarService.db;
       return await isar.shuttleModels.where().findAll();
     }

@@ -9,7 +9,7 @@ class AppLocalizationsZh extends AppLocalizations {
   AppLocalizationsZh([String locale = 'zh_TW']) : super(locale);
 
   @override
-  String get appTitle => '救災資源整合平台';
+  String get appTitle => '災難資源整合平台';
 
   @override
   String get login => '登入';
@@ -33,7 +33,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get tasks => '任務';
 
   @override
-  String get shuttles => '班車';
+  String get shuttles => '接駁';
 
   @override
   String get profile => '個人';
@@ -51,7 +51,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get join => '加入';
 
   @override
-  String get leave => '退出';
+  String get leave => '離開';
 
   @override
   String get settings => '設定';

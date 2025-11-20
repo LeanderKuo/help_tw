@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
@@ -24,10 +26,12 @@ class TaskRepository {
   // Fetch tasks (Network first, then Cache)
   Future<List<TaskModel>> getTasks() async {
     try {
+      // Supabase -> short timeout so the UI doesn't hang on web.
       final data = await _supabase
           .from('tasks')
           .select()
-          .order('created_at', ascending: false);
+          .order('created_at', ascending: false)
+          .timeout(const Duration(seconds: 12));
 
       final tasks = (data as List)
           .map((json) => TaskModel.fromJson(json))
@@ -35,6 +39,9 @@ class TaskRepository {
       final tasksWithIds = tasks
           .map((t) => t.copyWith(isarId: fastHash(t.id)))
           .toList();
+
+      // Web builds don't ship Isar (per spec), so return immediately.
+      if (kIsWeb) return tasksWithIds;
 
       // Cache to Isar
       final isar = await _isarService.db;
@@ -44,6 +51,11 @@ class TaskRepository {
 
       return tasksWithIds;
     } catch (e) {
+      if (kIsWeb) {
+        debugPrint('Task fetch failed on web: $e');
+        rethrow;
+      }
+
       // Fallback to Isar
       final isar = await _isarService.db;
       return await isar.taskModels.where().findAll();

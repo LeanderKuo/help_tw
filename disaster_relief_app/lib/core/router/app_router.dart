@@ -17,6 +17,7 @@ import '../../features/shuttles/presentation/shuttle_list_screen.dart';
 import '../../features/shuttles/presentation/shuttle_detail_screen.dart';
 import '../../features/auth/data/auth_repository.dart';
 import '../../features/profile/presentation/settings_screen.dart';
+import '../../l10n/app_localizations.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
@@ -125,21 +126,22 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _calculateSelectedIndex(context),
         onTap: (int idx) => _onItemTapped(idx, context),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.map), label: 'Map'),
-          BottomNavigationBarItem(icon: Icon(Icons.task), label: 'Tasks'),
+        items: [
+          BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
+          BottomNavigationBarItem(icon: const Icon(Icons.map), label: l10n.map),
+          BottomNavigationBarItem(icon: const Icon(Icons.task), label: l10n.tasks),
           BottomNavigationBarItem(
-            icon: Icon(Icons.directions_bus),
-            label: 'Shuttles',
+            icon: const Icon(Icons.directions_bus),
+            label: l10n.shuttles,
           ),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+          BottomNavigationBarItem(icon: const Icon(Icons.person), label: l10n.profile),
         ],
       ),
     );

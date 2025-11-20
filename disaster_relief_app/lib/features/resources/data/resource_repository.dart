@@ -1,3 +1,5 @@
+import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
@@ -27,7 +29,8 @@ class ResourceRepository {
       final data = await _supabase
           .from('resource_points')
           .select()
-          .eq('is_active', true); // Only fetch active resources
+          .eq('is_active', true) // Only fetch active resources
+          .timeout(const Duration(seconds: 12));
 
       final resources = (data as List)
           .map((json) => ResourcePoint.fromJson(json))
@@ -35,6 +38,8 @@ class ResourceRepository {
       final resourcesWithIds = resources
           .map((r) => r.copyWith(isarId: fastHash(r.id)))
           .toList();
+
+      if (kIsWeb) return resourcesWithIds;
 
       // 2. Cache to Isar
       final isar = await _isarService.db;
@@ -44,6 +49,11 @@ class ResourceRepository {
 
       return resourcesWithIds;
     } catch (e) {
+      if (kIsWeb) {
+        debugPrint('Resource fetch failed on web: $e');
+        rethrow;
+      }
+
       // 3. Fallback to Isar (Offline)
       final isar = await _isarService.db;
       return await isar.resourcePoints.where().findAll();
@@ -60,11 +70,13 @@ class ResourceRepository {
     
     await _supabase.from('resource_points').insert(data);
 
-    // 2. Save to local cache
-    final isar = await _isarService.db;
-    final cached = resource.copyWith(isarId: fastHash(resource.id));
-    await isar.writeTxn((isar) async {
-      await isar.resourcePoints.put(cached);
-    });
+    // 2. Save to local cache (skip on web where Isar isn't available)
+    if (!kIsWeb) {
+      final isar = await _isarService.db;
+      final cached = resource.copyWith(isarId: fastHash(resource.id));
+      await isar.writeTxn((isar) async {
+        await isar.resourcePoints.put(cached);
+      });
+    }
   }
 }
