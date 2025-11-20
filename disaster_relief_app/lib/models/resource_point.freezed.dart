@@ -32,6 +32,9 @@ mixin _$ResourcePoint {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  @Id()
+  int? get isarId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -56,7 +59,8 @@ abstract class $ResourcePointCopyWith<$Res> {
       String? createdBy,
       DateTime? createdAt,
       DateTime? updatedAt,
-      List<String> images});
+      List<String> images,
+      @JsonKey(ignore: true) @Id() int? isarId});
 }
 
 /// @nodoc
@@ -83,6 +87,7 @@ class _$ResourcePointCopyWithImpl<$Res, $Val extends ResourcePoint>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? images = null,
+    Object? isarId = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -129,6 +134,10 @@ class _$ResourcePointCopyWithImpl<$Res, $Val extends ResourcePoint>
           ? _value.images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      isarId: freezed == isarId
+          ? _value.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -152,7 +161,8 @@ abstract class _$$ResourcePointImplCopyWith<$Res>
       String? createdBy,
       DateTime? createdAt,
       DateTime? updatedAt,
-      List<String> images});
+      List<String> images,
+      @JsonKey(ignore: true) @Id() int? isarId});
 }
 
 /// @nodoc
@@ -177,6 +187,7 @@ class __$$ResourcePointImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? images = null,
+    Object? isarId = freezed,
   }) {
     return _then(_$ResourcePointImpl(
       id: null == id
@@ -223,6 +234,10 @@ class __$$ResourcePointImplCopyWithImpl<$Res>
           ? _value._images
           : images // ignore: cast_nullable_to_non_nullable
               as List<String>,
+      isarId: freezed == isarId
+          ? _value.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -241,7 +256,8 @@ class _$ResourcePointImpl extends _ResourcePoint {
       this.createdBy,
       this.createdAt,
       this.updatedAt,
-      final List<String> images = const []})
+      final List<String> images = const [],
+      @JsonKey(ignore: true) @Id() this.isarId})
       : _images = images,
         super._();
 
@@ -281,8 +297,13 @@ class _$ResourcePointImpl extends _ResourcePoint {
   }
 
   @override
+  @JsonKey(ignore: true)
+  @Id()
+  final int? isarId;
+
+  @override
   String toString() {
-    return 'ResourcePoint(id: $id, title: $title, description: $description, type: $type, latitude: $latitude, longitude: $longitude, isActive: $isActive, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, images: $images)';
+    return 'ResourcePoint(id: $id, title: $title, description: $description, type: $type, latitude: $latitude, longitude: $longitude, isActive: $isActive, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, images: $images, isarId: $isarId)';
   }
 
   @override
@@ -307,7 +328,8 @@ class _$ResourcePointImpl extends _ResourcePoint {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            const DeepCollectionEquality().equals(other._images, _images));
+            const DeepCollectionEquality().equals(other._images, _images) &&
+            (identical(other.isarId, isarId) || other.isarId == isarId));
   }
 
   @JsonKey(ignore: true)
@@ -324,7 +346,8 @@ class _$ResourcePointImpl extends _ResourcePoint {
       createdBy,
       createdAt,
       updatedAt,
-      const DeepCollectionEquality().hash(_images));
+      const DeepCollectionEquality().hash(_images),
+      isarId);
 
   @JsonKey(ignore: true)
   @override
@@ -352,7 +375,8 @@ abstract class _ResourcePoint extends ResourcePoint {
       final String? createdBy,
       final DateTime? createdAt,
       final DateTime? updatedAt,
-      final List<String> images}) = _$ResourcePointImpl;
+      final List<String> images,
+      @JsonKey(ignore: true) @Id() final int? isarId}) = _$ResourcePointImpl;
   const _ResourcePoint._() : super._();
 
   factory _ResourcePoint.fromJson(Map<String, dynamic> json) =
@@ -380,6 +404,10 @@ abstract class _ResourcePoint extends ResourcePoint {
   DateTime? get updatedAt;
   @override
   List<String> get images;
+  @override
+  @JsonKey(ignore: true)
+  @Id()
+  int? get isarId;
   @override
   @JsonKey(ignore: true)
   _$$ResourcePointImplCopyWith<_$ResourcePointImpl> get copyWith =>

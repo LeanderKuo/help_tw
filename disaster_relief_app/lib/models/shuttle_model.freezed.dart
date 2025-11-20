@@ -46,6 +46,9 @@ mixin _$ShuttleModel {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  @Id()
+  int? get isarId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -74,7 +77,8 @@ abstract class $ShuttleModelCopyWith<$Res> {
       @JsonKey(name: 'driver_id') String? driverId,
       @JsonKey(name: 'created_by') String? createdBy,
       @JsonKey(name: 'created_at') DateTime? createdAt,
-      @JsonKey(name: 'updated_at') DateTime? updatedAt});
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
+      @JsonKey(ignore: true) @Id() int? isarId});
 }
 
 /// @nodoc
@@ -105,6 +109,7 @@ class _$ShuttleModelCopyWithImpl<$Res, $Val extends ShuttleModel>
     Object? createdBy = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
+    Object? isarId = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -167,6 +172,10 @@ class _$ShuttleModelCopyWithImpl<$Res, $Val extends ShuttleModel>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isarId: freezed == isarId
+          ? _value.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -194,7 +203,8 @@ abstract class _$$ShuttleModelImplCopyWith<$Res>
       @JsonKey(name: 'driver_id') String? driverId,
       @JsonKey(name: 'created_by') String? createdBy,
       @JsonKey(name: 'created_at') DateTime? createdAt,
-      @JsonKey(name: 'updated_at') DateTime? updatedAt});
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
+      @JsonKey(ignore: true) @Id() int? isarId});
 }
 
 /// @nodoc
@@ -223,6 +233,7 @@ class __$$ShuttleModelImplCopyWithImpl<$Res>
     Object? createdBy = freezed,
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
+    Object? isarId = freezed,
   }) {
     return _then(_$ShuttleModelImpl(
       id: null == id
@@ -285,6 +296,10 @@ class __$$ShuttleModelImplCopyWithImpl<$Res>
           ? _value.updatedAt
           : updatedAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      isarId: freezed == isarId
+          ? _value.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -307,7 +322,8 @@ class _$ShuttleModelImpl extends _ShuttleModel {
       @JsonKey(name: 'driver_id') this.driverId,
       @JsonKey(name: 'created_by') this.createdBy,
       @JsonKey(name: 'created_at') this.createdAt,
-      @JsonKey(name: 'updated_at') this.updatedAt})
+      @JsonKey(name: 'updated_at') this.updatedAt,
+      @JsonKey(ignore: true) @Id() this.isarId})
       : super._();
 
   factory _$ShuttleModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -356,10 +372,14 @@ class _$ShuttleModelImpl extends _ShuttleModel {
   @override
   @JsonKey(name: 'updated_at')
   final DateTime? updatedAt;
+  @override
+  @JsonKey(ignore: true)
+  @Id()
+  final int? isarId;
 
   @override
   String toString() {
-    return 'ShuttleModel(id: $id, title: $title, description: $description, status: $status, routeStartLat: $routeStartLat, routeStartLng: $routeStartLng, routeEndLat: $routeEndLat, routeEndLng: $routeEndLng, departureTime: $departureTime, capacity: $capacity, seatsTaken: $seatsTaken, driverId: $driverId, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ShuttleModel(id: $id, title: $title, description: $description, status: $status, routeStartLat: $routeStartLat, routeStartLng: $routeStartLng, routeEndLat: $routeEndLat, routeEndLng: $routeEndLng, departureTime: $departureTime, capacity: $capacity, seatsTaken: $seatsTaken, driverId: $driverId, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, isarId: $isarId)';
   }
 
   @override
@@ -393,7 +413,8 @@ class _$ShuttleModelImpl extends _ShuttleModel {
             (identical(other.createdAt, createdAt) ||
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
-                other.updatedAt == updatedAt));
+                other.updatedAt == updatedAt) &&
+            (identical(other.isarId, isarId) || other.isarId == isarId));
   }
 
   @JsonKey(ignore: true)
@@ -414,7 +435,8 @@ class _$ShuttleModelImpl extends _ShuttleModel {
       driverId,
       createdBy,
       createdAt,
-      updatedAt);
+      updatedAt,
+      isarId);
 
   @JsonKey(ignore: true)
   @override
@@ -432,22 +454,22 @@ class _$ShuttleModelImpl extends _ShuttleModel {
 
 abstract class _ShuttleModel extends ShuttleModel {
   const factory _ShuttleModel(
-          {required final String id,
-          required final String title,
-          final String? description,
-          final String status,
-          @JsonKey(name: 'route_start_lat') final double? routeStartLat,
-          @JsonKey(name: 'route_start_lng') final double? routeStartLng,
-          @JsonKey(name: 'route_end_lat') final double? routeEndLat,
-          @JsonKey(name: 'route_end_lng') final double? routeEndLng,
-          @JsonKey(name: 'departure_time') final DateTime? departureTime,
-          final int capacity,
-          @JsonKey(name: 'seats_taken') final int seatsTaken,
-          @JsonKey(name: 'driver_id') final String? driverId,
-          @JsonKey(name: 'created_by') final String? createdBy,
-          @JsonKey(name: 'created_at') final DateTime? createdAt,
-          @JsonKey(name: 'updated_at') final DateTime? updatedAt}) =
-      _$ShuttleModelImpl;
+      {required final String id,
+      required final String title,
+      final String? description,
+      final String status,
+      @JsonKey(name: 'route_start_lat') final double? routeStartLat,
+      @JsonKey(name: 'route_start_lng') final double? routeStartLng,
+      @JsonKey(name: 'route_end_lat') final double? routeEndLat,
+      @JsonKey(name: 'route_end_lng') final double? routeEndLng,
+      @JsonKey(name: 'departure_time') final DateTime? departureTime,
+      final int capacity,
+      @JsonKey(name: 'seats_taken') final int seatsTaken,
+      @JsonKey(name: 'driver_id') final String? driverId,
+      @JsonKey(name: 'created_by') final String? createdBy,
+      @JsonKey(name: 'created_at') final DateTime? createdAt,
+      @JsonKey(name: 'updated_at') final DateTime? updatedAt,
+      @JsonKey(ignore: true) @Id() final int? isarId}) = _$ShuttleModelImpl;
   const _ShuttleModel._() : super._();
 
   factory _ShuttleModel.fromJson(Map<String, dynamic> json) =
@@ -493,6 +515,10 @@ abstract class _ShuttleModel extends ShuttleModel {
   @override
   @JsonKey(name: 'updated_at')
   DateTime? get updatedAt;
+  @override
+  @JsonKey(ignore: true)
+  @Id()
+  int? get isarId;
   @override
   @JsonKey(ignore: true)
   _$$ShuttleModelImplCopyWith<_$ShuttleModelImpl> get copyWith =>

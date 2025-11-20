@@ -1,10 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
 import '../../../services/supabase_service.dart';
 import '../../../services/isar_service.dart';
 import '../../../models/shuttle_model.dart';
+import '../../../models/resource_point.dart'; // for fastHash
 
 final isarServiceProvider = Provider<IsarService>((ref) {
   return IsarService();
@@ -27,21 +27,18 @@ class ShuttleRepository {
       final shuttles = (data as List)
           .map((json) => ShuttleModel.fromJson(json))
           .toList();
+      final shuttlesWithIds = shuttles
+          .map((s) => s.copyWith(isarId: fastHash(s.id)))
+          .toList();
       
-      // Skip Isar on web (not supported in 3.x).
-      if (kIsWeb) {
-        return shuttles;
-      }
-
       // Cache
       final isar = await _isarService.db;
-      await isar.writeTxn(() async {
-        await isar.shuttleModels.putAll(shuttles);
+      await isar.writeTxn((isar) async {
+        await isar.shuttleModels.putAll(shuttlesWithIds);
       });
 
-      return shuttles;
+      return shuttlesWithIds;
     } catch (e) {
-      if (kIsWeb) rethrow;
       final isar = await _isarService.db;
       return await isar.shuttleModels.where().findAll();
     }

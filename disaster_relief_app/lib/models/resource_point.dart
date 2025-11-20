@@ -5,7 +5,7 @@ part 'resource_point.freezed.dart';
 part 'resource_point.g.dart';
 
 @freezed
-@Collection(ignore: {'copyWith'})
+@Collection()
 class ResourcePoint with _$ResourcePoint {
   const ResourcePoint._();
 
@@ -21,13 +21,11 @@ class ResourcePoint with _$ResourcePoint {
     DateTime? createdAt,
     DateTime? updatedAt,
     @Default([]) List<String> images,
+    @JsonKey(ignore: true) @Id() int? isarId,
   }) = _ResourcePoint;
 
   factory ResourcePoint.fromJson(Map<String, dynamic> json) =>
       _$ResourcePointFromJson(json);
-      
-  // Isar Id
-  Id get isarId => fastHash(id);
 }
 
 // FNV-1a 64-bit hash algorithm optimized for Dart

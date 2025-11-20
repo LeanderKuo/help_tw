@@ -27,8 +27,8 @@ dependencies:
   supabase_flutter: ^2.8.0
 
   # Local Database (Offline Cache)
-  isar: ^3.1.0+1
-  isar_flutter_libs: ^3.1.0+1
+  isar: 2.5.0
+  isar_flutter_libs: 2.5.0
   path_provider: ^2.1.4
 
   # Maps & Location
@@ -79,7 +79,7 @@ dev_dependencies:
   riverpod_generator: ^2.4.0
   freezed: ^2.4.0
   json_serializable: ^6.8.0
-  isar_generator: ^3.1.0+1
+  isar_generator: 2.5.0
 
 flutter:
   uses-material-design: true
@@ -102,3 +102,7 @@ flutter:
   #         weight: 500
   #       - asset: assets/fonts/NotoSansTC-Bold.ttf
   #         weight: 700
+
+dependency_overrides:
+  ffi: 2.0.1
+  analyzer: 5.13.0

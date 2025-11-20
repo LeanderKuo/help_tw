@@ -6,162 +6,141 @@ part of 'task_model.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
 extension GetTaskModelCollection on Isar {
-  IsarCollection<TaskModel> get taskModels => this.collection();
+  IsarCollection<TaskModel> get taskModels => getCollection();
 }
 
 const TaskModelSchema = CollectionSchema(
-  name: r'TaskModel',
-  id: 2,
-  properties: {
-    r'assignedTo': PropertySchema(
-      id: 0,
-      name: r'assignedTo',
-      type: IsarType.string,
-    ),
-    r'createdAt': PropertySchema(
-      id: 1,
-      name: r'createdAt',
-      type: IsarType.dateTime,
-    ),
-    r'createdBy': PropertySchema(
-      id: 2,
-      name: r'createdBy',
-      type: IsarType.string,
-    ),
-    r'description': PropertySchema(
-      id: 3,
-      name: r'description',
-      type: IsarType.string,
-    ),
-    r'id': PropertySchema(
-      id: 4,
-      name: r'id',
-      type: IsarType.string,
-    ),
-    r'images': PropertySchema(
-      id: 5,
-      name: r'images',
-      type: IsarType.stringList,
-    ),
-    r'isDraft': PropertySchema(
-      id: 6,
-      name: r'isDraft',
-      type: IsarType.bool,
-    ),
-    r'latitude': PropertySchema(
-      id: 7,
-      name: r'latitude',
-      type: IsarType.double,
-    ),
-    r'longitude': PropertySchema(
-      id: 8,
-      name: r'longitude',
-      type: IsarType.double,
-    ),
-    r'priority': PropertySchema(
-      id: 9,
-      name: r'priority',
-      type: IsarType.string,
-    ),
-    r'status': PropertySchema(
-      id: 10,
-      name: r'status',
-      type: IsarType.string,
-    ),
-    r'title': PropertySchema(
-      id: 11,
-      name: r'title',
-      type: IsarType.string,
-    ),
-    r'updatedAt': PropertySchema(
-      id: 12,
-      name: r'updatedAt',
-      type: IsarType.dateTime,
-    )
+  name: 'TaskModel',
+  schema:
+      '{"name":"TaskModel","idName":"isarId","properties":[{"name":"assignedTo","type":"String"},{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"description","type":"String"},{"name":"id","type":"String"},{"name":"images","type":"StringList"},{"name":"isDraft","type":"Bool"},{"name":"latitude","type":"Double"},{"name":"longitude","type":"Double"},{"name":"priority","type":"String"},{"name":"status","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
+  idName: 'isarId',
+  propertyIds: {
+    'assignedTo': 0,
+    'createdAt': 1,
+    'createdBy': 2,
+    'description': 3,
+    'id': 4,
+    'images': 5,
+    'isDraft': 6,
+    'latitude': 7,
+    'longitude': 8,
+    'priority': 9,
+    'status': 10,
+    'title': 11,
+    'updatedAt': 12
   },
-  estimateSize: _taskModelEstimateSize,
-  serialize: _taskModelSerialize,
-  deserialize: _taskModelDeserialize,
-  deserializeProp: _taskModelDeserializeProp,
-  idName: r'isarId',
-  indexes: {},
-  links: {},
-  embeddedSchemas: {},
+  listProperties: {'images'},
+  indexIds: {},
+  indexValueTypes: {},
+  linkIds: {},
+  backlinkLinkNames: {},
   getId: _taskModelGetId,
   getLinks: _taskModelGetLinks,
-  attach: _taskModelAttach,
-  version: '3.1.0+1',
+  attachLinks: _taskModelAttachLinks,
+  serializeNative: _taskModelSerializeNative,
+  deserializeNative: _taskModelDeserializeNative,
+  deserializePropNative: _taskModelDeserializePropNative,
+  serializeWeb: _taskModelSerializeWeb,
+  deserializeWeb: _taskModelDeserializeWeb,
+  deserializePropWeb: _taskModelDeserializePropWeb,
+  version: 3,
 );
 
-int _taskModelEstimateSize(
-  TaskModel object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  var bytesCount = offsets.last;
-  {
-    final value = object.assignedTo;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
+int? _taskModelGetId(TaskModel object) {
+  if (object.isarId == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.isarId;
   }
-  {
-    final value = object.createdBy;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.description;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.id.length * 3;
-  bytesCount += 3 + object.images.length * 3;
-  {
-    for (var i = 0; i < object.images.length; i++) {
-      final value = object.images[i];
-      bytesCount += value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.priority.length * 3;
-  bytesCount += 3 + object.status.length * 3;
-  bytesCount += 3 + object.title.length * 3;
-  return bytesCount;
 }
 
-void _taskModelSerialize(
-  TaskModel object,
-  IsarWriter writer,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  writer.writeString(offsets[0], object.assignedTo);
-  writer.writeDateTime(offsets[1], object.createdAt);
-  writer.writeString(offsets[2], object.createdBy);
-  writer.writeString(offsets[3], object.description);
-  writer.writeString(offsets[4], object.id);
-  writer.writeStringList(offsets[5], object.images);
-  writer.writeBool(offsets[6], object.isDraft);
-  writer.writeDouble(offsets[7], object.latitude);
-  writer.writeDouble(offsets[8], object.longitude);
-  writer.writeString(offsets[9], object.priority);
-  writer.writeString(offsets[10], object.status);
-  writer.writeString(offsets[11], object.title);
-  writer.writeDateTime(offsets[12], object.updatedAt);
+List<IsarLinkBase> _taskModelGetLinks(TaskModel object) {
+  return [];
 }
 
-TaskModel _taskModelDeserialize(
-  Id id,
-  IsarReader reader,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
+void _taskModelSerializeNative(
+    IsarCollection<TaskModel> collection,
+    IsarRawObject rawObj,
+    TaskModel object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  var dynamicSize = 0;
+  final value0 = object.assignedTo;
+  IsarUint8List? _assignedTo;
+  if (value0 != null) {
+    _assignedTo = IsarBinaryWriter.utf8Encoder.convert(value0);
+  }
+  dynamicSize += (_assignedTo?.length ?? 0) as int;
+  final value1 = object.createdAt;
+  final _createdAt = value1;
+  final value2 = object.createdBy;
+  IsarUint8List? _createdBy;
+  if (value2 != null) {
+    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value2);
+  }
+  dynamicSize += (_createdBy?.length ?? 0) as int;
+  final value3 = object.description;
+  IsarUint8List? _description;
+  if (value3 != null) {
+    _description = IsarBinaryWriter.utf8Encoder.convert(value3);
+  }
+  dynamicSize += (_description?.length ?? 0) as int;
+  final value4 = object.id;
+  final _id = IsarBinaryWriter.utf8Encoder.convert(value4);
+  dynamicSize += (_id.length) as int;
+  final value5 = object.images;
+  dynamicSize += (value5.length) * 8;
+  final bytesList5 = <IsarUint8List>[];
+  for (var str in value5) {
+    final bytes = IsarBinaryWriter.utf8Encoder.convert(str);
+    bytesList5.add(bytes);
+    dynamicSize += bytes.length as int;
+  }
+  final _images = bytesList5;
+  final value6 = object.isDraft;
+  final _isDraft = value6;
+  final value7 = object.latitude;
+  final _latitude = value7;
+  final value8 = object.longitude;
+  final _longitude = value8;
+  final value9 = object.priority;
+  final _priority = IsarBinaryWriter.utf8Encoder.convert(value9);
+  dynamicSize += (_priority.length) as int;
+  final value10 = object.status;
+  final _status = IsarBinaryWriter.utf8Encoder.convert(value10);
+  dynamicSize += (_status.length) as int;
+  final value11 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value11);
+  dynamicSize += (_title.length) as int;
+  final value12 = object.updatedAt;
+  final _updatedAt = value12;
+  final size = staticSize + dynamicSize;
+
+  rawObj.buffer = alloc(size);
+  rawObj.buffer_length = size;
+  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeBytes(offsets[0], _assignedTo);
+  writer.writeDateTime(offsets[1], _createdAt);
+  writer.writeBytes(offsets[2], _createdBy);
+  writer.writeBytes(offsets[3], _description);
+  writer.writeBytes(offsets[4], _id);
+  writer.writeStringList(offsets[5], _images);
+  writer.writeBool(offsets[6], _isDraft);
+  writer.writeDouble(offsets[7], _latitude);
+  writer.writeDouble(offsets[8], _longitude);
+  writer.writeBytes(offsets[9], _priority);
+  writer.writeBytes(offsets[10], _status);
+  writer.writeBytes(offsets[11], _title);
+  writer.writeDateTime(offsets[12], _updatedAt);
+}
+
+TaskModel _taskModelDeserializeNative(IsarCollection<TaskModel> collection,
+    int id, IsarBinaryReader reader, List<int> offsets) {
   final object = TaskModel(
     assignedTo: reader.readStringOrNull(offsets[0]),
     createdAt: reader.readDateTimeOrNull(offsets[1]),
@@ -170,6 +149,7 @@ TaskModel _taskModelDeserialize(
     id: reader.readString(offsets[4]),
     images: reader.readStringList(offsets[5]) ?? [],
     isDraft: reader.readBool(offsets[6]),
+    isarId: id,
     latitude: reader.readDoubleOrNull(offsets[7]),
     longitude: reader.readDoubleOrNull(offsets[8]),
     priority: reader.readString(offsets[9]),
@@ -180,13 +160,11 @@ TaskModel _taskModelDeserialize(
   return object;
 }
 
-P _taskModelDeserializeProp<P>(
-  IsarReader reader,
-  int propertyId,
-  int offset,
-  Map<Type, List<int>> allOffsets,
-) {
-  switch (propertyId) {
+P _taskModelDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
     case 0:
       return (reader.readStringOrNull(offset)) as P;
     case 1:
@@ -214,181 +192,251 @@ P _taskModelDeserializeProp<P>(
     case 12:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
-      throw IsarError('Unknown property with id $propertyId');
+      throw 'Illegal propertyIndex';
   }
 }
 
-Id _taskModelGetId(TaskModel object) {
-  return object.isarId;
+dynamic _taskModelSerializeWeb(
+    IsarCollection<TaskModel> collection, TaskModel object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, 'assignedTo', object.assignedTo);
+  IsarNative.jsObjectSet(
+      jsObj, 'createdAt', object.createdAt?.toUtc().millisecondsSinceEpoch);
+  IsarNative.jsObjectSet(jsObj, 'createdBy', object.createdBy);
+  IsarNative.jsObjectSet(jsObj, 'description', object.description);
+  IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'images', object.images);
+  IsarNative.jsObjectSet(jsObj, 'isDraft', object.isDraft);
+  IsarNative.jsObjectSet(jsObj, 'isarId', object.isarId);
+  IsarNative.jsObjectSet(jsObj, 'latitude', object.latitude);
+  IsarNative.jsObjectSet(jsObj, 'longitude', object.longitude);
+  IsarNative.jsObjectSet(jsObj, 'priority', object.priority);
+  IsarNative.jsObjectSet(jsObj, 'status', object.status);
+  IsarNative.jsObjectSet(jsObj, 'title', object.title);
+  IsarNative.jsObjectSet(
+      jsObj, 'updatedAt', object.updatedAt?.toUtc().millisecondsSinceEpoch);
+  return jsObj;
 }
 
-List<IsarLinkBase<dynamic>> _taskModelGetLinks(TaskModel object) {
-  return [];
+TaskModel _taskModelDeserializeWeb(
+    IsarCollection<TaskModel> collection, dynamic jsObj) {
+  final object = TaskModel(
+    assignedTo: IsarNative.jsObjectGet(jsObj, 'assignedTo'),
+    createdAt: IsarNative.jsObjectGet(jsObj, 'createdAt') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'createdAt'),
+                isUtc: true)
+            .toLocal()
+        : null,
+    createdBy: IsarNative.jsObjectGet(jsObj, 'createdBy'),
+    description: IsarNative.jsObjectGet(jsObj, 'description'),
+    id: IsarNative.jsObjectGet(jsObj, 'id') ?? '',
+    images: (IsarNative.jsObjectGet(jsObj, 'images') as List?)
+            ?.map((e) => e ?? '')
+            .toList()
+            .cast<String>() ??
+        [],
+    isDraft: IsarNative.jsObjectGet(jsObj, 'isDraft') ?? false,
+    isarId: IsarNative.jsObjectGet(jsObj, 'isarId'),
+    latitude: IsarNative.jsObjectGet(jsObj, 'latitude'),
+    longitude: IsarNative.jsObjectGet(jsObj, 'longitude'),
+    priority: IsarNative.jsObjectGet(jsObj, 'priority') ?? '',
+    status: IsarNative.jsObjectGet(jsObj, 'status') ?? '',
+    title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
+    updatedAt: IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'updatedAt'),
+                isUtc: true)
+            .toLocal()
+        : null,
+  );
+  return object;
 }
 
-void _taskModelAttach(IsarCollection<dynamic> col, Id id, TaskModel object) {}
+P _taskModelDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case 'assignedTo':
+      return (IsarNative.jsObjectGet(jsObj, 'assignedTo')) as P;
+    case 'createdAt':
+      return (IsarNative.jsObjectGet(jsObj, 'createdAt') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'createdAt'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
+    case 'createdBy':
+      return (IsarNative.jsObjectGet(jsObj, 'createdBy')) as P;
+    case 'description':
+      return (IsarNative.jsObjectGet(jsObj, 'description')) as P;
+    case 'id':
+      return (IsarNative.jsObjectGet(jsObj, 'id') ?? '') as P;
+    case 'images':
+      return ((IsarNative.jsObjectGet(jsObj, 'images') as List?)
+              ?.map((e) => e ?? '')
+              .toList()
+              .cast<String>() ??
+          []) as P;
+    case 'isDraft':
+      return (IsarNative.jsObjectGet(jsObj, 'isDraft') ?? false) as P;
+    case 'isarId':
+      return (IsarNative.jsObjectGet(jsObj, 'isarId')) as P;
+    case 'latitude':
+      return (IsarNative.jsObjectGet(jsObj, 'latitude')) as P;
+    case 'longitude':
+      return (IsarNative.jsObjectGet(jsObj, 'longitude')) as P;
+    case 'priority':
+      return (IsarNative.jsObjectGet(jsObj, 'priority') ?? '') as P;
+    case 'status':
+      return (IsarNative.jsObjectGet(jsObj, 'status') ?? '') as P;
+    case 'title':
+      return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
+    case 'updatedAt':
+      return (IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'updatedAt'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
+    default:
+      throw 'Illegal propertyName';
+  }
+}
+
+void _taskModelAttachLinks(IsarCollection col, int id, TaskModel object) {}
 
 extension TaskModelQueryWhereSort
     on QueryBuilder<TaskModel, TaskModel, QWhere> {
   QueryBuilder<TaskModel, TaskModel, QAfterWhere> anyIsarId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(const IdWhereClause.any());
-    });
+    return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
 extension TaskModelQueryWhere
     on QueryBuilder<TaskModel, TaskModel, QWhereClause> {
   QueryBuilder<TaskModel, TaskModel, QAfterWhereClause> isarIdEqualTo(
-      Id isarId) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: isarId,
-        upper: isarId,
-      ));
-    });
+      int isarId) {
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: isarId,
+      includeLower: true,
+      upper: isarId,
+      includeUpper: true,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterWhereClause> isarIdNotEqualTo(
-      Id isarId) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
-            )
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
-            )
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
-            );
-      }
-    });
+      int isarId) {
+    if (whereSortInternal == Sort.asc) {
+      return addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+      );
+    } else {
+      return addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+      );
+    }
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterWhereClause> isarIdGreaterThan(
-      Id isarId,
+      int isarId,
       {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.greaterThan(lower: isarId, includeLower: include),
-      );
-    });
+    return addWhereClauseInternal(
+      IdWhereClause.greaterThan(lower: isarId, includeLower: include),
+    );
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterWhereClause> isarIdLessThan(
-      Id isarId,
+      int isarId,
       {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.lessThan(upper: isarId, includeUpper: include),
-      );
-    });
+    return addWhereClauseInternal(
+      IdWhereClause.lessThan(upper: isarId, includeUpper: include),
+    );
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterWhereClause> isarIdBetween(
-    Id lowerIsarId,
-    Id upperIsarId, {
+    int lowerIsarId,
+    int upperIsarId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerIsarId,
-        includeLower: includeLower,
-        upper: upperIsarId,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: lowerIsarId,
+      includeLower: includeLower,
+      upper: upperIsarId,
+      includeUpper: includeUpper,
+    ));
   }
 }
 
 extension TaskModelQueryFilter
     on QueryBuilder<TaskModel, TaskModel, QFilterCondition> {
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> assignedToIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'assignedTo',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      assignedToIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'assignedTo',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'assignedTo',
+      value: null,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> assignedToEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'assignedTo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'assignedTo',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
       assignedToGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'assignedTo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'assignedTo',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> assignedToLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'assignedTo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'assignedTo',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> assignedToBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'assignedTo',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'assignedTo',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
@@ -396,97 +444,63 @@ extension TaskModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'assignedTo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'assignedTo',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> assignedToEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'assignedTo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'assignedTo',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> assignedToContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'assignedTo',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'assignedTo',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> assignedToMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'assignedTo',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      assignedToIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'assignedTo',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      assignedToIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'assignedTo',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'assignedTo',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdAtIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createdAt',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      createdAtIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createdAt',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'createdAt',
+      value: null,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdAtEqualTo(
       DateTime? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
@@ -494,26 +508,24 @@ extension TaskModelQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdAtLessThan(
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdAtBetween(
@@ -522,245 +534,192 @@ extension TaskModelQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'createdAt',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'createdAt',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createdBy',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      createdByIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createdBy',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'createdBy',
+      value: null,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
       createdByGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'createdBy',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'createdBy',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'createdBy',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> createdByIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdBy',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      createdByIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'createdBy',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'createdBy',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
       descriptionIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      descriptionIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'description',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'description',
+      value: null,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> descriptionEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
       descriptionGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> descriptionLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> descriptionBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'description',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'description',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
@@ -768,1062 +727,722 @@ extension TaskModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> descriptionEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> descriptionContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> descriptionMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'description',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      descriptionIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      descriptionIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'description',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'description',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'id',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'id',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'id',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> idIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'id',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementEqualTo(
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesAnyEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementGreaterThan(
+      imagesAnyGreaterThan(
     String value, {
+    bool caseSensitive = true,
     bool include = false,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementLessThan(
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesAnyLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementBetween(
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesAnyBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'images',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'images',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementStartsWith(
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesAnyStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementEndsWith(
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesAnyEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesAnyContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'images',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesAnyMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'images',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'images',
-        value: '',
-      ));
-    });
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isDraftEqualTo(
+      bool value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'isDraft',
+      value: value,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'images',
-        value: '',
-      ));
-    });
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'isarId',
+      value: null,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesLengthEqualTo(
-      int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdEqualTo(
+      int value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesLengthLessThan(
-    int length, {
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdGreaterThan(
+    int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      imagesLengthGreaterThan(
-    int length, {
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdLessThan(
+    int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> imagesLengthBetween(
+  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isDraftEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isDraft',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdEqualTo(
-      Id value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isarId',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdGreaterThan(
-    Id value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'isarId',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdLessThan(
-    Id value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'isarId',
-        value: value,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> isarIdBetween(
-    Id lower,
-    Id upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'isarId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'isarId',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> latitudeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'latitude',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      latitudeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'latitude',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> latitudeEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'latitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'latitude',
+      value: null,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> latitudeGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'latitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+      double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'latitude',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> latitudeLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'latitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+      double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'latitude',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> latitudeBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'latitude',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
+      double? lower, double? upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'latitude',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> longitudeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'longitude',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'longitude',
+      value: null,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      longitudeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'longitude',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> longitudeEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'longitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      longitudeGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'longitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+      longitudeGreaterThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'longitude',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> longitudeLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'longitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+      double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'longitude',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> longitudeBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'longitude',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
+      double? lower, double? upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'longitude',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'priority',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'priority',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'priority',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'priority',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'priority',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'priority',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'priority',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'priority',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'priority',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'priority',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'priority',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'priority',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'priority',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'priority',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'priority',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> priorityIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'priority',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      priorityIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'priority',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'priority',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'status',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'status',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'status',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'status',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> statusIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'status',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'status',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'title',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'title',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'title',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'title',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> titleIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'title',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'title',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> updatedAtIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'updatedAt',
-      ));
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
-      updatedAtIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'updatedAt',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'updatedAt',
+      value: null,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> updatedAtEqualTo(
       DateTime? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition>
@@ -1831,26 +1450,24 @@ extension TaskModelQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> updatedAtLessThan(
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterFilterCondition> updatedAtBetween(
@@ -1859,326 +1476,230 @@ extension TaskModelQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'updatedAt',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'updatedAt',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 }
-
-extension TaskModelQueryObject
-    on QueryBuilder<TaskModel, TaskModel, QFilterCondition> {}
 
 extension TaskModelQueryLinks
     on QueryBuilder<TaskModel, TaskModel, QFilterCondition> {}
 
-extension TaskModelQuerySortBy on QueryBuilder<TaskModel, TaskModel, QSortBy> {
+extension TaskModelQueryWhereSortBy
+    on QueryBuilder<TaskModel, TaskModel, QSortBy> {
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByAssignedTo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'assignedTo', Sort.asc);
-    });
+    return addSortByInternal('assignedTo', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByAssignedToDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'assignedTo', Sort.desc);
-    });
+    return addSortByInternal('assignedTo', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.asc);
-    });
+    return addSortByInternal('createdAt', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByCreatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.desc);
-    });
+    return addSortByInternal('createdAt', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByCreatedBy() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.asc);
-    });
+    return addSortByInternal('createdBy', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByCreatedByDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.desc);
-    });
+    return addSortByInternal('createdBy', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByDescription() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
-    });
+    return addSortByInternal('description', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByDescriptionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
-    });
+    return addSortByInternal('description', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
+    return addSortByInternal('id', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
+    return addSortByInternal('id', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByIsDraft() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDraft', Sort.asc);
-    });
+    return addSortByInternal('isDraft', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByIsDraftDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDraft', Sort.desc);
-    });
+    return addSortByInternal('isDraft', Sort.desc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByIsarId() {
+    return addSortByInternal('isarId', Sort.asc);
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByIsarIdDesc() {
+    return addSortByInternal('isarId', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByLatitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'latitude', Sort.asc);
-    });
+    return addSortByInternal('latitude', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByLatitudeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'latitude', Sort.desc);
-    });
+    return addSortByInternal('latitude', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByLongitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'longitude', Sort.asc);
-    });
+    return addSortByInternal('longitude', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByLongitudeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'longitude', Sort.desc);
-    });
+    return addSortByInternal('longitude', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByPriority() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'priority', Sort.asc);
-    });
+    return addSortByInternal('priority', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByPriorityDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'priority', Sort.desc);
-    });
+    return addSortByInternal('priority', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByStatus() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.asc);
-    });
+    return addSortByInternal('status', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByStatusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.desc);
-    });
+    return addSortByInternal('status', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByTitle() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.asc);
-    });
+    return addSortByInternal('title', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByTitleDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.desc);
-    });
+    return addSortByInternal('title', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.asc);
-    });
+    return addSortByInternal('updatedAt', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> sortByUpdatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.desc);
-    });
+    return addSortByInternal('updatedAt', Sort.desc);
   }
 }
 
-extension TaskModelQuerySortThenBy
+extension TaskModelQueryWhereSortThenBy
     on QueryBuilder<TaskModel, TaskModel, QSortThenBy> {
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByAssignedTo() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'assignedTo', Sort.asc);
-    });
+    return addSortByInternal('assignedTo', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByAssignedToDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'assignedTo', Sort.desc);
-    });
+    return addSortByInternal('assignedTo', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.asc);
-    });
+    return addSortByInternal('createdAt', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByCreatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.desc);
-    });
+    return addSortByInternal('createdAt', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByCreatedBy() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.asc);
-    });
+    return addSortByInternal('createdBy', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByCreatedByDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.desc);
-    });
+    return addSortByInternal('createdBy', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByDescription() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
-    });
+    return addSortByInternal('description', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByDescriptionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
-    });
+    return addSortByInternal('description', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
+    return addSortByInternal('id', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
+    return addSortByInternal('id', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByIsDraft() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDraft', Sort.asc);
-    });
+    return addSortByInternal('isDraft', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByIsDraftDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isDraft', Sort.desc);
-    });
+    return addSortByInternal('isDraft', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByIsarId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isarId', Sort.asc);
-    });
+    return addSortByInternal('isarId', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByIsarIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isarId', Sort.desc);
-    });
+    return addSortByInternal('isarId', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByLatitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'latitude', Sort.asc);
-    });
+    return addSortByInternal('latitude', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByLatitudeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'latitude', Sort.desc);
-    });
+    return addSortByInternal('latitude', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByLongitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'longitude', Sort.asc);
-    });
+    return addSortByInternal('longitude', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByLongitudeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'longitude', Sort.desc);
-    });
+    return addSortByInternal('longitude', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByPriority() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'priority', Sort.asc);
-    });
+    return addSortByInternal('priority', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByPriorityDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'priority', Sort.desc);
-    });
+    return addSortByInternal('priority', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByStatus() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.asc);
-    });
+    return addSortByInternal('status', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByStatusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.desc);
-    });
+    return addSortByInternal('status', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByTitle() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.asc);
-    });
+    return addSortByInternal('title', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByTitleDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.desc);
-    });
+    return addSortByInternal('title', Sort.desc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.asc);
-    });
+    return addSortByInternal('updatedAt', Sort.asc);
   }
 
   QueryBuilder<TaskModel, TaskModel, QAfterSortBy> thenByUpdatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.desc);
-    });
+    return addSortByInternal('updatedAt', Sort.desc);
   }
 }
 
@@ -2186,174 +1707,120 @@ extension TaskModelQueryWhereDistinct
     on QueryBuilder<TaskModel, TaskModel, QDistinct> {
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByAssignedTo(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'assignedTo', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('assignedTo', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createdAt');
-    });
+    return addDistinctByInternal('createdAt');
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByCreatedBy(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createdBy', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('createdBy', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('description', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctById(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByImages() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'images');
-    });
+    return addDistinctByInternal('id', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByIsDraft() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isDraft');
-    });
+    return addDistinctByInternal('isDraft');
+  }
+
+  QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByIsarId() {
+    return addDistinctByInternal('isarId');
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByLatitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'latitude');
-    });
+    return addDistinctByInternal('latitude');
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByLongitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'longitude');
-    });
+    return addDistinctByInternal('longitude');
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByPriority(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'priority', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('priority', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByStatus(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('status', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('title', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<TaskModel, TaskModel, QDistinct> distinctByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'updatedAt');
-    });
+    return addDistinctByInternal('updatedAt');
   }
 }
 
 extension TaskModelQueryProperty
     on QueryBuilder<TaskModel, TaskModel, QQueryProperty> {
-  QueryBuilder<TaskModel, int, QQueryOperations> isarIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isarId');
-    });
-  }
-
   QueryBuilder<TaskModel, String?, QQueryOperations> assignedToProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'assignedTo');
-    });
+    return addPropertyNameInternal('assignedTo');
   }
 
   QueryBuilder<TaskModel, DateTime?, QQueryOperations> createdAtProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'createdAt');
-    });
+    return addPropertyNameInternal('createdAt');
   }
 
   QueryBuilder<TaskModel, String?, QQueryOperations> createdByProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'createdBy');
-    });
+    return addPropertyNameInternal('createdBy');
   }
 
   QueryBuilder<TaskModel, String?, QQueryOperations> descriptionProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'description');
-    });
+    return addPropertyNameInternal('description');
   }
 
   QueryBuilder<TaskModel, String, QQueryOperations> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'id');
-    });
+    return addPropertyNameInternal('id');
   }
 
   QueryBuilder<TaskModel, List<String>, QQueryOperations> imagesProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'images');
-    });
+    return addPropertyNameInternal('images');
   }
 
   QueryBuilder<TaskModel, bool, QQueryOperations> isDraftProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isDraft');
-    });
+    return addPropertyNameInternal('isDraft');
+  }
+
+  QueryBuilder<TaskModel, int?, QQueryOperations> isarIdProperty() {
+    return addPropertyNameInternal('isarId');
   }
 
   QueryBuilder<TaskModel, double?, QQueryOperations> latitudeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'latitude');
-    });
+    return addPropertyNameInternal('latitude');
   }
 
   QueryBuilder<TaskModel, double?, QQueryOperations> longitudeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'longitude');
-    });
+    return addPropertyNameInternal('longitude');
   }
 
   QueryBuilder<TaskModel, String, QQueryOperations> priorityProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'priority');
-    });
+    return addPropertyNameInternal('priority');
   }
 
   QueryBuilder<TaskModel, String, QQueryOperations> statusProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'status');
-    });
+    return addPropertyNameInternal('status');
   }
 
   QueryBuilder<TaskModel, String, QQueryOperations> titleProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'title');
-    });
+    return addPropertyNameInternal('title');
   }
 
   QueryBuilder<TaskModel, DateTime?, QQueryOperations> updatedAtProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'updatedAt');
-    });
+    return addPropertyNameInternal('updatedAt');
   }
 }
 

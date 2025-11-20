@@ -38,7 +38,10 @@ mixin _$TaskModel {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-  bool get isDraft => throw _privateConstructorUsedError;
+  bool get isDraft => throw _privateConstructorUsedError; // Local only flag
+  @JsonKey(ignore: true)
+  @Id()
+  int? get isarId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -64,7 +67,8 @@ abstract class $TaskModelCopyWith<$Res> {
       @JsonKey(name: 'created_by') String? createdBy,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      bool isDraft});
+      bool isDraft,
+      @JsonKey(ignore: true) @Id() int? isarId});
 }
 
 /// @nodoc
@@ -93,6 +97,7 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? isDraft = null,
+    Object? isarId = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -147,6 +152,10 @@ class _$TaskModelCopyWithImpl<$Res, $Val extends TaskModel>
           ? _value.isDraft
           : isDraft // ignore: cast_nullable_to_non_nullable
               as bool,
+      isarId: freezed == isarId
+          ? _value.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -172,7 +181,8 @@ abstract class _$$TaskModelImplCopyWith<$Res>
       @JsonKey(name: 'created_by') String? createdBy,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      bool isDraft});
+      bool isDraft,
+      @JsonKey(ignore: true) @Id() int? isarId});
 }
 
 /// @nodoc
@@ -199,6 +209,7 @@ class __$$TaskModelImplCopyWithImpl<$Res>
     Object? createdAt = freezed,
     Object? updatedAt = freezed,
     Object? isDraft = null,
+    Object? isarId = freezed,
   }) {
     return _then(_$TaskModelImpl(
       id: null == id
@@ -253,6 +264,10 @@ class __$$TaskModelImplCopyWithImpl<$Res>
           ? _value.isDraft
           : isDraft // ignore: cast_nullable_to_non_nullable
               as bool,
+      isarId: freezed == isarId
+          ? _value.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -273,7 +288,8 @@ class _$TaskModelImpl extends _TaskModel {
       @JsonKey(name: 'created_by') this.createdBy,
       @JsonKey(name: 'created_at') this.createdAt,
       @JsonKey(name: 'updated_at') this.updatedAt,
-      this.isDraft = false})
+      this.isDraft = false,
+      @JsonKey(ignore: true) @Id() this.isarId})
       : _images = images,
         super._();
 
@@ -322,10 +338,15 @@ class _$TaskModelImpl extends _TaskModel {
   @override
   @JsonKey()
   final bool isDraft;
+// Local only flag
+  @override
+  @JsonKey(ignore: true)
+  @Id()
+  final int? isarId;
 
   @override
   String toString() {
-    return 'TaskModel(id: $id, title: $title, description: $description, status: $status, priority: $priority, latitude: $latitude, longitude: $longitude, images: $images, assignedTo: $assignedTo, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, isDraft: $isDraft)';
+    return 'TaskModel(id: $id, title: $title, description: $description, status: $status, priority: $priority, latitude: $latitude, longitude: $longitude, images: $images, assignedTo: $assignedTo, createdBy: $createdBy, createdAt: $createdAt, updatedAt: $updatedAt, isDraft: $isDraft, isarId: $isarId)';
   }
 
   @override
@@ -353,7 +374,8 @@ class _$TaskModelImpl extends _TaskModel {
                 other.createdAt == createdAt) &&
             (identical(other.updatedAt, updatedAt) ||
                 other.updatedAt == updatedAt) &&
-            (identical(other.isDraft, isDraft) || other.isDraft == isDraft));
+            (identical(other.isDraft, isDraft) || other.isDraft == isDraft) &&
+            (identical(other.isarId, isarId) || other.isarId == isarId));
   }
 
   @JsonKey(ignore: true)
@@ -372,7 +394,8 @@ class _$TaskModelImpl extends _TaskModel {
       createdBy,
       createdAt,
       updatedAt,
-      isDraft);
+      isDraft,
+      isarId);
 
   @JsonKey(ignore: true)
   @override
@@ -402,7 +425,8 @@ abstract class _TaskModel extends TaskModel {
       @JsonKey(name: 'created_by') final String? createdBy,
       @JsonKey(name: 'created_at') final DateTime? createdAt,
       @JsonKey(name: 'updated_at') final DateTime? updatedAt,
-      final bool isDraft}) = _$TaskModelImpl;
+      final bool isDraft,
+      @JsonKey(ignore: true) @Id() final int? isarId}) = _$TaskModelImpl;
   const _TaskModel._() : super._();
 
   factory _TaskModel.fromJson(Map<String, dynamic> json) =
@@ -438,6 +462,10 @@ abstract class _TaskModel extends TaskModel {
   DateTime? get updatedAt;
   @override
   bool get isDraft;
+  @override // Local only flag
+  @JsonKey(ignore: true)
+  @Id()
+  int? get isarId;
   @override
   @JsonKey(ignore: true)
   _$$TaskModelImplCopyWith<_$TaskModelImpl> get copyWith =>

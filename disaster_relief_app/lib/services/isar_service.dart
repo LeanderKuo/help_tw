@@ -9,26 +9,25 @@ class IsarService {
   late Future<Isar> db;
 
   IsarService() {
-    // Isar 3.x currently lacks web support; skip initialization on web.
-    if (kIsWeb) {
-      db = Future.error(
-        UnsupportedError(
-          'Isar 3.x has no web support yet. Web builds skip local caching.',
-        ),
-      );
-    } else {
-      db = openDB();
-    }
+    db = openDB();
   }
 
   Future<Isar> openDB() async {
     if (Isar.instanceNames.isEmpty) {
-      final dir = await getApplicationDocumentsDirectory();
-      return Isar.open(
-        [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
-        directory: dir.path,
-        inspector: true,
-      );
+      if (kIsWeb) {
+        // Web uses isar_web (IndexedDB); no directory needed.
+        return Isar.open(
+          schemas: [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
+          inspector: false,
+        );
+      } else {
+        final dir = await getApplicationDocumentsDirectory();
+        return Isar.open(
+          schemas: [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
+          directory: dir.path,
+          inspector: true,
+        );
+      }
     }
     return Future.value(Isar.getInstance());
   }

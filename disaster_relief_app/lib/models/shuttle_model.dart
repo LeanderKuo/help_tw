@@ -6,7 +6,7 @@ part 'shuttle_model.freezed.dart';
 part 'shuttle_model.g.dart';
 
 @freezed
-@Collection(ignore: {'copyWith'})
+@Collection()
 class ShuttleModel with _$ShuttleModel {
   const ShuttleModel._();
 
@@ -26,10 +26,9 @@ class ShuttleModel with _$ShuttleModel {
     @JsonKey(name: 'created_by') String? createdBy,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
+    @JsonKey(ignore: true) @Id() int? isarId,
   }) = _ShuttleModel;
 
   factory ShuttleModel.fromJson(Map<String, dynamic> json) =>
       _$ShuttleModelFromJson(json);
-
-  Id get isarId => fastHash(id);
 }

@@ -6,166 +6,144 @@ part of 'shuttle_model.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
 extension GetShuttleModelCollection on Isar {
-  IsarCollection<ShuttleModel> get shuttleModels => this.collection();
+  IsarCollection<ShuttleModel> get shuttleModels => getCollection();
 }
 
 const ShuttleModelSchema = CollectionSchema(
-  name: r'ShuttleModel',
-  id: 3,
-  properties: {
-    r'capacity': PropertySchema(
-      id: 0,
-      name: r'capacity',
-      type: IsarType.long,
-    ),
-    r'createdAt': PropertySchema(
-      id: 1,
-      name: r'createdAt',
-      type: IsarType.dateTime,
-    ),
-    r'createdBy': PropertySchema(
-      id: 2,
-      name: r'createdBy',
-      type: IsarType.string,
-    ),
-    r'departureTime': PropertySchema(
-      id: 3,
-      name: r'departureTime',
-      type: IsarType.dateTime,
-    ),
-    r'description': PropertySchema(
-      id: 4,
-      name: r'description',
-      type: IsarType.string,
-    ),
-    r'driverId': PropertySchema(
-      id: 5,
-      name: r'driverId',
-      type: IsarType.string,
-    ),
-    r'id': PropertySchema(
-      id: 6,
-      name: r'id',
-      type: IsarType.string,
-    ),
-    r'routeEndLat': PropertySchema(
-      id: 7,
-      name: r'routeEndLat',
-      type: IsarType.double,
-    ),
-    r'routeEndLng': PropertySchema(
-      id: 8,
-      name: r'routeEndLng',
-      type: IsarType.double,
-    ),
-    r'routeStartLat': PropertySchema(
-      id: 9,
-      name: r'routeStartLat',
-      type: IsarType.double,
-    ),
-    r'routeStartLng': PropertySchema(
-      id: 10,
-      name: r'routeStartLng',
-      type: IsarType.double,
-    ),
-    r'seatsTaken': PropertySchema(
-      id: 11,
-      name: r'seatsTaken',
-      type: IsarType.long,
-    ),
-    r'status': PropertySchema(
-      id: 12,
-      name: r'status',
-      type: IsarType.string,
-    ),
-    r'title': PropertySchema(
-      id: 13,
-      name: r'title',
-      type: IsarType.string,
-    ),
-    r'updatedAt': PropertySchema(
-      id: 14,
-      name: r'updatedAt',
-      type: IsarType.dateTime,
-    )
+  name: 'ShuttleModel',
+  schema:
+      '{"name":"ShuttleModel","idName":"isarId","properties":[{"name":"capacity","type":"Long"},{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"departureTime","type":"Long"},{"name":"description","type":"String"},{"name":"driverId","type":"String"},{"name":"id","type":"String"},{"name":"routeEndLat","type":"Double"},{"name":"routeEndLng","type":"Double"},{"name":"routeStartLat","type":"Double"},{"name":"routeStartLng","type":"Double"},{"name":"seatsTaken","type":"Long"},{"name":"status","type":"String"},{"name":"title","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
+  idName: 'isarId',
+  propertyIds: {
+    'capacity': 0,
+    'createdAt': 1,
+    'createdBy': 2,
+    'departureTime': 3,
+    'description': 4,
+    'driverId': 5,
+    'id': 6,
+    'routeEndLat': 7,
+    'routeEndLng': 8,
+    'routeStartLat': 9,
+    'routeStartLng': 10,
+    'seatsTaken': 11,
+    'status': 12,
+    'title': 13,
+    'updatedAt': 14
   },
-  estimateSize: _shuttleModelEstimateSize,
-  serialize: _shuttleModelSerialize,
-  deserialize: _shuttleModelDeserialize,
-  deserializeProp: _shuttleModelDeserializeProp,
-  idName: r'isarId',
-  indexes: {},
-  links: {},
-  embeddedSchemas: {},
+  listProperties: {},
+  indexIds: {},
+  indexValueTypes: {},
+  linkIds: {},
+  backlinkLinkNames: {},
   getId: _shuttleModelGetId,
   getLinks: _shuttleModelGetLinks,
-  attach: _shuttleModelAttach,
-  version: '3.1.0+1',
+  attachLinks: _shuttleModelAttachLinks,
+  serializeNative: _shuttleModelSerializeNative,
+  deserializeNative: _shuttleModelDeserializeNative,
+  deserializePropNative: _shuttleModelDeserializePropNative,
+  serializeWeb: _shuttleModelSerializeWeb,
+  deserializeWeb: _shuttleModelDeserializeWeb,
+  deserializePropWeb: _shuttleModelDeserializePropWeb,
+  version: 3,
 );
 
-int _shuttleModelEstimateSize(
-  ShuttleModel object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  var bytesCount = offsets.last;
-  {
-    final value = object.createdBy;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
+int? _shuttleModelGetId(ShuttleModel object) {
+  if (object.isarId == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.isarId;
   }
-  {
-    final value = object.description;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.driverId;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.id.length * 3;
-  bytesCount += 3 + object.status.length * 3;
-  bytesCount += 3 + object.title.length * 3;
-  return bytesCount;
 }
 
-void _shuttleModelSerialize(
-  ShuttleModel object,
-  IsarWriter writer,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  writer.writeLong(offsets[0], object.capacity);
-  writer.writeDateTime(offsets[1], object.createdAt);
-  writer.writeString(offsets[2], object.createdBy);
-  writer.writeDateTime(offsets[3], object.departureTime);
-  writer.writeString(offsets[4], object.description);
-  writer.writeString(offsets[5], object.driverId);
-  writer.writeString(offsets[6], object.id);
-  writer.writeDouble(offsets[7], object.routeEndLat);
-  writer.writeDouble(offsets[8], object.routeEndLng);
-  writer.writeDouble(offsets[9], object.routeStartLat);
-  writer.writeDouble(offsets[10], object.routeStartLng);
-  writer.writeLong(offsets[11], object.seatsTaken);
-  writer.writeString(offsets[12], object.status);
-  writer.writeString(offsets[13], object.title);
-  writer.writeDateTime(offsets[14], object.updatedAt);
+List<IsarLinkBase> _shuttleModelGetLinks(ShuttleModel object) {
+  return [];
 }
 
-ShuttleModel _shuttleModelDeserialize(
-  Id id,
-  IsarReader reader,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
+void _shuttleModelSerializeNative(
+    IsarCollection<ShuttleModel> collection,
+    IsarRawObject rawObj,
+    ShuttleModel object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  var dynamicSize = 0;
+  final value0 = object.capacity;
+  final _capacity = value0;
+  final value1 = object.createdAt;
+  final _createdAt = value1;
+  final value2 = object.createdBy;
+  IsarUint8List? _createdBy;
+  if (value2 != null) {
+    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value2);
+  }
+  dynamicSize += (_createdBy?.length ?? 0) as int;
+  final value3 = object.departureTime;
+  final _departureTime = value3;
+  final value4 = object.description;
+  IsarUint8List? _description;
+  if (value4 != null) {
+    _description = IsarBinaryWriter.utf8Encoder.convert(value4);
+  }
+  dynamicSize += (_description?.length ?? 0) as int;
+  final value5 = object.driverId;
+  IsarUint8List? _driverId;
+  if (value5 != null) {
+    _driverId = IsarBinaryWriter.utf8Encoder.convert(value5);
+  }
+  dynamicSize += (_driverId?.length ?? 0) as int;
+  final value6 = object.id;
+  final _id = IsarBinaryWriter.utf8Encoder.convert(value6);
+  dynamicSize += (_id.length) as int;
+  final value7 = object.routeEndLat;
+  final _routeEndLat = value7;
+  final value8 = object.routeEndLng;
+  final _routeEndLng = value8;
+  final value9 = object.routeStartLat;
+  final _routeStartLat = value9;
+  final value10 = object.routeStartLng;
+  final _routeStartLng = value10;
+  final value11 = object.seatsTaken;
+  final _seatsTaken = value11;
+  final value12 = object.status;
+  final _status = IsarBinaryWriter.utf8Encoder.convert(value12);
+  dynamicSize += (_status.length) as int;
+  final value13 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value13);
+  dynamicSize += (_title.length) as int;
+  final value14 = object.updatedAt;
+  final _updatedAt = value14;
+  final size = staticSize + dynamicSize;
+
+  rawObj.buffer = alloc(size);
+  rawObj.buffer_length = size;
+  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeLong(offsets[0], _capacity);
+  writer.writeDateTime(offsets[1], _createdAt);
+  writer.writeBytes(offsets[2], _createdBy);
+  writer.writeDateTime(offsets[3], _departureTime);
+  writer.writeBytes(offsets[4], _description);
+  writer.writeBytes(offsets[5], _driverId);
+  writer.writeBytes(offsets[6], _id);
+  writer.writeDouble(offsets[7], _routeEndLat);
+  writer.writeDouble(offsets[8], _routeEndLng);
+  writer.writeDouble(offsets[9], _routeStartLat);
+  writer.writeDouble(offsets[10], _routeStartLng);
+  writer.writeLong(offsets[11], _seatsTaken);
+  writer.writeBytes(offsets[12], _status);
+  writer.writeBytes(offsets[13], _title);
+  writer.writeDateTime(offsets[14], _updatedAt);
+}
+
+ShuttleModel _shuttleModelDeserializeNative(
+    IsarCollection<ShuttleModel> collection,
+    int id,
+    IsarBinaryReader reader,
+    List<int> offsets) {
   final object = ShuttleModel(
     capacity: reader.readLong(offsets[0]),
     createdAt: reader.readDateTimeOrNull(offsets[1]),
@@ -174,6 +152,7 @@ ShuttleModel _shuttleModelDeserialize(
     description: reader.readStringOrNull(offsets[4]),
     driverId: reader.readStringOrNull(offsets[5]),
     id: reader.readString(offsets[6]),
+    isarId: id,
     routeEndLat: reader.readDoubleOrNull(offsets[7]),
     routeEndLng: reader.readDoubleOrNull(offsets[8]),
     routeStartLat: reader.readDoubleOrNull(offsets[9]),
@@ -186,13 +165,11 @@ ShuttleModel _shuttleModelDeserialize(
   return object;
 }
 
-P _shuttleModelDeserializeProp<P>(
-  IsarReader reader,
-  int propertyId,
-  int offset,
-  Map<Type, List<int>> allOffsets,
-) {
-  switch (propertyId) {
+P _shuttleModelDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
     case 0:
       return (reader.readLong(offset)) as P;
     case 1:
@@ -224,99 +201,198 @@ P _shuttleModelDeserializeProp<P>(
     case 14:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
-      throw IsarError('Unknown property with id $propertyId');
+      throw 'Illegal propertyIndex';
   }
 }
 
-Id _shuttleModelGetId(ShuttleModel object) {
-  return object.isarId;
+dynamic _shuttleModelSerializeWeb(
+    IsarCollection<ShuttleModel> collection, ShuttleModel object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(jsObj, 'capacity', object.capacity);
+  IsarNative.jsObjectSet(
+      jsObj, 'createdAt', object.createdAt?.toUtc().millisecondsSinceEpoch);
+  IsarNative.jsObjectSet(jsObj, 'createdBy', object.createdBy);
+  IsarNative.jsObjectSet(jsObj, 'departureTime',
+      object.departureTime?.toUtc().millisecondsSinceEpoch);
+  IsarNative.jsObjectSet(jsObj, 'description', object.description);
+  IsarNative.jsObjectSet(jsObj, 'driverId', object.driverId);
+  IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'isarId', object.isarId);
+  IsarNative.jsObjectSet(jsObj, 'routeEndLat', object.routeEndLat);
+  IsarNative.jsObjectSet(jsObj, 'routeEndLng', object.routeEndLng);
+  IsarNative.jsObjectSet(jsObj, 'routeStartLat', object.routeStartLat);
+  IsarNative.jsObjectSet(jsObj, 'routeStartLng', object.routeStartLng);
+  IsarNative.jsObjectSet(jsObj, 'seatsTaken', object.seatsTaken);
+  IsarNative.jsObjectSet(jsObj, 'status', object.status);
+  IsarNative.jsObjectSet(jsObj, 'title', object.title);
+  IsarNative.jsObjectSet(
+      jsObj, 'updatedAt', object.updatedAt?.toUtc().millisecondsSinceEpoch);
+  return jsObj;
 }
 
-List<IsarLinkBase<dynamic>> _shuttleModelGetLinks(ShuttleModel object) {
-  return [];
+ShuttleModel _shuttleModelDeserializeWeb(
+    IsarCollection<ShuttleModel> collection, dynamic jsObj) {
+  final object = ShuttleModel(
+    capacity:
+        IsarNative.jsObjectGet(jsObj, 'capacity') ?? double.negativeInfinity,
+    createdAt: IsarNative.jsObjectGet(jsObj, 'createdAt') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'createdAt'),
+                isUtc: true)
+            .toLocal()
+        : null,
+    createdBy: IsarNative.jsObjectGet(jsObj, 'createdBy'),
+    departureTime: IsarNative.jsObjectGet(jsObj, 'departureTime') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'departureTime'),
+                isUtc: true)
+            .toLocal()
+        : null,
+    description: IsarNative.jsObjectGet(jsObj, 'description'),
+    driverId: IsarNative.jsObjectGet(jsObj, 'driverId'),
+    id: IsarNative.jsObjectGet(jsObj, 'id') ?? '',
+    isarId: IsarNative.jsObjectGet(jsObj, 'isarId'),
+    routeEndLat: IsarNative.jsObjectGet(jsObj, 'routeEndLat'),
+    routeEndLng: IsarNative.jsObjectGet(jsObj, 'routeEndLng'),
+    routeStartLat: IsarNative.jsObjectGet(jsObj, 'routeStartLat'),
+    routeStartLng: IsarNative.jsObjectGet(jsObj, 'routeStartLng'),
+    seatsTaken:
+        IsarNative.jsObjectGet(jsObj, 'seatsTaken') ?? double.negativeInfinity,
+    status: IsarNative.jsObjectGet(jsObj, 'status') ?? '',
+    title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
+    updatedAt: IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'updatedAt'),
+                isUtc: true)
+            .toLocal()
+        : null,
+  );
+  return object;
 }
 
-void _shuttleModelAttach(
-    IsarCollection<dynamic> col, Id id, ShuttleModel object) {}
+P _shuttleModelDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case 'capacity':
+      return (IsarNative.jsObjectGet(jsObj, 'capacity') ??
+          double.negativeInfinity) as P;
+    case 'createdAt':
+      return (IsarNative.jsObjectGet(jsObj, 'createdAt') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'createdAt'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
+    case 'createdBy':
+      return (IsarNative.jsObjectGet(jsObj, 'createdBy')) as P;
+    case 'departureTime':
+      return (IsarNative.jsObjectGet(jsObj, 'departureTime') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'departureTime'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
+    case 'description':
+      return (IsarNative.jsObjectGet(jsObj, 'description')) as P;
+    case 'driverId':
+      return (IsarNative.jsObjectGet(jsObj, 'driverId')) as P;
+    case 'id':
+      return (IsarNative.jsObjectGet(jsObj, 'id') ?? '') as P;
+    case 'isarId':
+      return (IsarNative.jsObjectGet(jsObj, 'isarId')) as P;
+    case 'routeEndLat':
+      return (IsarNative.jsObjectGet(jsObj, 'routeEndLat')) as P;
+    case 'routeEndLng':
+      return (IsarNative.jsObjectGet(jsObj, 'routeEndLng')) as P;
+    case 'routeStartLat':
+      return (IsarNative.jsObjectGet(jsObj, 'routeStartLat')) as P;
+    case 'routeStartLng':
+      return (IsarNative.jsObjectGet(jsObj, 'routeStartLng')) as P;
+    case 'seatsTaken':
+      return (IsarNative.jsObjectGet(jsObj, 'seatsTaken') ??
+          double.negativeInfinity) as P;
+    case 'status':
+      return (IsarNative.jsObjectGet(jsObj, 'status') ?? '') as P;
+    case 'title':
+      return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
+    case 'updatedAt':
+      return (IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'updatedAt'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
+    default:
+      throw 'Illegal propertyName';
+  }
+}
+
+void _shuttleModelAttachLinks(
+    IsarCollection col, int id, ShuttleModel object) {}
 
 extension ShuttleModelQueryWhereSort
     on QueryBuilder<ShuttleModel, ShuttleModel, QWhere> {
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterWhere> anyIsarId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(const IdWhereClause.any());
-    });
+    return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
 extension ShuttleModelQueryWhere
     on QueryBuilder<ShuttleModel, ShuttleModel, QWhereClause> {
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterWhereClause> isarIdEqualTo(
-      Id isarId) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: isarId,
-        upper: isarId,
-      ));
-    });
+      int isarId) {
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: isarId,
+      includeLower: true,
+      upper: isarId,
+      includeUpper: true,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterWhereClause> isarIdNotEqualTo(
-      Id isarId) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
-            )
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
-            )
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
-            );
-      }
-    });
+      int isarId) {
+    if (whereSortInternal == Sort.asc) {
+      return addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+      );
+    } else {
+      return addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+      );
+    }
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterWhereClause> isarIdGreaterThan(
-      Id isarId,
+      int isarId,
       {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.greaterThan(lower: isarId, includeLower: include),
-      );
-    });
+    return addWhereClauseInternal(
+      IdWhereClause.greaterThan(lower: isarId, includeLower: include),
+    );
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterWhereClause> isarIdLessThan(
-      Id isarId,
+      int isarId,
       {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.lessThan(upper: isarId, includeUpper: include),
-      );
-    });
+    return addWhereClauseInternal(
+      IdWhereClause.lessThan(upper: isarId, includeUpper: include),
+    );
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterWhereClause> isarIdBetween(
-    Id lowerIsarId,
-    Id upperIsarId, {
+    int lowerIsarId,
+    int upperIsarId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerIsarId,
-        includeLower: includeLower,
-        upper: upperIsarId,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: lowerIsarId,
+      includeLower: includeLower,
+      upper: upperIsarId,
+      includeUpper: includeUpper,
+    ));
   }
 }
 
@@ -324,12 +400,11 @@ extension ShuttleModelQueryFilter
     on QueryBuilder<ShuttleModel, ShuttleModel, QFilterCondition> {
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       capacityEqualTo(int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'capacity',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'capacity',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -337,13 +412,12 @@ extension ShuttleModelQueryFilter
     int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'capacity',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'capacity',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -351,13 +425,12 @@ extension ShuttleModelQueryFilter
     int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'capacity',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'capacity',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -367,43 +440,31 @@ extension ShuttleModelQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'capacity',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'capacity',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       createdAtIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createdAt',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      createdAtIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createdAt',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'createdAt',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       createdAtEqualTo(DateTime? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -411,13 +472,12 @@ extension ShuttleModelQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -425,13 +485,12 @@ extension ShuttleModelQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -441,33 +500,22 @@ extension ShuttleModelQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'createdAt',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'createdAt',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       createdByIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createdBy',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      createdByIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createdBy',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'createdBy',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -475,65 +523,60 @@ extension ShuttleModelQueryFilter
     String? value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       createdByGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       createdByLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       createdByBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'createdBy',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'createdBy',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -541,13 +584,12 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -555,83 +597,50 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       createdByContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       createdByMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'createdBy',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      createdByIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdBy',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      createdByIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'createdBy',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'createdBy',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       departureTimeIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'departureTime',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      departureTimeIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'departureTime',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'departureTime',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       departureTimeEqualTo(DateTime? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'departureTime',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'departureTime',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -639,13 +648,12 @@ extension ShuttleModelQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'departureTime',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'departureTime',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -653,13 +661,12 @@ extension ShuttleModelQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'departureTime',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'departureTime',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -669,33 +676,22 @@ extension ShuttleModelQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'departureTime',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'departureTime',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       descriptionIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      descriptionIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'description',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'description',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -703,65 +699,60 @@ extension ShuttleModelQueryFilter
     String? value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       descriptionGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       descriptionLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       descriptionBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'description',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'description',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -769,13 +760,12 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -783,73 +773,41 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       descriptionContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       descriptionMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'description',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      descriptionIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      descriptionIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'description',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'description',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       driverIdIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'driverId',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      driverIdIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'driverId',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'driverId',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -857,65 +815,60 @@ extension ShuttleModelQueryFilter
     String? value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'driverId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'driverId',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       driverIdGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'driverId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'driverId',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       driverIdLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'driverId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'driverId',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       driverIdBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'driverId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'driverId',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -923,13 +876,12 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'driverId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'driverId',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -937,587 +889,363 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'driverId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'driverId',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       driverIdContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'driverId',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'driverId',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       driverIdMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'driverId',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      driverIdIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'driverId',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      driverIdIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'driverId',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'driverId',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'id',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'id',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> idIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'id',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      idIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'id',
-        value: '',
-      ));
-    });
+      isarIdIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'isarId',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> isarIdEqualTo(
-      Id value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isarId',
-        value: value,
-      ));
-    });
+      int value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       isarIdGreaterThan(
-    Id value, {
+    int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'isarId',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       isarIdLessThan(
-    Id value, {
+    int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'isarId',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> isarIdBetween(
-    Id lower,
-    Id upper, {
+    int lower,
+    int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'isarId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'isarId',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       routeEndLatIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'routeEndLat',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'routeEndLat',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLatIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'routeEndLat',
-      ));
-    });
+      routeEndLatGreaterThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'routeEndLat',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLatEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'routeEndLat',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+      routeEndLatLessThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'routeEndLat',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLatGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'routeEndLat',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLatLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'routeEndLat',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLatBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'routeEndLat',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
+      routeEndLatBetween(double? lower, double? upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'routeEndLat',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       routeEndLngIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'routeEndLng',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'routeEndLng',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLngIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'routeEndLng',
-      ));
-    });
+      routeEndLngGreaterThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'routeEndLng',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLngEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'routeEndLng',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+      routeEndLngLessThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'routeEndLng',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLngGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'routeEndLng',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLngLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'routeEndLng',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeEndLngBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'routeEndLng',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
+      routeEndLngBetween(double? lower, double? upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'routeEndLng',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       routeStartLatIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'routeStartLat',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'routeStartLat',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLatIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'routeStartLat',
-      ));
-    });
+      routeStartLatGreaterThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'routeStartLat',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLatEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'routeStartLat',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+      routeStartLatLessThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'routeStartLat',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLatGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'routeStartLat',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLatLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'routeStartLat',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLatBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'routeStartLat',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
+      routeStartLatBetween(double? lower, double? upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'routeStartLat',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       routeStartLngIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'routeStartLng',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'routeStartLng',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLngIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'routeStartLng',
-      ));
-    });
+      routeStartLngGreaterThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'routeStartLng',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLngEqualTo(
-    double? value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'routeStartLng',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
+      routeStartLngLessThan(double? value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'routeStartLng',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLngGreaterThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'routeStartLng',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLngLessThan(
-    double? value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'routeStartLng',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      routeStartLngBetween(
-    double? lower,
-    double? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'routeStartLng',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
+      routeStartLngBetween(double? lower, double? upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'routeStartLng',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       seatsTakenEqualTo(int value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'seatsTaken',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'seatsTaken',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1525,13 +1253,12 @@ extension ShuttleModelQueryFilter
     int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'seatsTaken',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'seatsTaken',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1539,13 +1266,12 @@ extension ShuttleModelQueryFilter
     int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'seatsTaken',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'seatsTaken',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1555,79 +1281,72 @@ extension ShuttleModelQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'seatsTaken',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'seatsTaken',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> statusEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       statusGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       statusLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> statusBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'status',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'status',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1635,13 +1354,12 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1649,119 +1367,91 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       statusContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'status',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'status',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> statusMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'status',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      statusIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'status',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      statusIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'status',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'status',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       titleGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> titleLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'title',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'title',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1769,98 +1459,64 @@ extension ShuttleModelQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> titleContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition> titleMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'title',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      titleIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'title',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      titleIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'title',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'title',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       updatedAtIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'updatedAt',
-      ));
-    });
-  }
-
-  QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
-      updatedAtIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'updatedAt',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'updatedAt',
+      value: null,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
       updatedAtEqualTo(DateTime? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1868,13 +1524,12 @@ extension ShuttleModelQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1882,13 +1537,12 @@ extension ShuttleModelQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterFilterCondition>
@@ -1898,617 +1552,438 @@ extension ShuttleModelQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'updatedAt',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'updatedAt',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 }
-
-extension ShuttleModelQueryObject
-    on QueryBuilder<ShuttleModel, ShuttleModel, QFilterCondition> {}
 
 extension ShuttleModelQueryLinks
     on QueryBuilder<ShuttleModel, ShuttleModel, QFilterCondition> {}
 
-extension ShuttleModelQuerySortBy
+extension ShuttleModelQueryWhereSortBy
     on QueryBuilder<ShuttleModel, ShuttleModel, QSortBy> {
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCapacity() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'capacity', Sort.asc);
-    });
+    return addSortByInternal('capacity', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCapacityDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'capacity', Sort.desc);
-    });
+    return addSortByInternal('capacity', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.asc);
-    });
+    return addSortByInternal('createdAt', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCreatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.desc);
-    });
+    return addSortByInternal('createdAt', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCreatedBy() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.asc);
-    });
+    return addSortByInternal('createdBy', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByCreatedByDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.desc);
-    });
+    return addSortByInternal('createdBy', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByDepartureTime() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'departureTime', Sort.asc);
-    });
+    return addSortByInternal('departureTime', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       sortByDepartureTimeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'departureTime', Sort.desc);
-    });
+    return addSortByInternal('departureTime', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByDescription() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
-    });
+    return addSortByInternal('description', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       sortByDescriptionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
-    });
+    return addSortByInternal('description', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByDriverId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'driverId', Sort.asc);
-    });
+    return addSortByInternal('driverId', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByDriverIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'driverId', Sort.desc);
-    });
+    return addSortByInternal('driverId', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
+    return addSortByInternal('id', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
+    return addSortByInternal('id', Sort.desc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByIsarId() {
+    return addSortByInternal('isarId', Sort.asc);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByIsarIdDesc() {
+    return addSortByInternal('isarId', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByRouteEndLat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeEndLat', Sort.asc);
-    });
+    return addSortByInternal('routeEndLat', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       sortByRouteEndLatDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeEndLat', Sort.desc);
-    });
+    return addSortByInternal('routeEndLat', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByRouteEndLng() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeEndLng', Sort.asc);
-    });
+    return addSortByInternal('routeEndLng', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       sortByRouteEndLngDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeEndLng', Sort.desc);
-    });
+    return addSortByInternal('routeEndLng', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByRouteStartLat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeStartLat', Sort.asc);
-    });
+    return addSortByInternal('routeStartLat', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       sortByRouteStartLatDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeStartLat', Sort.desc);
-    });
+    return addSortByInternal('routeStartLat', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByRouteStartLng() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeStartLng', Sort.asc);
-    });
+    return addSortByInternal('routeStartLng', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       sortByRouteStartLngDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeStartLng', Sort.desc);
-    });
+    return addSortByInternal('routeStartLng', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortBySeatsTaken() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'seatsTaken', Sort.asc);
-    });
+    return addSortByInternal('seatsTaken', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       sortBySeatsTakenDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'seatsTaken', Sort.desc);
-    });
+    return addSortByInternal('seatsTaken', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByStatus() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.asc);
-    });
+    return addSortByInternal('status', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByStatusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.desc);
-    });
+    return addSortByInternal('status', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByTitle() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.asc);
-    });
+    return addSortByInternal('title', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByTitleDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.desc);
-    });
+    return addSortByInternal('title', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.asc);
-    });
+    return addSortByInternal('updatedAt', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> sortByUpdatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.desc);
-    });
+    return addSortByInternal('updatedAt', Sort.desc);
   }
 }
 
-extension ShuttleModelQuerySortThenBy
+extension ShuttleModelQueryWhereSortThenBy
     on QueryBuilder<ShuttleModel, ShuttleModel, QSortThenBy> {
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCapacity() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'capacity', Sort.asc);
-    });
+    return addSortByInternal('capacity', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCapacityDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'capacity', Sort.desc);
-    });
+    return addSortByInternal('capacity', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.asc);
-    });
+    return addSortByInternal('createdAt', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCreatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.desc);
-    });
+    return addSortByInternal('createdAt', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCreatedBy() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.asc);
-    });
+    return addSortByInternal('createdBy', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByCreatedByDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.desc);
-    });
+    return addSortByInternal('createdBy', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByDepartureTime() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'departureTime', Sort.asc);
-    });
+    return addSortByInternal('departureTime', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       thenByDepartureTimeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'departureTime', Sort.desc);
-    });
+    return addSortByInternal('departureTime', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByDescription() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
-    });
+    return addSortByInternal('description', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       thenByDescriptionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
-    });
+    return addSortByInternal('description', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByDriverId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'driverId', Sort.asc);
-    });
+    return addSortByInternal('driverId', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByDriverIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'driverId', Sort.desc);
-    });
+    return addSortByInternal('driverId', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
+    return addSortByInternal('id', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
+    return addSortByInternal('id', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByIsarId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isarId', Sort.asc);
-    });
+    return addSortByInternal('isarId', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByIsarIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isarId', Sort.desc);
-    });
+    return addSortByInternal('isarId', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByRouteEndLat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeEndLat', Sort.asc);
-    });
+    return addSortByInternal('routeEndLat', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       thenByRouteEndLatDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeEndLat', Sort.desc);
-    });
+    return addSortByInternal('routeEndLat', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByRouteEndLng() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeEndLng', Sort.asc);
-    });
+    return addSortByInternal('routeEndLng', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       thenByRouteEndLngDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeEndLng', Sort.desc);
-    });
+    return addSortByInternal('routeEndLng', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByRouteStartLat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeStartLat', Sort.asc);
-    });
+    return addSortByInternal('routeStartLat', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       thenByRouteStartLatDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeStartLat', Sort.desc);
-    });
+    return addSortByInternal('routeStartLat', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByRouteStartLng() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeStartLng', Sort.asc);
-    });
+    return addSortByInternal('routeStartLng', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       thenByRouteStartLngDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'routeStartLng', Sort.desc);
-    });
+    return addSortByInternal('routeStartLng', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenBySeatsTaken() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'seatsTaken', Sort.asc);
-    });
+    return addSortByInternal('seatsTaken', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy>
       thenBySeatsTakenDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'seatsTaken', Sort.desc);
-    });
+    return addSortByInternal('seatsTaken', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByStatus() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.asc);
-    });
+    return addSortByInternal('status', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByStatusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'status', Sort.desc);
-    });
+    return addSortByInternal('status', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByTitle() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.asc);
-    });
+    return addSortByInternal('title', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByTitleDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.desc);
-    });
+    return addSortByInternal('title', Sort.desc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.asc);
-    });
+    return addSortByInternal('updatedAt', Sort.asc);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QAfterSortBy> thenByUpdatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.desc);
-    });
+    return addSortByInternal('updatedAt', Sort.desc);
   }
 }
 
 extension ShuttleModelQueryWhereDistinct
     on QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> {
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByCapacity() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'capacity');
-    });
+    return addDistinctByInternal('capacity');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createdAt');
-    });
+    return addDistinctByInternal('createdAt');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByCreatedBy(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createdBy', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('createdBy', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct>
       distinctByDepartureTime() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'departureTime');
-    });
+    return addDistinctByInternal('departureTime');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('description', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByDriverId(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'driverId', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('driverId', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctById(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('id', caseSensitive: caseSensitive);
+  }
+
+  QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByIsarId() {
+    return addDistinctByInternal('isarId');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByRouteEndLat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'routeEndLat');
-    });
+    return addDistinctByInternal('routeEndLat');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByRouteEndLng() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'routeEndLng');
-    });
+    return addDistinctByInternal('routeEndLng');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct>
       distinctByRouteStartLat() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'routeStartLat');
-    });
+    return addDistinctByInternal('routeStartLat');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct>
       distinctByRouteStartLng() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'routeStartLng');
-    });
+    return addDistinctByInternal('routeStartLng');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctBySeatsTaken() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'seatsTaken');
-    });
+    return addDistinctByInternal('seatsTaken');
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByStatus(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'status', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('status', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('title', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ShuttleModel, ShuttleModel, QDistinct> distinctByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'updatedAt');
-    });
+    return addDistinctByInternal('updatedAt');
   }
 }
 
 extension ShuttleModelQueryProperty
     on QueryBuilder<ShuttleModel, ShuttleModel, QQueryProperty> {
-  QueryBuilder<ShuttleModel, int, QQueryOperations> isarIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isarId');
-    });
-  }
-
   QueryBuilder<ShuttleModel, int, QQueryOperations> capacityProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'capacity');
-    });
+    return addPropertyNameInternal('capacity');
   }
 
   QueryBuilder<ShuttleModel, DateTime?, QQueryOperations> createdAtProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'createdAt');
-    });
+    return addPropertyNameInternal('createdAt');
   }
 
   QueryBuilder<ShuttleModel, String?, QQueryOperations> createdByProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'createdBy');
-    });
+    return addPropertyNameInternal('createdBy');
   }
 
   QueryBuilder<ShuttleModel, DateTime?, QQueryOperations>
       departureTimeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'departureTime');
-    });
+    return addPropertyNameInternal('departureTime');
   }
 
   QueryBuilder<ShuttleModel, String?, QQueryOperations> descriptionProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'description');
-    });
+    return addPropertyNameInternal('description');
   }
 
   QueryBuilder<ShuttleModel, String?, QQueryOperations> driverIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'driverId');
-    });
+    return addPropertyNameInternal('driverId');
   }
 
   QueryBuilder<ShuttleModel, String, QQueryOperations> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'id');
-    });
+    return addPropertyNameInternal('id');
+  }
+
+  QueryBuilder<ShuttleModel, int?, QQueryOperations> isarIdProperty() {
+    return addPropertyNameInternal('isarId');
   }
 
   QueryBuilder<ShuttleModel, double?, QQueryOperations> routeEndLatProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'routeEndLat');
-    });
+    return addPropertyNameInternal('routeEndLat');
   }
 
   QueryBuilder<ShuttleModel, double?, QQueryOperations> routeEndLngProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'routeEndLng');
-    });
+    return addPropertyNameInternal('routeEndLng');
   }
 
   QueryBuilder<ShuttleModel, double?, QQueryOperations>
       routeStartLatProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'routeStartLat');
-    });
+    return addPropertyNameInternal('routeStartLat');
   }
 
   QueryBuilder<ShuttleModel, double?, QQueryOperations>
       routeStartLngProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'routeStartLng');
-    });
+    return addPropertyNameInternal('routeStartLng');
   }
 
   QueryBuilder<ShuttleModel, int, QQueryOperations> seatsTakenProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'seatsTaken');
-    });
+    return addPropertyNameInternal('seatsTaken');
   }
 
   QueryBuilder<ShuttleModel, String, QQueryOperations> statusProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'status');
-    });
+    return addPropertyNameInternal('status');
   }
 
   QueryBuilder<ShuttleModel, String, QQueryOperations> titleProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'title');
-    });
+    return addPropertyNameInternal('title');
   }
 
   QueryBuilder<ShuttleModel, DateTime?, QQueryOperations> updatedAtProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'updatedAt');
-    });
+    return addPropertyNameInternal('updatedAt');
   }
 }
 

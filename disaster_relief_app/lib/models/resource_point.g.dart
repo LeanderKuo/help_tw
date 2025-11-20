@@ -6,143 +6,131 @@ part of 'resource_point.dart';
 // IsarCollectionGenerator
 // **************************************************************************
 
-// coverage:ignore-file
-// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, prefer_const_constructors, lines_longer_than_80_chars, require_trailing_commas, inference_failure_on_function_invocation, unnecessary_parenthesis, unnecessary_raw_strings, unnecessary_null_checks, join_return_with_assignment, prefer_final_locals, avoid_js_rounded_ints, avoid_positional_boolean_parameters, always_specify_types
+// ignore_for_file: duplicate_ignore, non_constant_identifier_names, constant_identifier_names, invalid_use_of_protected_member, unnecessary_cast, unused_local_variable
 
 extension GetResourcePointCollection on Isar {
-  IsarCollection<ResourcePoint> get resourcePoints => this.collection();
+  IsarCollection<ResourcePoint> get resourcePoints => getCollection();
 }
 
 const ResourcePointSchema = CollectionSchema(
-  name: r'ResourcePoint',
-  id: 1,
-  properties: {
-    r'createdAt': PropertySchema(
-      id: 0,
-      name: r'createdAt',
-      type: IsarType.dateTime,
-    ),
-    r'createdBy': PropertySchema(
-      id: 1,
-      name: r'createdBy',
-      type: IsarType.string,
-    ),
-    r'description': PropertySchema(
-      id: 2,
-      name: r'description',
-      type: IsarType.string,
-    ),
-    r'id': PropertySchema(
-      id: 3,
-      name: r'id',
-      type: IsarType.string,
-    ),
-    r'images': PropertySchema(
-      id: 4,
-      name: r'images',
-      type: IsarType.stringList,
-    ),
-    r'isActive': PropertySchema(
-      id: 5,
-      name: r'isActive',
-      type: IsarType.bool,
-    ),
-    r'latitude': PropertySchema(
-      id: 6,
-      name: r'latitude',
-      type: IsarType.double,
-    ),
-    r'longitude': PropertySchema(
-      id: 7,
-      name: r'longitude',
-      type: IsarType.double,
-    ),
-    r'title': PropertySchema(
-      id: 8,
-      name: r'title',
-      type: IsarType.string,
-    ),
-    r'type': PropertySchema(
-      id: 9,
-      name: r'type',
-      type: IsarType.string,
-    ),
-    r'updatedAt': PropertySchema(
-      id: 10,
-      name: r'updatedAt',
-      type: IsarType.dateTime,
-    )
+  name: 'ResourcePoint',
+  schema:
+      '{"name":"ResourcePoint","idName":"isarId","properties":[{"name":"createdAt","type":"Long"},{"name":"createdBy","type":"String"},{"name":"description","type":"String"},{"name":"id","type":"String"},{"name":"images","type":"StringList"},{"name":"isActive","type":"Bool"},{"name":"latitude","type":"Double"},{"name":"longitude","type":"Double"},{"name":"title","type":"String"},{"name":"type","type":"String"},{"name":"updatedAt","type":"Long"}],"indexes":[],"links":[]}',
+  idName: 'isarId',
+  propertyIds: {
+    'createdAt': 0,
+    'createdBy': 1,
+    'description': 2,
+    'id': 3,
+    'images': 4,
+    'isActive': 5,
+    'latitude': 6,
+    'longitude': 7,
+    'title': 8,
+    'type': 9,
+    'updatedAt': 10
   },
-  estimateSize: _resourcePointEstimateSize,
-  serialize: _resourcePointSerialize,
-  deserialize: _resourcePointDeserialize,
-  deserializeProp: _resourcePointDeserializeProp,
-  idName: r'isarId',
-  indexes: {},
-  links: {},
-  embeddedSchemas: {},
+  listProperties: {'images'},
+  indexIds: {},
+  indexValueTypes: {},
+  linkIds: {},
+  backlinkLinkNames: {},
   getId: _resourcePointGetId,
   getLinks: _resourcePointGetLinks,
-  attach: _resourcePointAttach,
-  version: '3.1.0+1',
+  attachLinks: _resourcePointAttachLinks,
+  serializeNative: _resourcePointSerializeNative,
+  deserializeNative: _resourcePointDeserializeNative,
+  deserializePropNative: _resourcePointDeserializePropNative,
+  serializeWeb: _resourcePointSerializeWeb,
+  deserializeWeb: _resourcePointDeserializeWeb,
+  deserializePropWeb: _resourcePointDeserializePropWeb,
+  version: 3,
 );
 
-int _resourcePointEstimateSize(
-  ResourcePoint object,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  var bytesCount = offsets.last;
-  {
-    final value = object.createdBy;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
+int? _resourcePointGetId(ResourcePoint object) {
+  if (object.isarId == Isar.autoIncrement) {
+    return null;
+  } else {
+    return object.isarId;
   }
-  {
-    final value = object.description;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.id.length * 3;
-  bytesCount += 3 + object.images.length * 3;
-  {
-    for (var i = 0; i < object.images.length; i++) {
-      final value = object.images[i];
-      bytesCount += value.length * 3;
-    }
-  }
-  bytesCount += 3 + object.title.length * 3;
-  bytesCount += 3 + object.type.length * 3;
-  return bytesCount;
 }
 
-void _resourcePointSerialize(
-  ResourcePoint object,
-  IsarWriter writer,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
-  writer.writeDateTime(offsets[0], object.createdAt);
-  writer.writeString(offsets[1], object.createdBy);
-  writer.writeString(offsets[2], object.description);
-  writer.writeString(offsets[3], object.id);
-  writer.writeStringList(offsets[4], object.images);
-  writer.writeBool(offsets[5], object.isActive);
-  writer.writeDouble(offsets[6], object.latitude);
-  writer.writeDouble(offsets[7], object.longitude);
-  writer.writeString(offsets[8], object.title);
-  writer.writeString(offsets[9], object.type);
-  writer.writeDateTime(offsets[10], object.updatedAt);
+List<IsarLinkBase> _resourcePointGetLinks(ResourcePoint object) {
+  return [];
 }
 
-ResourcePoint _resourcePointDeserialize(
-  Id id,
-  IsarReader reader,
-  List<int> offsets,
-  Map<Type, List<int>> allOffsets,
-) {
+void _resourcePointSerializeNative(
+    IsarCollection<ResourcePoint> collection,
+    IsarRawObject rawObj,
+    ResourcePoint object,
+    int staticSize,
+    List<int> offsets,
+    AdapterAlloc alloc) {
+  var dynamicSize = 0;
+  final value0 = object.createdAt;
+  final _createdAt = value0;
+  final value1 = object.createdBy;
+  IsarUint8List? _createdBy;
+  if (value1 != null) {
+    _createdBy = IsarBinaryWriter.utf8Encoder.convert(value1);
+  }
+  dynamicSize += (_createdBy?.length ?? 0) as int;
+  final value2 = object.description;
+  IsarUint8List? _description;
+  if (value2 != null) {
+    _description = IsarBinaryWriter.utf8Encoder.convert(value2);
+  }
+  dynamicSize += (_description?.length ?? 0) as int;
+  final value3 = object.id;
+  final _id = IsarBinaryWriter.utf8Encoder.convert(value3);
+  dynamicSize += (_id.length) as int;
+  final value4 = object.images;
+  dynamicSize += (value4.length) * 8;
+  final bytesList4 = <IsarUint8List>[];
+  for (var str in value4) {
+    final bytes = IsarBinaryWriter.utf8Encoder.convert(str);
+    bytesList4.add(bytes);
+    dynamicSize += bytes.length as int;
+  }
+  final _images = bytesList4;
+  final value5 = object.isActive;
+  final _isActive = value5;
+  final value6 = object.latitude;
+  final _latitude = value6;
+  final value7 = object.longitude;
+  final _longitude = value7;
+  final value8 = object.title;
+  final _title = IsarBinaryWriter.utf8Encoder.convert(value8);
+  dynamicSize += (_title.length) as int;
+  final value9 = object.type;
+  final _type = IsarBinaryWriter.utf8Encoder.convert(value9);
+  dynamicSize += (_type.length) as int;
+  final value10 = object.updatedAt;
+  final _updatedAt = value10;
+  final size = staticSize + dynamicSize;
+
+  rawObj.buffer = alloc(size);
+  rawObj.buffer_length = size;
+  final buffer = IsarNative.bufAsBytes(rawObj.buffer, size);
+  final writer = IsarBinaryWriter(buffer, staticSize);
+  writer.writeDateTime(offsets[0], _createdAt);
+  writer.writeBytes(offsets[1], _createdBy);
+  writer.writeBytes(offsets[2], _description);
+  writer.writeBytes(offsets[3], _id);
+  writer.writeStringList(offsets[4], _images);
+  writer.writeBool(offsets[5], _isActive);
+  writer.writeDouble(offsets[6], _latitude);
+  writer.writeDouble(offsets[7], _longitude);
+  writer.writeBytes(offsets[8], _title);
+  writer.writeBytes(offsets[9], _type);
+  writer.writeDateTime(offsets[10], _updatedAt);
+}
+
+ResourcePoint _resourcePointDeserializeNative(
+    IsarCollection<ResourcePoint> collection,
+    int id,
+    IsarBinaryReader reader,
+    List<int> offsets) {
   final object = ResourcePoint(
     createdAt: reader.readDateTimeOrNull(offsets[0]),
     createdBy: reader.readStringOrNull(offsets[1]),
@@ -150,6 +138,7 @@ ResourcePoint _resourcePointDeserialize(
     id: reader.readString(offsets[3]),
     images: reader.readStringList(offsets[4]) ?? [],
     isActive: reader.readBool(offsets[5]),
+    isarId: id,
     latitude: reader.readDouble(offsets[6]),
     longitude: reader.readDouble(offsets[7]),
     title: reader.readString(offsets[8]),
@@ -159,13 +148,11 @@ ResourcePoint _resourcePointDeserialize(
   return object;
 }
 
-P _resourcePointDeserializeProp<P>(
-  IsarReader reader,
-  int propertyId,
-  int offset,
-  Map<Type, List<int>> allOffsets,
-) {
-  switch (propertyId) {
+P _resourcePointDeserializePropNative<P>(
+    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  switch (propertyIndex) {
+    case -1:
+      return id as P;
     case 0:
       return (reader.readDateTimeOrNull(offset)) as P;
     case 1:
@@ -189,98 +176,178 @@ P _resourcePointDeserializeProp<P>(
     case 10:
       return (reader.readDateTimeOrNull(offset)) as P;
     default:
-      throw IsarError('Unknown property with id $propertyId');
+      throw 'Illegal propertyIndex';
   }
 }
 
-Id _resourcePointGetId(ResourcePoint object) {
-  return object.isarId;
+dynamic _resourcePointSerializeWeb(
+    IsarCollection<ResourcePoint> collection, ResourcePoint object) {
+  final jsObj = IsarNative.newJsObject();
+  IsarNative.jsObjectSet(
+      jsObj, 'createdAt', object.createdAt?.toUtc().millisecondsSinceEpoch);
+  IsarNative.jsObjectSet(jsObj, 'createdBy', object.createdBy);
+  IsarNative.jsObjectSet(jsObj, 'description', object.description);
+  IsarNative.jsObjectSet(jsObj, 'id', object.id);
+  IsarNative.jsObjectSet(jsObj, 'images', object.images);
+  IsarNative.jsObjectSet(jsObj, 'isActive', object.isActive);
+  IsarNative.jsObjectSet(jsObj, 'isarId', object.isarId);
+  IsarNative.jsObjectSet(jsObj, 'latitude', object.latitude);
+  IsarNative.jsObjectSet(jsObj, 'longitude', object.longitude);
+  IsarNative.jsObjectSet(jsObj, 'title', object.title);
+  IsarNative.jsObjectSet(jsObj, 'type', object.type);
+  IsarNative.jsObjectSet(
+      jsObj, 'updatedAt', object.updatedAt?.toUtc().millisecondsSinceEpoch);
+  return jsObj;
 }
 
-List<IsarLinkBase<dynamic>> _resourcePointGetLinks(ResourcePoint object) {
-  return [];
+ResourcePoint _resourcePointDeserializeWeb(
+    IsarCollection<ResourcePoint> collection, dynamic jsObj) {
+  final object = ResourcePoint(
+    createdAt: IsarNative.jsObjectGet(jsObj, 'createdAt') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'createdAt'),
+                isUtc: true)
+            .toLocal()
+        : null,
+    createdBy: IsarNative.jsObjectGet(jsObj, 'createdBy'),
+    description: IsarNative.jsObjectGet(jsObj, 'description'),
+    id: IsarNative.jsObjectGet(jsObj, 'id') ?? '',
+    images: (IsarNative.jsObjectGet(jsObj, 'images') as List?)
+            ?.map((e) => e ?? '')
+            .toList()
+            .cast<String>() ??
+        [],
+    isActive: IsarNative.jsObjectGet(jsObj, 'isActive') ?? false,
+    isarId: IsarNative.jsObjectGet(jsObj, 'isarId'),
+    latitude:
+        IsarNative.jsObjectGet(jsObj, 'latitude') ?? double.negativeInfinity,
+    longitude:
+        IsarNative.jsObjectGet(jsObj, 'longitude') ?? double.negativeInfinity,
+    title: IsarNative.jsObjectGet(jsObj, 'title') ?? '',
+    type: IsarNative.jsObjectGet(jsObj, 'type') ?? '',
+    updatedAt: IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
+        ? DateTime.fromMillisecondsSinceEpoch(
+                IsarNative.jsObjectGet(jsObj, 'updatedAt'),
+                isUtc: true)
+            .toLocal()
+        : null,
+  );
+  return object;
 }
 
-void _resourcePointAttach(
-    IsarCollection<dynamic> col, Id id, ResourcePoint object) {}
+P _resourcePointDeserializePropWeb<P>(Object jsObj, String propertyName) {
+  switch (propertyName) {
+    case 'createdAt':
+      return (IsarNative.jsObjectGet(jsObj, 'createdAt') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'createdAt'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
+    case 'createdBy':
+      return (IsarNative.jsObjectGet(jsObj, 'createdBy')) as P;
+    case 'description':
+      return (IsarNative.jsObjectGet(jsObj, 'description')) as P;
+    case 'id':
+      return (IsarNative.jsObjectGet(jsObj, 'id') ?? '') as P;
+    case 'images':
+      return ((IsarNative.jsObjectGet(jsObj, 'images') as List?)
+              ?.map((e) => e ?? '')
+              .toList()
+              .cast<String>() ??
+          []) as P;
+    case 'isActive':
+      return (IsarNative.jsObjectGet(jsObj, 'isActive') ?? false) as P;
+    case 'isarId':
+      return (IsarNative.jsObjectGet(jsObj, 'isarId')) as P;
+    case 'latitude':
+      return (IsarNative.jsObjectGet(jsObj, 'latitude') ??
+          double.negativeInfinity) as P;
+    case 'longitude':
+      return (IsarNative.jsObjectGet(jsObj, 'longitude') ??
+          double.negativeInfinity) as P;
+    case 'title':
+      return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
+    case 'type':
+      return (IsarNative.jsObjectGet(jsObj, 'type') ?? '') as P;
+    case 'updatedAt':
+      return (IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
+          ? DateTime.fromMillisecondsSinceEpoch(
+                  IsarNative.jsObjectGet(jsObj, 'updatedAt'),
+                  isUtc: true)
+              .toLocal()
+          : null) as P;
+    default:
+      throw 'Illegal propertyName';
+  }
+}
+
+void _resourcePointAttachLinks(
+    IsarCollection col, int id, ResourcePoint object) {}
 
 extension ResourcePointQueryWhereSort
     on QueryBuilder<ResourcePoint, ResourcePoint, QWhere> {
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhere> anyIsarId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(const IdWhereClause.any());
-    });
+    return addWhereClauseInternal(const IdWhereClause.any());
   }
 }
 
 extension ResourcePointQueryWhere
     on QueryBuilder<ResourcePoint, ResourcePoint, QWhereClause> {
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause> isarIdEqualTo(
-      Id isarId) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: isarId,
-        upper: isarId,
-      ));
-    });
+      int isarId) {
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: isarId,
+      includeLower: true,
+      upper: isarId,
+      includeUpper: true,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause>
-      isarIdNotEqualTo(Id isarId) {
-    return QueryBuilder.apply(this, (query) {
-      if (query.whereSort == Sort.asc) {
-        return query
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
-            )
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
-            );
-      } else {
-        return query
-            .addWhereClause(
-              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
-            )
-            .addWhereClause(
-              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
-            );
-      }
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause>
-      isarIdGreaterThan(Id isarId, {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.greaterThan(lower: isarId, includeLower: include),
+      isarIdNotEqualTo(int isarId) {
+    if (whereSortInternal == Sort.asc) {
+      return addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: isarId, includeLower: false),
       );
-    });
+    } else {
+      return addWhereClauseInternal(
+        IdWhereClause.greaterThan(lower: isarId, includeLower: false),
+      ).addWhereClauseInternal(
+        IdWhereClause.lessThan(upper: isarId, includeUpper: false),
+      );
+    }
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause>
+      isarIdGreaterThan(int isarId, {bool include = false}) {
+    return addWhereClauseInternal(
+      IdWhereClause.greaterThan(lower: isarId, includeLower: include),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause> isarIdLessThan(
-      Id isarId,
+      int isarId,
       {bool include = false}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(
-        IdWhereClause.lessThan(upper: isarId, includeUpper: include),
-      );
-    });
+    return addWhereClauseInternal(
+      IdWhereClause.lessThan(upper: isarId, includeUpper: include),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause> isarIdBetween(
-    Id lowerIsarId,
-    Id upperIsarId, {
+    int lowerIsarId,
+    int upperIsarId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addWhereClause(IdWhereClause.between(
-        lower: lowerIsarId,
-        includeLower: includeLower,
-        upper: upperIsarId,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addWhereClauseInternal(IdWhereClause.between(
+      lower: lowerIsarId,
+      includeLower: includeLower,
+      upper: upperIsarId,
+      includeUpper: includeUpper,
+    ));
   }
 }
 
@@ -288,30 +355,20 @@ extension ResourcePointQueryFilter
     on QueryBuilder<ResourcePoint, ResourcePoint, QFilterCondition> {
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdAtIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createdAt',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdAtIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createdAt',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'createdAt',
+      value: null,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdAtEqualTo(DateTime? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -319,13 +376,12 @@ extension ResourcePointQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -333,13 +389,12 @@ extension ResourcePointQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'createdAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'createdAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -349,33 +404,22 @@ extension ResourcePointQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'createdAt',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'createdAt',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdByIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'createdBy',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'createdBy',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'createdBy',
+      value: null,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -383,65 +427,60 @@ extension ResourcePointQueryFilter
     String? value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdByGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdByLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdByBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'createdBy',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'createdBy',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -449,13 +488,12 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -463,73 +501,41 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdByContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'createdBy',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'createdBy',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       createdByMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'createdBy',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'createdBy',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'createdBy',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'createdBy',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       descriptionIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'description',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'description',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'description',
+      value: null,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -537,65 +543,60 @@ extension ResourcePointQueryFilter
     String? value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       descriptionGreaterThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       descriptionLessThan(
     String? value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       descriptionBetween(
     String? lower,
     String? upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'description',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'description',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -603,13 +604,12 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -617,118 +617,90 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       descriptionContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'description',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'description',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       descriptionMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'description',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'description',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'description',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'description',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       idGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'id',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -736,493 +708,284 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idContains(
       String value,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'id',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'id',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'id',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'id',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      idIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'id',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      idIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'id',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementEqualTo(
+      imagesAnyEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementGreaterThan(
+      imagesAnyGreaterThan(
     String value, {
+    bool caseSensitive = true,
     bool include = false,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementLessThan(
+      imagesAnyLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementBetween(
+      imagesAnyBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'images',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'images',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementStartsWith(
+      imagesAnyStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementEndsWith(
+      imagesAnyEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'images',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+      imagesAnyContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'images',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'images',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
+      imagesAnyMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'images',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'images',
-        value: '',
-      ));
-    });
+      isActiveEqualTo(bool value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'isActive',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesElementIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'images',
-        value: '',
-      ));
-    });
+      isarIdIsNull() {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'isarId',
+      value: null,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesLengthEqualTo(int length) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        length,
-        true,
-        length,
-        true,
-      );
-    });
+      isarIdEqualTo(int value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        0,
-        true,
-        0,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        0,
-        false,
-        999999,
-        true,
-      );
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesLengthLessThan(
-    int length, {
+      isarIdGreaterThan(
+    int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        0,
-        true,
-        length,
-        include,
-      );
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesLengthGreaterThan(
-    int length, {
+      isarIdLessThan(
+    int value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        length,
-        include,
-        999999,
-        true,
-      );
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'isarId',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesLengthBetween(
+      isarIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.listLength(
-        r'images',
-        lower,
-        includeLower,
-        upper,
-        includeUpper,
-      );
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'isarId',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isActiveEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isActive',
-        value: value,
-      ));
-    });
+      latitudeGreaterThan(double value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'latitude',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdEqualTo(Id value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'isarId',
-        value: value,
-      ));
-    });
+      latitudeLessThan(double value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'latitude',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdGreaterThan(
-    Id value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'isarId',
-        value: value,
-      ));
-    });
+      latitudeBetween(double lower, double upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'latitude',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdLessThan(
-    Id value, {
-    bool include = false,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'isarId',
-        value: value,
-      ));
-    });
+      longitudeGreaterThan(double value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: false,
+      property: 'longitude',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdBetween(
-    Id lower,
-    Id upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'isarId',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+      longitudeLessThan(double value) {
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: false,
+      property: 'longitude',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      latitudeEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'latitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      latitudeGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'latitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      latitudeLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'latitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      latitudeBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'latitude',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      longitudeEqualTo(
-    double value, {
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'longitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      longitudeGreaterThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'longitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      longitudeLessThan(
-    double value, {
-    bool include = false,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'longitude',
-        value: value,
-        epsilon: epsilon,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      longitudeBetween(
-    double lower,
-    double upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    double epsilon = Query.epsilon,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'longitude',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        epsilon: epsilon,
-      ));
-    });
+      longitudeBetween(double lower, double upper) {
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'longitude',
+      lower: lower,
+      includeLower: false,
+      upper: upper,
+      includeUpper: false,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -1230,65 +993,60 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       titleGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       titleLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       titleBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'title',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'title',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -1296,13 +1054,12 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -1310,119 +1067,91 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       titleContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'title',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'title',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       titleMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'title',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'title',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'title',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'title',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> typeEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'type',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'type',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       typeGreaterThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'type',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'type',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       typeLessThan(
     String value, {
-    bool include = false,
     bool caseSensitive = true,
+    bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'type',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'type',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> typeBetween(
     String lower,
     String upper, {
+    bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
-    bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'type',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'type',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -1430,13 +1159,12 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'type',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.startsWith,
+      property: 'type',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -1444,84 +1172,51 @@ extension ResourcePointQueryFilter
     String value, {
     bool caseSensitive = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'type',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.endsWith,
+      property: 'type',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       typeContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'type',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.contains,
+      property: 'type',
+      value: value,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> typeMatches(
       String pattern,
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'type',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      typeIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'type',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      typeIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'type',
-        value: '',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.matches,
+      property: 'type',
+      value: pattern,
+      caseSensitive: caseSensitive,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       updatedAtIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'updatedAt',
-      ));
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      updatedAtIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'updatedAt',
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.isNull,
+      property: 'updatedAt',
+      value: null,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
       updatedAtEqualTo(DateTime? value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.eq,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -1529,13 +1224,12 @@ extension ResourcePointQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.gt,
+      include: include,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -1543,13 +1237,12 @@ extension ResourcePointQueryFilter
     DateTime? value, {
     bool include = false,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'updatedAt',
-        value: value,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition(
+      type: ConditionType.lt,
+      include: include,
+      property: 'updatedAt',
+      value: value,
+    ));
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
@@ -1559,442 +1252,315 @@ extension ResourcePointQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'updatedAt',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-      ));
-    });
+    return addFilterConditionInternal(FilterCondition.between(
+      property: 'updatedAt',
+      lower: lower,
+      includeLower: includeLower,
+      upper: upper,
+      includeUpper: includeUpper,
+    ));
   }
 }
-
-extension ResourcePointQueryObject
-    on QueryBuilder<ResourcePoint, ResourcePoint, QFilterCondition> {}
 
 extension ResourcePointQueryLinks
     on QueryBuilder<ResourcePoint, ResourcePoint, QFilterCondition> {}
 
-extension ResourcePointQuerySortBy
+extension ResourcePointQueryWhereSortBy
     on QueryBuilder<ResourcePoint, ResourcePoint, QSortBy> {
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.asc);
-    });
+    return addSortByInternal('createdAt', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       sortByCreatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.desc);
-    });
+    return addSortByInternal('createdAt', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByCreatedBy() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.asc);
-    });
+    return addSortByInternal('createdBy', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       sortByCreatedByDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.desc);
-    });
+    return addSortByInternal('createdBy', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByDescription() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
-    });
+    return addSortByInternal('description', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       sortByDescriptionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
-    });
+    return addSortByInternal('description', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
+    return addSortByInternal('id', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
+    return addSortByInternal('id', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByIsActive() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isActive', Sort.asc);
-    });
+    return addSortByInternal('isActive', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       sortByIsActiveDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isActive', Sort.desc);
-    });
+    return addSortByInternal('isActive', Sort.desc);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByIsarId() {
+    return addSortByInternal('isarId', Sort.asc);
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByIsarIdDesc() {
+    return addSortByInternal('isarId', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByLatitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'latitude', Sort.asc);
-    });
+    return addSortByInternal('latitude', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       sortByLatitudeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'latitude', Sort.desc);
-    });
+    return addSortByInternal('latitude', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByLongitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'longitude', Sort.asc);
-    });
+    return addSortByInternal('longitude', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       sortByLongitudeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'longitude', Sort.desc);
-    });
+    return addSortByInternal('longitude', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByTitle() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.asc);
-    });
+    return addSortByInternal('title', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByTitleDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.desc);
-    });
+    return addSortByInternal('title', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByType() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'type', Sort.asc);
-    });
+    return addSortByInternal('type', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByTypeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'type', Sort.desc);
-    });
+    return addSortByInternal('type', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> sortByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.asc);
-    });
+    return addSortByInternal('updatedAt', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       sortByUpdatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.desc);
-    });
+    return addSortByInternal('updatedAt', Sort.desc);
   }
 }
 
-extension ResourcePointQuerySortThenBy
+extension ResourcePointQueryWhereSortThenBy
     on QueryBuilder<ResourcePoint, ResourcePoint, QSortThenBy> {
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.asc);
-    });
+    return addSortByInternal('createdAt', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       thenByCreatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdAt', Sort.desc);
-    });
+    return addSortByInternal('createdAt', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByCreatedBy() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.asc);
-    });
+    return addSortByInternal('createdBy', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       thenByCreatedByDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'createdBy', Sort.desc);
-    });
+    return addSortByInternal('createdBy', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByDescription() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.asc);
-    });
+    return addSortByInternal('description', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       thenByDescriptionDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'description', Sort.desc);
-    });
+    return addSortByInternal('description', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenById() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.asc);
-    });
+    return addSortByInternal('id', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'id', Sort.desc);
-    });
+    return addSortByInternal('id', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByIsActive() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isActive', Sort.asc);
-    });
+    return addSortByInternal('isActive', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       thenByIsActiveDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isActive', Sort.desc);
-    });
+    return addSortByInternal('isActive', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByIsarId() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isarId', Sort.asc);
-    });
+    return addSortByInternal('isarId', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByIsarIdDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'isarId', Sort.desc);
-    });
+    return addSortByInternal('isarId', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByLatitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'latitude', Sort.asc);
-    });
+    return addSortByInternal('latitude', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       thenByLatitudeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'latitude', Sort.desc);
-    });
+    return addSortByInternal('latitude', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByLongitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'longitude', Sort.asc);
-    });
+    return addSortByInternal('longitude', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       thenByLongitudeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'longitude', Sort.desc);
-    });
+    return addSortByInternal('longitude', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByTitle() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.asc);
-    });
+    return addSortByInternal('title', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByTitleDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'title', Sort.desc);
-    });
+    return addSortByInternal('title', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByType() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'type', Sort.asc);
-    });
+    return addSortByInternal('type', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByTypeDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'type', Sort.desc);
-    });
+    return addSortByInternal('type', Sort.desc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy> thenByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.asc);
-    });
+    return addSortByInternal('updatedAt', Sort.asc);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
       thenByUpdatedAtDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'updatedAt', Sort.desc);
-    });
+    return addSortByInternal('updatedAt', Sort.desc);
   }
 }
 
 extension ResourcePointQueryWhereDistinct
     on QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> {
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByCreatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createdAt');
-    });
+    return addDistinctByInternal('createdAt');
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByCreatedBy(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'createdBy', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('createdBy', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByDescription(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'description', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('description', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctById(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByImages() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'images');
-    });
+    return addDistinctByInternal('id', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByIsActive() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'isActive');
-    });
+    return addDistinctByInternal('isActive');
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByIsarId() {
+    return addDistinctByInternal('isarId');
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByLatitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'latitude');
-    });
+    return addDistinctByInternal('latitude');
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByLongitude() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'longitude');
-    });
+    return addDistinctByInternal('longitude');
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByTitle(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('title', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByType(
       {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'type', caseSensitive: caseSensitive);
-    });
+    return addDistinctByInternal('type', caseSensitive: caseSensitive);
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByUpdatedAt() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'updatedAt');
-    });
+    return addDistinctByInternal('updatedAt');
   }
 }
 
 extension ResourcePointQueryProperty
     on QueryBuilder<ResourcePoint, ResourcePoint, QQueryProperty> {
-  QueryBuilder<ResourcePoint, int, QQueryOperations> isarIdProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isarId');
-    });
-  }
-
   QueryBuilder<ResourcePoint, DateTime?, QQueryOperations> createdAtProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'createdAt');
-    });
+    return addPropertyNameInternal('createdAt');
   }
 
   QueryBuilder<ResourcePoint, String?, QQueryOperations> createdByProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'createdBy');
-    });
+    return addPropertyNameInternal('createdBy');
   }
 
   QueryBuilder<ResourcePoint, String?, QQueryOperations> descriptionProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'description');
-    });
+    return addPropertyNameInternal('description');
   }
 
   QueryBuilder<ResourcePoint, String, QQueryOperations> idProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'id');
-    });
+    return addPropertyNameInternal('id');
   }
 
   QueryBuilder<ResourcePoint, List<String>, QQueryOperations> imagesProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'images');
-    });
+    return addPropertyNameInternal('images');
   }
 
   QueryBuilder<ResourcePoint, bool, QQueryOperations> isActiveProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'isActive');
-    });
+    return addPropertyNameInternal('isActive');
+  }
+
+  QueryBuilder<ResourcePoint, int?, QQueryOperations> isarIdProperty() {
+    return addPropertyNameInternal('isarId');
   }
 
   QueryBuilder<ResourcePoint, double, QQueryOperations> latitudeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'latitude');
-    });
+    return addPropertyNameInternal('latitude');
   }
 
   QueryBuilder<ResourcePoint, double, QQueryOperations> longitudeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'longitude');
-    });
+    return addPropertyNameInternal('longitude');
   }
 
   QueryBuilder<ResourcePoint, String, QQueryOperations> titleProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'title');
-    });
+    return addPropertyNameInternal('title');
   }
 
   QueryBuilder<ResourcePoint, String, QQueryOperations> typeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'type');
-    });
+    return addPropertyNameInternal('type');
   }
 
   QueryBuilder<ResourcePoint, DateTime?, QQueryOperations> updatedAtProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'updatedAt');
-    });
+    return addPropertyNameInternal('updatedAt');
   }
 }
 

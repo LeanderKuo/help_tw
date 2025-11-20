@@ -6,7 +6,7 @@ part 'task_model.freezed.dart';
 part 'task_model.g.dart';
 
 @freezed
-@Collection(ignore: {'copyWith'})
+@Collection()
 class TaskModel with _$TaskModel {
   const TaskModel._();
 
@@ -24,10 +24,9 @@ class TaskModel with _$TaskModel {
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
     @Default(false) bool isDraft, // Local only flag
+    @JsonKey(ignore: true) @Id() int? isarId,
   }) = _TaskModel;
 
   factory TaskModel.fromJson(Map<String, dynamic> json) =>
       _$TaskModelFromJson(json);
-
-  Id get isarId => fastHash(id);
 }
