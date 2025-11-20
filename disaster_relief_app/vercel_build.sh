@@ -2,7 +2,7 @@
 set -e
 
 # Install a pinned Flutter SDK and build the web bundle for Vercel.
-V=3.24.3
+V=3.38.1
 FH="$PWD/.flutter"
 
 # Try to install deps when a package manager exists; otherwise continue.
