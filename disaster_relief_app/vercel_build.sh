@@ -29,4 +29,13 @@ git config --global --add safe.directory "$FH" || true
 
 flutter config --no-analytics
 flutter pub get
-flutter build web --release
+
+# Ensure Supabase env vars exist before building.
+if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
+  echo "Missing SUPABASE_URL or SUPABASE_ANON_KEY environment variables for build." >&2
+  exit 1
+fi
+
+flutter build web --release \
+  --dart-define=SUPABASE_URL="$SUPABASE_URL" \
+  --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"

@@ -23,11 +23,12 @@ Since you have used Vercel before, this is the easiest way to share your app.
     - Import your `help_tw` repository.
 3.  **Configure Build Settings**:
     - **Framework Preset**: Select `Flutter` (if available) or `Other`.
-    - **Build Command**: `flutter build web --release`
+    - **Build Command**: `bash vercel_build.sh`
     - **Output Directory**: `build/web`
-    - **Install Command**: `flutter pub get`
-4.  **Environment Variables**:
-    - Add any secrets if you have them (e.g., Supabase keys if you stored them in `.env`, though currently they are in code).
+    - **Install Command**: `flutter pub get` (not strictly needed because the script runs it, but fine to leave)
+4.  **Environment Variables** (All Environments):
+    - `SUPABASE_URL` = your Supabase project URL
+    - `SUPABASE_ANON_KEY` = your Supabase anon key
 5.  **Deploy**: Click **Deploy**.
 
 ### Troubleshooting Web Build
