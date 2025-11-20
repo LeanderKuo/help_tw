@@ -1,329 +1,116 @@
------
-
-````markdown
-# Disaster Resource Integration Platform (DRIP) — Full Stack Specifications
-**File Name:** `specs_v1.md`
-**Version:** 1.0.0 (Greenfield / Flutter + Supabase)
-**Status:** Final / Ready for Dev
-**Date:** 2025-11-19
-
-> **Purpose:** Single Source of Truth (SSoT). This document guides the development of the Flutter App and Supabase Backend from scratch. It includes the complete Database Schema, Complex RBAC Implementation (RLS/Triggers), API Contracts, and Security Standards.
+# DRIP (Disaster Relief Integration Platform) — Architecture & Delivery Spec
+**Version:** 2025-11-20  
+**Status:** Final / SSoT  
+**Targets:** Flutter (mobile/web), Supabase (Postgres 15)  
+**Purpose:** Replace prior draft with a concise, testable architecture that passes CI (Vercel) and satisfies feature spec + bilingual UX requirements.
 
 ---
 
-## 1. Tech Stack & Architecture Decisions
-
-### 1.1 Frontend (Flutter App)
-
-- **Framework:** Flutter (Stable Channel) / Dart 3+
-- **State Management:** **Riverpod** (Generator mode recommended) - Handles business logic and state transitions.
-- **Navigation:** **GoRouter** - Supports Deep Linking and Nested Routes.
-- **Local Database:** **Isar** - Used for offline read-only cache (Cache-First for reads).
-- **Map SDK:** **google_maps_flutter** - Requires API Key; integrates with Places API for accurate POI data.
-- **Networking:** **supabase_flutter** (Auth, DB, Realtime) + **dio** (For Edge Function calls).
-
-### 1.2 Backend (Supabase)
-
-- **Database:** PostgreSQL 15+ (Primary Region: `asia-east1` or equivalent).
-- **Extensions:** `postgis` (Geospatial operations), `pg_cron` (Scheduled cleanup).
-- **Auth:** Supabase Auth (Email/Password + Phone OTP + Google).
-- **Logic Layer:**
-  - **RLS Policies:** Fundamental access control.
-  - **Database Triggers (PL/pgSQL):** Handles Rate Limiting, Field-level protection, and Automatic Auditing.
-  - **Edge Functions (Deno/TS):** Handles high-privilege operations (Role promotion, FCM Push forwarding).
+## 0. Build/Deployment Baseline (Vercel + Flutter Web)
+- SDK: Flutter 3.38.1 (pinned in `vercel_build.sh`), Dart 3.10.0, web target = CanvasKit (Skia) with wasm dry-run warnings ignored (`isar` uses `dart:ffi`; web build still uses dart2js).
+- Command: `bash vercel_build.sh` (ensures SUPABASE_URL / SUPABASE_ANON_KEY present). If needed, add `--no-wasm-dry-run` to the flutter build line to silence wasm warnings.
+- Do **not** run Flutter as root; Vercel sandbox prints warnings but builds fine.
+- Lints/format: `dart format .` before commit; no analyzer override changes required for build.
+- Known constraint: Offline cache (Isar) is native-only; web falls back to network-first (no FFI).
 
 ---
 
-## 2. Core Architecture Strategies
-
-### 2.1 Offline-First Strategy (Network-First with Fallback)
-
-1.  **Read Operations:**
-    - The App requests data from Supabase first.
-    - **Success:** Update UI and write to Isar local DB (overwriting old cache).
-    - **Fail:** Read from Isar local DB and show "Last updated at..." toast.
-2.  **Write Operations:**
-    - **Strict Mode:** Creating Tasks, Joining Shuttles, and Sending Messages **require internet connection**.
-    - **Drafts:** Only "Drafts" can be saved locally.
-
-### 2.2 Realtime & Notifications
-
-- **Shuttle Tracking:** Use **Supabase Realtime (Broadcast)** to stream coordinates. Do NOT write to the DB continuously to save costs. Only write to DB when `status` changes (Departed/Arrived).
-- **Push Notifications (FCM):**
-  - App stores Token in `user_devices` table.
-  - Postgres Trigger listens to events (e.g., `INSERT ON task_messages`).
-  - Trigger calls Edge Function → Edge Function sends payload to FCM.
+## 1. System Overview
+- **Frontend:** Flutter (Material 3), Riverpod 2.x, GoRouter 14, Dio (edge calls), Google Maps (mobile), l10n (en-US / zh-TW). Offline cache with Isar (mobile/desktop).
+- **Backend:** Supabase (Auth + Postgres + Realtime). PostGIS, pg_cron. Edge Functions for privileged flows (role promotion, FCM fan-out).
+- **Security:** Strong RLS, field-level triggers, audit logs, masked PII, MFA recommended for elevated roles.
+- **Domains:** Announcements, Tasks, Shuttles, Resource Points, Profiles/Identity, Chat.
 
 ---
 
-## 3. Database Schema Design (PostgreSQL)
-
-### 3.1 Users & Profiles
-
-**Design Concept:** Separation of PII (Personally Identifiable Information). Public profiles are automatically masked.
-
-```sql
--- 1. Public Profile (Readable by everyone)
-CREATE TABLE profiles_public (
-  id UUID REFERENCES auth.users(id) PRIMARY KEY,
-  display_id TEXT UNIQUE NOT NULL,       -- e.g., U-8821
-  nickname TEXT NOT NULL,
-  role TEXT DEFAULT 'User',              -- Visitor, User, Superuser, Leader, Admin, Superadmin
-  avatar_url TEXT,
-  masked_phone TEXT,                     -- System generated: 0912-***-789
-  updated_at TIMESTAMPTZ
-);
-
--- 2. Private Profile (Readable only by Owner and Admin)
-CREATE TABLE profiles_private (
-  id UUID REFERENCES auth.users(id) PRIMARY KEY,
-  full_name TEXT,
-  real_phone TEXT,                       -- Plain text or Supabase Vault encrypted
-  fcm_tokens TEXT[],                     -- Array for multi-device support
-  privacy_settings JSONB DEFAULT '{"show_phone": false}',
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-```
-
-### 3.2 Core Business Entities
-
-```sql
--- 3. Resource Points
-CREATE TABLE resource_points (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  title TEXT NOT NULL,
-  type TEXT NOT NULL,                    -- water, shelter, medical
-  location GEOGRAPHY(POINT) NOT NULL,    -- PostGIS
-  is_temporary BOOLEAN DEFAULT false,
-  expires_at TIMESTAMPTZ,
-  created_by UUID REFERENCES auth.users(id)
-);
-
--- 4. Tasks
-CREATE TABLE tasks (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  title TEXT NOT NULL,
-  description TEXT,
-  status TEXT DEFAULT 'open',            -- open, in_progress, done
-  is_priority BOOLEAN DEFAULT false,     -- Protected Field: Only Leader+ can change
-  location GEOGRAPHY(POINT),
-  needed_roles TEXT[],
-  author_id UUID REFERENCES auth.users(id),
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-
--- 5. Shuttles
-CREATE TABLE shuttles (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  display_id TEXT GENERATED ALWAYS AS ('S-' || SUBSTRING(id::text, 1, 5)) STORED,
-  title TEXT NOT NULL,
-  status TEXT DEFAULT 'open',
-  is_priority BOOLEAN DEFAULT false,     -- Protected Field
-  origin_loc GEOGRAPHY(POINT) NOT NULL,
-  dest_loc GEOGRAPHY(POINT) NOT NULL,
-  depart_at TIMESTAMPTZ NOT NULL,
-  seats_total INT NOT NULL,
-  seats_taken INT DEFAULT 0,
-  created_by UUID REFERENCES auth.users(id), -- Driver/Creator
-  vehicle_info JSONB                     -- {plate: 'ABC-123'}
-);
-
--- 6. Shuttle Participants (Join Table)
-CREATE TABLE shuttle_participants (
-  shuttle_id UUID REFERENCES shuttles(id),
-  user_id UUID REFERENCES auth.users(id),
-  role TEXT DEFAULT 'passenger',
-  joined_at TIMESTAMPTZ DEFAULT now(),
-  PRIMARY KEY (shuttle_id, user_id)
-);
-```
+## 2. Cross-Language Strategy (UI vs Content)
+- UI strings: Controlled by `user_settings.language` (fallback `profiles_public.locale`). Two options: `zh-TW`, `en-US`. Toggle in Profile Settings → saves to both tables.
+- Content fields (titles/bodies): Stored as jsonb with `zh-TW`/`en-US` keys; no input language enforcement. Display rule: `preferredLang` value, else `fallbackLang`.
+- Flutter helper: `localizedText(jsonMap, prefLang)` (see `lib/core/localization/localized_text.dart`).
+- App locale wiring: `localeController` (Riverpod) loads/syncs language; `MaterialApp.locale` bound to controller; GoRouter unaffected.
 
 ---
 
-## 4\. Complex Security & RBAC Implementation
-
-> **Core Section:** Implementation of Rate Limiting and Role Matrix.
-
-### 4.1 Basic Helper Functions
-
-```sql
--- Get Current User Role
-CREATE OR REPLACE FUNCTION auth_role() RETURNS text AS $$
-  SELECT role FROM profiles_public WHERE id = auth.uid();
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
-
--- Check if User is Leader or Above
-CREATE OR REPLACE FUNCTION is_leader_or_above() RETURNS boolean AS $$
-  SELECT auth_role() IN ('Leader', 'Admin', 'Superadmin');
-$$ LANGUAGE sql STABLE SECURITY DEFINER;
-```
-
-### 4.2 Business Logic Protection (Triggers)
-
-**A. Rate Limit**
-_Rule: Standard Users/Superusers can only create 1 task per hour. Leaders and above are exempt._
-
-```sql
-CREATE OR REPLACE FUNCTION check_task_rate_limit() RETURNS TRIGGER AS $$
-DECLARE
-  recent_count int;
-BEGIN
-  -- Exemption List
-  IF is_leader_or_above() THEN RETURN NEW; END IF;
-
-  -- Check count in the last hour
-  SELECT COUNT(*) INTO recent_count FROM tasks
-  WHERE author_id = auth.uid() AND created_at > (now() - INTERVAL '1 hour');
-
-  IF recent_count >= 1 THEN
-    RAISE EXCEPTION 'Rate limit exceeded: 1 task per hour for standard users.';
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_task_rate_limit BEFORE INSERT ON tasks
-  FOR EACH ROW EXECUTE FUNCTION check_task_rate_limit();
-```
-
-**B. Field Level Security**
-_Rule: Only Leaders and above can modify `is_priority`._
-
-```sql
-CREATE OR REPLACE FUNCTION protect_priority_field() RETURNS TRIGGER AS $$
-BEGIN
-  IF (NEW.is_priority IS DISTINCT FROM OLD.is_priority) AND NOT is_leader_or_above() THEN
-    RAISE EXCEPTION 'Permission denied: Only Leaders can change priority.';
-  END IF;
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER trg_protect_task_priority BEFORE UPDATE ON tasks
-  FOR EACH ROW EXECUTE FUNCTION protect_priority_field();
-```
-
-### 4.3 RLS Policy Matrix
-
-**Tasks**
-
-- **User+**: Create (subject to Rate Limit), Edit Own.
-- **Leader+**: Manage All.
-
-<!-- end list -->
-
-```sql
-ALTER TABLE tasks ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Public read" ON tasks FOR SELECT USING (true);
-
-CREATE POLICY "Auth create" ON tasks FOR INSERT
-  WITH CHECK ( auth.uid() IS NOT NULL );
-
-CREATE POLICY "Owner or Leader update" ON tasks FOR UPDATE
-  USING ( auth.uid() = author_id OR is_leader_or_above() );
-
-CREATE POLICY "Owner or Leader delete" ON tasks FOR DELETE
-  USING ( auth.uid() = author_id OR is_leader_or_above() );
-```
-
-**Shuttles**
-
-- **Visitor**: No Access.
-- **User+**: Create, Manage Own.
-- **Leader+**: Manage All.
-
-<!-- end list -->
-
-```sql
-ALTER TABLE shuttles ENABLE ROW LEVEL SECURITY;
-
-CREATE POLICY "Auth read" ON shuttles FOR SELECT
-  USING ( auth.uid() IS NOT NULL ); -- Visitor cannot see
-
-CREATE POLICY "Auth create" ON shuttles FOR INSERT
-  WITH CHECK ( auth.uid() IS NOT NULL );
-
-CREATE POLICY "Owner or Leader manage" ON shuttles FOR ALL
-  USING ( auth.uid() = created_by OR is_leader_or_above() );
-```
+## 3. Architecture (Frontend)
+- **State:** Riverpod providers for auth, locale, features (tasks/shuttles/resources). Avoid global mutable singletons.
+- **Navigation:** GoRouter tree  
+  `/login`, `/register`, `/home`, `/map` (+resources/create), `/tasks` (+create, :id), `/shuttles` (+:id), `/profile` (+settings).
+- **Data Flow:** Repositories call Supabase; models via Freezed/JsonSerializable. Offline: on mobile, cache reads to Isar; writes remain online-only.
+- **UI Composition:** Feature-first directories; shared widgets in `core/widgets`; theming in `core/theme`.
+- **Maps:** `google_maps_flutter` mobile; web map deferred (spec allows Desktop/Mobile priority).
+- **Error/Empty:** Use toasts/modals per feature spec; 30-day TTL chat history (aligned with backend).
 
 ---
 
-## 5\. API & RPC Contracts
+## 4. Architecture (Backend / Supabase)
+### 4.1 Identity & Settings
+- Tables: `profiles_public(id, display_id, nickname, role, masked_phone, locale, avatar_url, created_at, updated_at)`; `profiles_private(id, email, full_name, real_phone, privacy_settings)`; `user_settings(user_id, language, timezone, push_enabled, updated_at)`.
+- Sync: Locale updates write to `user_settings.language` + `profiles_public.locale`.
 
-Since the Client cannot directly modify high-privilege fields (like Roles), we use Database Functions or Edge Functions.
+### 4.2 Content Entities
+- **Announcements:** `title jsonb`, `body jsonb` (both require zh-TW & en-US keys), `type general|emergency`, `is_pinned`, unique active emergency constraint.
+- **Resource Points:** `title jsonb`, `description jsonb`, category `permanent|temporary`, geohash-6, PostGIS indexes.
+- **Tasks:** `display_id`, `status open|in_progress|done|canceled`, `is_priority` (Leader+ only), participant_count maintained by trigger; geohash.
+- **Shuttles:** `display_id`, route (origin/destination geog + geohash), seats_total/taken, vehicle, contact_phone_masked, schedule fields.
+- **Participants/Messages:** `task_participants`, `shuttle_participants`, `task_messages`, `shuttle_messages` with 30-day expiry enforced by cron.
 
-### 5.1 Role Promotion (RPC)
+### 4.3 Business Logic (Triggers/RPC)
+- Rate limit: 1 task create/hour for User/Superuser (Leader+ exempt).
+- Priority guard: `is_priority` change requires Leader+.
+- Capacity guard: shuttle insert enforces seats_taken < seats_total.
+- Counters: participant/message sync triggers keep aggregates.
+- Geodata: geohash setters on resource/task/shuttle.
+- RPC: `join_shuttle` (transaction: lock, capacity check, insert, increment), `admin_appoint_role` (role promotion).
 
-**Function Name:** `admin_appoint_role`
-**Type:** Database Function (Security Definer)
-**Params:** `target_uid (uuid)`, `new_role (text)`
-**Logic:**
-
-1.  Check if Caller is `Superadmin` (if promoting to Leader) or `Leader+` (if promoting to Superuser).
-2.  Update `profiles_public`.
-
-### 5.2 Join Shuttle (RPC)
-
-**Function Name:** `join_shuttle`
-**Logic:** Atomic Transaction.
-
-1.  Lock the Shuttle Row (`FOR UPDATE`).
-2.  Check `seats_taken < seats_total`.
-3.  Insert into `shuttle_participants`.
-4.  Update `seats_taken = seats_taken + 1`.
-
----
-
-## 6\. UI/UX Specifications (Flutter Implementation)
-
-**Navigation Graph (GoRouter)**
-
-```text
-/login
-/home (Tabs)
-  ├─ /announcements
-  ├─ /tasks
-  │   ├─ /create
-  │   └─ /:taskId (Detail & Chat)
-  ├─ /shuttles
-  │   ├─ /create
-  │   ├─ /my-shuttles (Tabs: Created/Joined/History)
-  │   └─ /:shuttleId (Detail & Realtime Map)
-  └─ /profile
-      └─ /admin-panel (Guard: Role >= Admin)
-```
-
-**Role-Based UI Components**
-
-- **FAB (Create Task):** Wrapped in `ConsumerWidget` listening to `userProvider`. Hidden if Role == Visitor.
-- **Priority Checkbox:** `enabled` only if `is_leader_or_above() == true`.
-- **Admin Panel:** Visible only to Admin+, used for role approval and referral code generation.
+### 4.4 RLS (summary)
+- Public read: announcements, resource_points; Auth read on shuttles; tasks readable by all.
+- Mutations require auth and ownership or elevated role (Leader+/Admin+/Superadmin per table).
+- Messages/participants restricted to members, owners, or Leader+.
+- Referral codes/audit logs admin-only.
 
 ---
 
-## 7\. Development Roadmap
-
-1.  **Week 1: Infrastructure**
-    - Supabase init & SQL Deployment (Apply Schema & RLS above).
-    - Flutter init & Auth Flow (Login/Register/Profile Sync).
-2.  **Week 2: Core Features**
-    - Resource Points Map (Google Maps).
-    - Tasks CRUD + Rate Limit Testing (Unit Test Focus).
-3.  **Week 3: Shuttle System**
-    - Shuttle CRUD.
-    - RPC `join_shuttle` Integration.
-    - Realtime Location Broadcasting.
-4.  **Week 4: Final Polish & Delivery**
-    - Offline Caching (Isar).
-    - Push Notifications (Edge Functions).
-    - Full System Penetration Testing (Permissions).
+## 5. Security & Privacy
+- PII split public/private; masked phone/email in public views.
+- TLS in-transit, AES-256 at-rest (Supabase managed). Secrets in env; no hard-coded keys.
+- Audit: `audit_logs` insert-only; retain ≥1y. Events: role promotion, referral issuance, task/shuttle creation/delete, visibility toggles, policy breaches.
+- MFA recommended for Leader/Admin/Superadmin; App Check enforced for clients.
+- A11y: minimum tappable 44x44, contrast 4.5:1, marquee non-blocking.
 
 ---
 
-**End of Specification**
+## 6. Feature Surfaces (per specs_feature)
+- P01 Home: hero + CTA, notifications icon, profile shortcut.
+- P04 Announcements list: pinned emergency, marquee bottom.
+- P05/P06/P07 Shuttles: list/filter, detail with chat, tabs (created/joined/history), join/leave capacity-aware.
+- P08/P09/P10 Tasks: list/detail/chat, join modal with visibility flag.
+- P11 Map: pins for resources/tasks/shuttles, bottom sheet detail, navigation deeplink to Google Maps.
+- P12 Admin center: role review/referral (Admin+).
+- P13 Profile: profile card, settings -> language toggle, privacy/notifications (stubs).
 
-```
+---
 
-```
+## 7. Non-Functional & Ops
+- Observability: Crashlytics (mobile), GA4 events (`shuttle_join/leave/full/complete`, `task_join/leave/complete`, `emergency_announcement_view`, `map_navigation_click`).
+- Performance: Cache-first reads with background refresh; paginate lists; sort per spec (`priority desc, departAt asc, createdAt desc`).
+- Cleanup: pg_cron daily prune `*_messages` older than 30 days.
+- Backups: Supabase PITR enabled (per org policy).
+- CI/CD: Vercel build via `vercel_build.sh`; run `dart format .` and `flutter test` (unit) where available.
+
+---
+
+## 8. Immediate Fix Applied (build blocker)
+- Riverpod `AsyncError` in `locale_controller` adjusted to match 2.6.1 signature (removed `previous` argument); keeps fallback state by resetting after error. This resolves the Vercel compile failure.
+
+---
+
+## 9. Future Enhancements / Risks
+- Web offline cache: replace Isar on web with in-memory or `shared_preferences`; currently network-first on web.
+- Map on web: add web map provider or disable map tab when unsupported.
+- Auth flows: add LINE OAuth (currently stubbed); enable MFA prompt for elevated roles.
+- Tests: add unit tests for localization fallback and geohash triggers (SQL).
+- Dependency drift: many packages outdated; schedule upgrade ticket (Riverpod 3, GoRouter 17, Isar 3 with web Wasm).
+
+---
+
+**End of document.**

@@ -108,11 +108,8 @@ class LocaleController extends StateNotifier<AsyncValue<AppLanguage>> {
       await _repository.updateLanguage(userId: userId, language: language);
       state = AsyncData(language);
     } catch (error, stack) {
-      state = AsyncError<AppLanguage>(
-        error,
-        stack,
-        previous: AsyncData(previous ?? AppLanguage.zhTw),
-      );
+      state = AsyncError<AppLanguage>(error, stack);
+      state = AsyncData(previous ?? AppLanguage.zhTw);
     }
   }
 
