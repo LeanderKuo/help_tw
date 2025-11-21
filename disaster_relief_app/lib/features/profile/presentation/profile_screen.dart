@@ -8,6 +8,7 @@ import '../../auth/presentation/auth_controller.dart';
 import '../../auth/data/auth_repository.dart';
 import '../../../core/auth/role.dart';
 import '../../../core/auth/role_providers.dart';
+import 'role_upgrade_dialog.dart';
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -21,8 +22,12 @@ class ProfileScreen extends ConsumerWidget {
     final profile = profileAsync.valueOrNull;
     final role = roleAsync.valueOrNull ?? AppRole.user;
     final rawDisplayName = profile?.nickname ?? user?.email ?? l10n.noEmail;
-    final displayName = rawDisplayName.trim().isEmpty ? l10n.noEmail : rawDisplayName;
-    final displayInitial = displayName.isNotEmpty ? displayName[0].toUpperCase() : 'U';
+    final displayName = rawDisplayName.trim().isEmpty
+        ? l10n.noEmail
+        : rawDisplayName;
+    final displayInitial = displayName.isNotEmpty
+        ? displayName[0].toUpperCase()
+        : 'U';
 
     return Scaffold(
       appBar: AppBar(
@@ -83,7 +88,10 @@ class ProfileScreen extends ConsumerWidget {
                       ),
                       child: Text(
                         role.label,
-                        style: const TextStyle(fontSize: 12, color: Colors.white),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.white,
+                        ),
                       ),
                     ),
                   ],
@@ -118,6 +126,50 @@ class ProfileScreen extends ConsumerWidget {
                       ],
                     ),
                     const SizedBox(height: 16),
+                    if (role.rank < AppRole.root.rank)
+                      _buildInfoCard(
+                        context,
+                        title: 'Roles & permissions',
+                        children: [
+                          if (!role.isAdminOrAbove)
+                            _buildActionTile(
+                              icon: Icons.upgrade,
+                              label: 'Request role upgrade',
+                              onTap: () async {
+                                await showDialog<bool>(
+                                  context: context,
+                                  builder: (_) =>
+                                      RoleUpgradeDialog(currentRole: role),
+                                );
+                              },
+                            ),
+                          if (role.isLeaderOrAbove)
+                            Column(
+                              children: [
+                                const Divider(),
+                                _buildActionTile(
+                                  icon: Icons.verified,
+                                  label: 'Apply for Admin (referral)',
+                                  onTap: () =>
+                                      context.push('/profile/apply-admin'),
+                                ),
+                              ],
+                            ),
+                          if (role.isAdminOrAbove)
+                            Column(
+                              children: [
+                                const Divider(),
+                                _buildActionTile(
+                                  icon: Icons.admin_panel_settings_outlined,
+                                  label: 'Open Admin Panel',
+                                  onTap: () => context.push('/admin'),
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
+                    if (role.rank < AppRole.root.rank)
+                      const SizedBox(height: 16),
                     _buildInfoCard(
                       context,
                       title: l10n.appSettingsSection,
@@ -292,7 +344,11 @@ Widget _buildActionTile({
   );
 }
 
-void _showLogoutDialog(BuildContext context, WidgetRef ref, AppLocalizations l10n) {
+void _showLogoutDialog(
+  BuildContext context,
+  WidgetRef ref,
+  AppLocalizations l10n,
+) {
   showDialog(
     context: context,
     builder: (context) => AlertDialog(

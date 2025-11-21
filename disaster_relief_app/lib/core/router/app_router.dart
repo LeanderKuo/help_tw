@@ -5,9 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../features/auth/presentation/splash_screen.dart';
 import '../../features/auth/presentation/login_screen.dart';
 import '../../features/auth/presentation/register_screen.dart';
+import '../../features/auth/presentation/phone_login_screen.dart';
 import '../../features/announcements/presentation/home_screen.dart';
 import '../../features/announcements/presentation/announcement_list_screen.dart';
 import '../../features/profile/presentation/profile_screen.dart';
+import '../../features/profile/presentation/apply_admin_screen.dart';
 import '../../features/map/presentation/map_screen.dart';
 import '../../features/resources/presentation/resource_list_screen.dart';
 import '../../features/resources/presentation/create_resource_screen.dart';
@@ -19,6 +21,7 @@ import '../../features/shuttles/presentation/shuttle_list_screen.dart';
 import '../../features/shuttles/presentation/create_shuttle_screen.dart';
 import '../../features/shuttles/presentation/shuttle_detail_screen.dart';
 import '../../features/shuttles/presentation/my_shuttles_screen.dart';
+import '../../features/admin/presentation/admin_panel_screen.dart';
 import '../../models/shuttle_model.dart';
 import '../../models/task_model.dart';
 import '../../features/auth/data/auth_repository.dart';
@@ -36,6 +39,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
       GoRoute(path: '/login', builder: (context, state) => const LoginScreen()),
+      GoRoute(
+        path: '/login/phone',
+        builder: (context, state) => const PhoneLoginScreen(),
+      ),
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterScreen(),
@@ -134,7 +141,15 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: 'settings',
                 builder: (context, state) => const SettingsScreen(),
               ),
+              GoRoute(
+                path: 'apply-admin',
+                builder: (context, state) => const ApplyAdminScreen(),
+              ),
             ],
+          ),
+          GoRoute(
+            path: '/admin',
+            builder: (context, state) => const AdminPanelScreen(),
           ),
         ],
       ),

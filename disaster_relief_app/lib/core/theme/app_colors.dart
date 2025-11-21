@@ -20,7 +20,9 @@ class AppColors {
   static const Color backgroundLight = Color(0xFFF5F5F5); // Material Grey 100
   static const Color surfaceLight = Colors.white;
   static const Color textPrimaryLight = Color(0xFF212121); // Material Grey 900
-  static const Color textSecondaryLight = Color(0xFF757575); // Material Grey 600
+  static const Color textSecondaryLight = Color(
+    0xFF757575,
+  ); // Material Grey 600
   static const Color dividerLight = Color(0xFFE0E0E0); // Material Grey 300
 
   // Neutral Colors - Dark Theme

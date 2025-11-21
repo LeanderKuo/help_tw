@@ -3,12 +3,14 @@ import '../../../models/resource_point.dart';
 import '../data/resource_repository.dart';
 
 final resourceControllerProvider =
-    StateNotifierProvider<ResourceController, AsyncValue<List<ResourcePoint>>>(
-        (ref) {
-  return ResourceController(ref.watch(resourceRepositoryProvider));
-});
+    StateNotifierProvider<ResourceController, AsyncValue<List<ResourcePoint>>>((
+      ref,
+    ) {
+      return ResourceController(ref.watch(resourceRepositoryProvider));
+    });
 
-class ResourceController extends StateNotifier<AsyncValue<List<ResourcePoint>>> {
+class ResourceController
+    extends StateNotifier<AsyncValue<List<ResourcePoint>>> {
   final ResourceRepository _repository;
 
   ResourceController(this._repository) : super(const AsyncValue.loading()) {
@@ -25,15 +27,15 @@ class ResourceController extends StateNotifier<AsyncValue<List<ResourcePoint>>> 
     await _repository.createResourcePoint(resource);
     await loadResources();
   }
-  
+
   void filterResources(String type) {
     // This would require keeping the full list in memory or re-fetching
     // For simplicity, let's just re-fetch or filter the current state if it's data
     state.whenData((resources) {
       if (type == 'All') {
-        // We need the original list. 
+        // We need the original list.
         // Better pattern: separate provider for filter state.
-        loadResources(); 
+        loadResources();
       } else {
         state = AsyncValue.data(
           resources.where((r) => r.type == type).toList(),

@@ -86,8 +86,7 @@ class HomeScreen extends ConsumerWidget {
                       _tr(
                         lang,
                         zh: '整合救災任務、人力、物資與資源點，提供地圖視覺化與即時協作，支援台灣緊急狀況高效應對。',
-                        en:
-                            'Coordinate relief tasks, people, supplies, and resource hubs with real-time collaboration and map visualization.',
+                        en: 'Coordinate relief tasks, people, supplies, and resource hubs with real-time collaboration and map visualization.',
                       ),
                       style: TextStyle(
                         color: Colors.white.withValues(alpha: 0.92),
@@ -149,14 +148,8 @@ class HomeScreen extends ConsumerWidget {
   Widget _buildLanguageToggle(WidgetRef ref, AppLanguage selected) {
     return SegmentedButton<AppLanguage>(
       segments: const [
-        ButtonSegment<AppLanguage>(
-          value: AppLanguage.zhTw,
-          label: Text('繁中'),
-        ),
-        ButtonSegment<AppLanguage>(
-          value: AppLanguage.enUs,
-          label: Text('EN'),
-        ),
+        ButtonSegment<AppLanguage>(value: AppLanguage.zhTw, label: Text('繁中')),
+        ButtonSegment<AppLanguage>(value: AppLanguage.enUs, label: Text('EN')),
       ],
       selected: {selected},
       showSelectedIcon: false,
@@ -190,8 +183,7 @@ class HomeScreen extends ConsumerWidget {
                 description: _tr(
                   lang,
                   zh: '以地圖集中作戰，直觀展示任務、資源點與人力分佈，支援場景任務與調度。',
-                  en:
-                      'A shared map to reveal missions, resources, and responders for quick situational awareness.',
+                  en: 'A shared map to reveal missions, resources, and responders for quick situational awareness.',
                 ),
                 color: AppColors.primary,
               ),
@@ -202,8 +194,7 @@ class HomeScreen extends ConsumerWidget {
                 description: _tr(
                   lang,
                   zh: '建立、排序並追蹤任務進度，支援即時更新與分派人員。',
-                  en:
-                      'Create, prioritize, and track missions with real-time updates and assignments.',
+                  en: 'Create, prioritize, and track missions with real-time updates and assignments.',
                 ),
                 color: AppColors.secondary,
               ),
@@ -214,8 +205,7 @@ class HomeScreen extends ConsumerWidget {
                 description: _tr(
                   lang,
                   zh: '管理救援運輸、路線與座位，指派集合地與搭乘資訊。',
-                  en:
-                      'Coordinate transport routes, seats, and pickup points for teams and supplies.',
+                  en: 'Coordinate transport routes, seats, and pickup points for teams and supplies.',
                 ),
                 color: AppColors.warning,
               ),
@@ -246,8 +236,7 @@ class HomeScreen extends ConsumerWidget {
                 description: _tr(
                   lang,
                   zh: '以地圖集中作戰，直觀展示任務、資源點與人力分佈，支援場景任務與調度。',
-                  en:
-                      'A shared map to reveal missions, resources, and responders for quick situational awareness.',
+                  en: 'A shared map to reveal missions, resources, and responders for quick situational awareness.',
                 ),
                 color: AppColors.primary,
               ),
@@ -257,8 +246,7 @@ class HomeScreen extends ConsumerWidget {
                 description: _tr(
                   lang,
                   zh: '建立、排序並追蹤任務進度，支援即時更新與分派人員。',
-                  en:
-                      'Create, prioritize, and track missions with real-time updates and assignments.',
+                  en: 'Create, prioritize, and track missions with real-time updates and assignments.',
                 ),
                 color: AppColors.secondary,
               ),
@@ -268,8 +256,7 @@ class HomeScreen extends ConsumerWidget {
                 description: _tr(
                   lang,
                   zh: '管理救援運輸、路線與座位，指派集合地與搭乘資訊。',
-                  en:
-                      'Coordinate transport routes, seats, and pickup points for teams and supplies.',
+                  en: 'Coordinate transport routes, seats, and pickup points for teams and supplies.',
                 ),
                 color: AppColors.warning,
               ),

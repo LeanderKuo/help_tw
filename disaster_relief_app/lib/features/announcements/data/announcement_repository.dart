@@ -19,8 +19,9 @@ final announcementsProvider = StreamProvider<List<AnnouncementModel>>((ref) {
   return repo.watchAnnouncements(language);
 });
 
-final activeEmergencyAnnouncementProvider =
-    StreamProvider<AnnouncementModel?>((ref) {
+final activeEmergencyAnnouncementProvider = StreamProvider<AnnouncementModel?>((
+  ref,
+) {
   final repo = ref.watch(announcementRepositoryProvider);
   final localeState = ref.watch(localeControllerProvider);
   final language = localeState.valueOrNull ?? AppLanguage.zhTw;
@@ -72,14 +73,8 @@ class AnnouncementModel {
     DateTime? startsAtOverride,
     DateTime? endsAtOverride,
   }) {
-    final localizedTitle = {
-      'zh-TW': title,
-      'en-US': title,
-    };
-    final localizedBody = {
-      'zh-TW': body,
-      'en-US': body,
-    };
+    final localizedTitle = {'zh-TW': title, 'en-US': title};
+    final localizedBody = {'zh-TW': body, 'en-US': body};
     return {
       'id': id,
       'type': type,
@@ -105,19 +100,24 @@ class AnnouncementRepository {
         .stream(primaryKey: ['id'])
         .order('starts_at', ascending: false)
         .map((rows) {
-      final models = rows
-          .map((row) => AnnouncementModel.fromJson(
-                Map<String, dynamic>.from(row as Map),
-                locale: locale,
-              ))
-          .toList()
-        ..sort((a, b) {
-          final aTime = a.startsAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-          final bTime = b.startsAt ?? DateTime.fromMillisecondsSinceEpoch(0);
-          return bTime.compareTo(aTime);
+          final models =
+              rows
+                  .map(
+                    (row) => AnnouncementModel.fromJson(
+                      Map<String, dynamic>.from(row as Map),
+                      locale: locale,
+                    ),
+                  )
+                  .toList()
+                ..sort((a, b) {
+                  final aTime =
+                      a.startsAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+                  final bTime =
+                      b.startsAt ?? DateTime.fromMillisecondsSinceEpoch(0);
+                  return bTime.compareTo(aTime);
+                });
+          return models;
         });
-      return models;
-    });
   }
 
   Stream<AnnouncementModel?> watchActiveEmergency(AppLanguage locale) {
@@ -161,12 +161,9 @@ class AnnouncementRepository {
       endsAt: endsAt,
     );
 
-    await _supabase.from('announcements').upsert(
-          model.toPayload(
-            locale: locale,
-            creatorId: userId,
-          ),
-        );
+    await _supabase
+        .from('announcements')
+        .upsert(model.toPayload(locale: locale, creatorId: userId));
   }
 
   Future<void> updateFlags({

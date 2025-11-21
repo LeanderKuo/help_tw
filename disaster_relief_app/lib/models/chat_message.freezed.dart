@@ -12,7 +12,8 @@ part of 'chat_message.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ChatMessage _$ChatMessageFromJson(Map<String, dynamic> json) {
   return _ChatMessage.fromJson(json);
@@ -42,17 +43,19 @@ mixin _$ChatMessage {
 /// @nodoc
 abstract class $ChatMessageCopyWith<$Res> {
   factory $ChatMessageCopyWith(
-          ChatMessage value, $Res Function(ChatMessage) then) =
-      _$ChatMessageCopyWithImpl<$Res, ChatMessage>;
+    ChatMessage value,
+    $Res Function(ChatMessage) then,
+  ) = _$ChatMessageCopyWithImpl<$Res, ChatMessage>;
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'task_id') String? taskId,
-      @JsonKey(name: 'shuttle_id') String? shuttleId,
-      @JsonKey(name: 'sender_id') String? senderId,
-      String? content,
-      @JsonKey(name: 'image_url') String? imageUrl,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'task_id') String? taskId,
+    @JsonKey(name: 'shuttle_id') String? shuttleId,
+    @JsonKey(name: 'sender_id') String? senderId,
+    String? content,
+    @JsonKey(name: 'image_url') String? imageUrl,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  });
 }
 
 /// @nodoc
@@ -76,36 +79,39 @@ class _$ChatMessageCopyWithImpl<$Res, $Val extends ChatMessage>
     Object? imageUrl = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      taskId: freezed == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      shuttleId: freezed == shuttleId
-          ? _value.shuttleId
-          : shuttleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      senderId: freezed == senderId
-          ? _value.senderId
-          : senderId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      content: freezed == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            taskId: freezed == taskId
+                ? _value.taskId
+                : taskId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            shuttleId: freezed == shuttleId
+                ? _value.shuttleId
+                : shuttleId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            senderId: freezed == senderId
+                ? _value.senderId
+                : senderId // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            content: freezed == content
+                ? _value.content
+                : content // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            imageUrl: freezed == imageUrl
+                ? _value.imageUrl
+                : imageUrl // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -113,18 +119,20 @@ class _$ChatMessageCopyWithImpl<$Res, $Val extends ChatMessage>
 abstract class _$$ChatMessageImplCopyWith<$Res>
     implements $ChatMessageCopyWith<$Res> {
   factory _$$ChatMessageImplCopyWith(
-          _$ChatMessageImpl value, $Res Function(_$ChatMessageImpl) then) =
-      __$$ChatMessageImplCopyWithImpl<$Res>;
+    _$ChatMessageImpl value,
+    $Res Function(_$ChatMessageImpl) then,
+  ) = __$$ChatMessageImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      @JsonKey(name: 'task_id') String? taskId,
-      @JsonKey(name: 'shuttle_id') String? shuttleId,
-      @JsonKey(name: 'sender_id') String? senderId,
-      String? content,
-      @JsonKey(name: 'image_url') String? imageUrl,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+  $Res call({
+    String id,
+    @JsonKey(name: 'task_id') String? taskId,
+    @JsonKey(name: 'shuttle_id') String? shuttleId,
+    @JsonKey(name: 'sender_id') String? senderId,
+    String? content,
+    @JsonKey(name: 'image_url') String? imageUrl,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+  });
 }
 
 /// @nodoc
@@ -132,8 +140,9 @@ class __$$ChatMessageImplCopyWithImpl<$Res>
     extends _$ChatMessageCopyWithImpl<$Res, _$ChatMessageImpl>
     implements _$$ChatMessageImplCopyWith<$Res> {
   __$$ChatMessageImplCopyWithImpl(
-      _$ChatMessageImpl _value, $Res Function(_$ChatMessageImpl) _then)
-      : super(_value, _then);
+    _$ChatMessageImpl _value,
+    $Res Function(_$ChatMessageImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -146,50 +155,53 @@ class __$$ChatMessageImplCopyWithImpl<$Res>
     Object? imageUrl = freezed,
     Object? createdAt = freezed,
   }) {
-    return _then(_$ChatMessageImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      taskId: freezed == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      shuttleId: freezed == shuttleId
-          ? _value.shuttleId
-          : shuttleId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      senderId: freezed == senderId
-          ? _value.senderId
-          : senderId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      content: freezed == content
-          ? _value.content
-          : content // ignore: cast_nullable_to_non_nullable
-              as String?,
-      imageUrl: freezed == imageUrl
-          ? _value.imageUrl
-          : imageUrl // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-    ));
+    return _then(
+      _$ChatMessageImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        taskId: freezed == taskId
+            ? _value.taskId
+            : taskId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        shuttleId: freezed == shuttleId
+            ? _value.shuttleId
+            : shuttleId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        senderId: freezed == senderId
+            ? _value.senderId
+            : senderId // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        content: freezed == content
+            ? _value.content
+            : content // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        imageUrl: freezed == imageUrl
+            ? _value.imageUrl
+            : imageUrl // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ChatMessageImpl implements _ChatMessage {
-  const _$ChatMessageImpl(
-      {required this.id,
-      @JsonKey(name: 'task_id') this.taskId,
-      @JsonKey(name: 'shuttle_id') this.shuttleId,
-      @JsonKey(name: 'sender_id') this.senderId,
-      this.content,
-      @JsonKey(name: 'image_url') this.imageUrl,
-      @JsonKey(name: 'created_at') this.createdAt});
+  const _$ChatMessageImpl({
+    required this.id,
+    @JsonKey(name: 'task_id') this.taskId,
+    @JsonKey(name: 'shuttle_id') this.shuttleId,
+    @JsonKey(name: 'sender_id') this.senderId,
+    this.content,
+    @JsonKey(name: 'image_url') this.imageUrl,
+    @JsonKey(name: 'created_at') this.createdAt,
+  });
 
   factory _$ChatMessageImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatMessageImplFromJson(json);
@@ -239,8 +251,16 @@ class _$ChatMessageImpl implements _ChatMessage {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, taskId, shuttleId, senderId,
-      content, imageUrl, createdAt);
+  int get hashCode => Object.hash(
+    runtimeType,
+    id,
+    taskId,
+    shuttleId,
+    senderId,
+    content,
+    imageUrl,
+    createdAt,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -250,22 +270,20 @@ class _$ChatMessageImpl implements _ChatMessage {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ChatMessageImplToJson(
-      this,
-    );
+    return _$$ChatMessageImplToJson(this);
   }
 }
 
 abstract class _ChatMessage implements ChatMessage {
-  const factory _ChatMessage(
-          {required final String id,
-          @JsonKey(name: 'task_id') final String? taskId,
-          @JsonKey(name: 'shuttle_id') final String? shuttleId,
-          @JsonKey(name: 'sender_id') final String? senderId,
-          final String? content,
-          @JsonKey(name: 'image_url') final String? imageUrl,
-          @JsonKey(name: 'created_at') final DateTime? createdAt}) =
-      _$ChatMessageImpl;
+  const factory _ChatMessage({
+    required final String id,
+    @JsonKey(name: 'task_id') final String? taskId,
+    @JsonKey(name: 'shuttle_id') final String? shuttleId,
+    @JsonKey(name: 'sender_id') final String? senderId,
+    final String? content,
+    @JsonKey(name: 'image_url') final String? imageUrl,
+    @JsonKey(name: 'created_at') final DateTime? createdAt,
+  }) = _$ChatMessageImpl;
 
   factory _ChatMessage.fromJson(Map<String, dynamic> json) =
       _$ChatMessageImpl.fromJson;

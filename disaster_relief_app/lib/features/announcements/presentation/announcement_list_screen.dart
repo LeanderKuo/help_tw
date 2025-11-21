@@ -18,8 +18,7 @@ class AnnouncementListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final announcementsAsync = ref.watch(announcementsProvider);
-    final role =
-        ref.watch(currentUserRoleProvider).valueOrNull ?? AppRole.user;
+    final role = ref.watch(currentUserRoleProvider).valueOrNull ?? AppRole.user;
     final canManage = role.canManageAnnouncements;
 
     return Scaffold(
@@ -46,7 +45,8 @@ class AnnouncementListScreen extends ConsumerWidget {
                 return _AnnouncementCard(
                   announcement: announcement,
                   canManage: canManage,
-                  onEdit: () => _openEditor(context, ref, existing: announcement),
+                  onEdit: () =>
+                      _openEditor(context, ref, existing: announcement),
                 );
               },
             );
@@ -74,8 +74,7 @@ class AnnouncementListScreen extends ConsumerWidget {
     WidgetRef ref, {
     AnnouncementModel? existing,
   }) async {
-    final titleController =
-        TextEditingController(text: existing?.title ?? '');
+    final titleController = TextEditingController(text: existing?.title ?? '');
     final bodyController = TextEditingController(text: existing?.body ?? '');
     String type = existing?.type ?? 'general';
     bool isActive = existing?.isActive ?? true;
@@ -138,14 +137,8 @@ class AnnouncementListScreen extends ConsumerWidget {
                     DropdownButtonFormField<String>(
                       value: type,
                       items: const [
-                        DropdownMenuItem(
-                          value: 'general',
-                          child: Text('一般'),
-                        ),
-                        DropdownMenuItem(
-                          value: 'emergency',
-                          child: Text('緊急'),
-                        ),
+                        DropdownMenuItem(value: 'general', child: Text('一般')),
+                        DropdownMenuItem(value: 'emergency', child: Text('緊急')),
                       ],
                       onChanged: (v) {
                         if (v == null) return;
@@ -194,9 +187,7 @@ class AnnouncementListScreen extends ConsumerWidget {
                               }
                             },
                             icon: const Icon(Icons.schedule),
-                            label: Text(
-                              '開始：${_formatDate(startsAt)}',
-                            ),
+                            label: Text('開始：${_formatDate(startsAt)}'),
                           ),
                         ),
                         Expanded(
@@ -231,14 +222,14 @@ class AnnouncementListScreen extends ConsumerWidget {
                           final body = bodyController.text.trim();
                           if (title.isEmpty || body.isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text('請輸入標題與內容'),
-                              ),
+                              const SnackBar(content: Text('請輸入標題與內容')),
                             );
                             return;
                           }
                           try {
-                            await ref.read(announcementControllerProvider).upsert(
+                            await ref
+                                .read(announcementControllerProvider)
+                                .upsert(
                                   id: existing?.id,
                                   title: title,
                                   body: body,
@@ -250,9 +241,9 @@ class AnnouncementListScreen extends ConsumerWidget {
                                 );
                             if (context.mounted) Navigator.of(context).pop();
                           } catch (e) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('儲存失敗：$e')),
-                            );
+                            ScaffoldMessenger.of(
+                              context,
+                            ).showSnackBar(SnackBar(content: Text('儲存失敗：$e')));
                           }
                         },
                         child: Text(existing == null ? '建立公告' : '更新公告'),
@@ -299,8 +290,10 @@ class _AnnouncementCard extends ConsumerWidget {
             Row(
               children: [
                 Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: accent.withValues(alpha: 0.14),
                     borderRadius: BorderRadius.circular(10),
@@ -315,7 +308,11 @@ class _AnnouncementCard extends ConsumerWidget {
                 ),
                 const SizedBox(width: 8),
                 if (announcement.isPinned)
-                  const Icon(Icons.push_pin, size: 18, color: AppColors.warning),
+                  const Icon(
+                    Icons.push_pin,
+                    size: 18,
+                    color: AppColors.warning,
+                  ),
                 const Spacer(),
                 if (canManage)
                   IconButton(
@@ -378,20 +375,21 @@ class _AnnouncementCard extends ConsumerWidget {
                       dense: true,
                       title: const Text('啟用'),
                       value: announcement.isActive,
-                      onChanged: (v) =>
-                          _updateFlag(ref, context, isActive: v),
+                      onChanged: (v) => _updateFlag(ref, context, isActive: v),
                     ),
                   ),
                   IconButton(
-                    tooltip:
-                        announcement.isPinned ? '取消置頂' : '置頂此公告',
+                    tooltip: announcement.isPinned ? '取消置頂' : '置頂此公告',
                     icon: Icon(
                       announcement.isPinned
                           ? Icons.push_pin_outlined
                           : Icons.push_pin,
                     ),
-                    onPressed: () =>
-                        _updateFlag(ref, context, isPinned: !announcement.isPinned),
+                    onPressed: () => _updateFlag(
+                      ref,
+                      context,
+                      isPinned: !announcement.isPinned,
+                    ),
                   ),
                 ],
               ),
@@ -409,26 +407,24 @@ class _AnnouncementCard extends ConsumerWidget {
     bool? isPinned,
   }) async {
     try {
-      await ref.read(announcementControllerProvider).updateFlags(
+      await ref
+          .read(announcementControllerProvider)
+          .updateFlags(
             id: announcement.id,
             type: announcement.type,
             isActive: isActive,
             isPinned: isPinned,
           );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('更新失敗：$e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('更新失敗：$e')));
     }
   }
 }
 
 class _InfoChip extends StatelessWidget {
-  const _InfoChip({
-    required this.icon,
-    required this.label,
-    this.color,
-  });
+  const _InfoChip({required this.icon, required this.label, this.color});
 
   final IconData icon;
   final String label;
@@ -437,7 +433,11 @@ class _InfoChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Chip(
-      avatar: Icon(icon, size: 16, color: color ?? AppColors.textSecondaryLight),
+      avatar: Icon(
+        icon,
+        size: 16,
+        color: color ?? AppColors.textSecondaryLight,
+      ),
       label: Text(
         label,
         style: TextStyle(

@@ -39,9 +39,9 @@ class ChatRepository {
         .stream(primaryKey: ['id'])
         .eq('task_id', taskId)
         .order('created_at')
-        .map((data) => data
-            .map((json) => ChatMessage.fromSupabase(json))
-            .toList());
+        .map(
+          (data) => data.map((json) => ChatMessage.fromSupabase(json)).toList(),
+        );
   }
 
   Stream<List<ChatMessage>> subscribeToShuttleMessages(String shuttleId) {
@@ -50,9 +50,9 @@ class ChatRepository {
         .stream(primaryKey: ['id'])
         .eq('shuttle_id', shuttleId)
         .order('created_at')
-        .map((data) => data
-            .map((json) => ChatMessage.fromSupabase(json))
-            .toList());
+        .map(
+          (data) => data.map((json) => ChatMessage.fromSupabase(json)).toList(),
+        );
   }
 
   Future<void> sendShuttleMessage(ChatMessage message) async {

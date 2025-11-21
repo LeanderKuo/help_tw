@@ -5,7 +5,7 @@ class SupabaseService {
   static Future<void> initialize() async {
     if (AppConfig.supabaseUrl.isEmpty || AppConfig.supabaseAnonKey.isEmpty) {
       throw Exception(
-        'Missing Supabase config. Pass SUPABASE_URL and SUPABASE_ANON_KEY via --dart-define at build/run time.',
+        'Missing Supabase config. Provide SUPABASE_URL and SUPABASE_ANON_KEY via --dart-define or .env.',
       );
     }
 

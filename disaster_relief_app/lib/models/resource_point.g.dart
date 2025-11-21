@@ -31,7 +31,7 @@ const ResourcePointSchema = CollectionSchema(
     'tags': 10,
     'title': 11,
     'type': 12,
-    'updatedAt': 13
+    'updatedAt': 13,
   },
   listProperties: {'images', 'tags'},
   indexIds: {},
@@ -63,12 +63,13 @@ List<IsarLinkBase> _resourcePointGetLinks(ResourcePoint object) {
 }
 
 void _resourcePointSerializeNative(
-    IsarCollection<ResourcePoint> collection,
-    IsarRawObject rawObj,
-    ResourcePoint object,
-    int staticSize,
-    List<int> offsets,
-    AdapterAlloc alloc) {
+  IsarCollection<ResourcePoint> collection,
+  IsarRawObject rawObj,
+  ResourcePoint object,
+  int staticSize,
+  List<int> offsets,
+  AdapterAlloc alloc,
+) {
   var dynamicSize = 0;
   final value0 = object.address;
   IsarUint8List? _address;
@@ -150,10 +151,11 @@ void _resourcePointSerializeNative(
 }
 
 ResourcePoint _resourcePointDeserializeNative(
-    IsarCollection<ResourcePoint> collection,
-    int id,
-    IsarBinaryReader reader,
-    List<int> offsets) {
+  IsarCollection<ResourcePoint> collection,
+  int id,
+  IsarBinaryReader reader,
+  List<int> offsets,
+) {
   final object = ResourcePoint(
     address: reader.readStringOrNull(offsets[0]),
     createdAt: reader.readDateTimeOrNull(offsets[1]),
@@ -175,7 +177,11 @@ ResourcePoint _resourcePointDeserializeNative(
 }
 
 P _resourcePointDeserializePropNative<P>(
-    int id, IsarBinaryReader reader, int propertyIndex, int offset) {
+  int id,
+  IsarBinaryReader reader,
+  int propertyIndex,
+  int offset,
+) {
   switch (propertyIndex) {
     case -1:
       return id as P;
@@ -213,15 +219,23 @@ P _resourcePointDeserializePropNative<P>(
 }
 
 dynamic _resourcePointSerializeWeb(
-    IsarCollection<ResourcePoint> collection, ResourcePoint object) {
+  IsarCollection<ResourcePoint> collection,
+  ResourcePoint object,
+) {
   final jsObj = IsarNative.newJsObject();
   IsarNative.jsObjectSet(jsObj, 'address', object.address);
   IsarNative.jsObjectSet(
-      jsObj, 'createdAt', object.createdAt?.toUtc().millisecondsSinceEpoch);
+    jsObj,
+    'createdAt',
+    object.createdAt?.toUtc().millisecondsSinceEpoch,
+  );
   IsarNative.jsObjectSet(jsObj, 'createdBy', object.createdBy);
   IsarNative.jsObjectSet(jsObj, 'description', object.description);
   IsarNative.jsObjectSet(
-      jsObj, 'expiresAt', object.expiresAt?.toUtc().millisecondsSinceEpoch);
+    jsObj,
+    'expiresAt',
+    object.expiresAt?.toUtc().millisecondsSinceEpoch,
+  );
   IsarNative.jsObjectSet(jsObj, 'id', object.id);
   IsarNative.jsObjectSet(jsObj, 'images', object.images);
   IsarNative.jsObjectSet(jsObj, 'isActive', object.isActive);
@@ -232,30 +246,36 @@ dynamic _resourcePointSerializeWeb(
   IsarNative.jsObjectSet(jsObj, 'title', object.title);
   IsarNative.jsObjectSet(jsObj, 'type', object.type);
   IsarNative.jsObjectSet(
-      jsObj, 'updatedAt', object.updatedAt?.toUtc().millisecondsSinceEpoch);
+    jsObj,
+    'updatedAt',
+    object.updatedAt?.toUtc().millisecondsSinceEpoch,
+  );
   return jsObj;
 }
 
 ResourcePoint _resourcePointDeserializeWeb(
-    IsarCollection<ResourcePoint> collection, dynamic jsObj) {
+  IsarCollection<ResourcePoint> collection,
+  dynamic jsObj,
+) {
   final object = ResourcePoint(
     address: IsarNative.jsObjectGet(jsObj, 'address'),
     createdAt: IsarNative.jsObjectGet(jsObj, 'createdAt') != null
         ? DateTime.fromMillisecondsSinceEpoch(
-                IsarNative.jsObjectGet(jsObj, 'createdAt'),
-                isUtc: true)
-            .toLocal()
+            IsarNative.jsObjectGet(jsObj, 'createdAt'),
+            isUtc: true,
+          ).toLocal()
         : null,
     createdBy: IsarNative.jsObjectGet(jsObj, 'createdBy'),
     description: IsarNative.jsObjectGet(jsObj, 'description'),
     expiresAt: IsarNative.jsObjectGet(jsObj, 'expiresAt') != null
         ? DateTime.fromMillisecondsSinceEpoch(
-                IsarNative.jsObjectGet(jsObj, 'expiresAt'),
-                isUtc: true)
-            .toLocal()
+            IsarNative.jsObjectGet(jsObj, 'expiresAt'),
+            isUtc: true,
+          ).toLocal()
         : null,
     id: IsarNative.jsObjectGet(jsObj, 'id') ?? '',
-    images: (IsarNative.jsObjectGet(jsObj, 'images') as List?)
+    images:
+        (IsarNative.jsObjectGet(jsObj, 'images') as List?)
             ?.map((e) => e ?? '')
             .toList()
             .cast<String>() ??
@@ -266,7 +286,8 @@ ResourcePoint _resourcePointDeserializeWeb(
         IsarNative.jsObjectGet(jsObj, 'latitude') ?? double.negativeInfinity,
     longitude:
         IsarNative.jsObjectGet(jsObj, 'longitude') ?? double.negativeInfinity,
-    tags: (IsarNative.jsObjectGet(jsObj, 'tags') as List?)
+    tags:
+        (IsarNative.jsObjectGet(jsObj, 'tags') as List?)
             ?.map((e) => e ?? '')
             .toList()
             .cast<String>() ??
@@ -275,9 +296,9 @@ ResourcePoint _resourcePointDeserializeWeb(
     type: IsarNative.jsObjectGet(jsObj, 'type') ?? '',
     updatedAt: IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
         ? DateTime.fromMillisecondsSinceEpoch(
-                IsarNative.jsObjectGet(jsObj, 'updatedAt'),
-                isUtc: true)
-            .toLocal()
+            IsarNative.jsObjectGet(jsObj, 'updatedAt'),
+            isUtc: true,
+          ).toLocal()
         : null,
   );
   return object;
@@ -289,64 +310,74 @@ P _resourcePointDeserializePropWeb<P>(Object jsObj, String propertyName) {
       return (IsarNative.jsObjectGet(jsObj, 'address')) as P;
     case 'createdAt':
       return (IsarNative.jsObjectGet(jsObj, 'createdAt') != null
-          ? DateTime.fromMillisecondsSinceEpoch(
+              ? DateTime.fromMillisecondsSinceEpoch(
                   IsarNative.jsObjectGet(jsObj, 'createdAt'),
-                  isUtc: true)
-              .toLocal()
-          : null) as P;
+                  isUtc: true,
+                ).toLocal()
+              : null)
+          as P;
     case 'createdBy':
       return (IsarNative.jsObjectGet(jsObj, 'createdBy')) as P;
     case 'description':
       return (IsarNative.jsObjectGet(jsObj, 'description')) as P;
     case 'expiresAt':
       return (IsarNative.jsObjectGet(jsObj, 'expiresAt') != null
-          ? DateTime.fromMillisecondsSinceEpoch(
+              ? DateTime.fromMillisecondsSinceEpoch(
                   IsarNative.jsObjectGet(jsObj, 'expiresAt'),
-                  isUtc: true)
-              .toLocal()
-          : null) as P;
+                  isUtc: true,
+                ).toLocal()
+              : null)
+          as P;
     case 'id':
       return (IsarNative.jsObjectGet(jsObj, 'id') ?? '') as P;
     case 'images':
       return ((IsarNative.jsObjectGet(jsObj, 'images') as List?)
-              ?.map((e) => e ?? '')
-              .toList()
-              .cast<String>() ??
-          []) as P;
+                  ?.map((e) => e ?? '')
+                  .toList()
+                  .cast<String>() ??
+              [])
+          as P;
     case 'isActive':
       return (IsarNative.jsObjectGet(jsObj, 'isActive') ?? false) as P;
     case 'isarId':
       return (IsarNative.jsObjectGet(jsObj, 'isarId')) as P;
     case 'latitude':
       return (IsarNative.jsObjectGet(jsObj, 'latitude') ??
-          double.negativeInfinity) as P;
+              double.negativeInfinity)
+          as P;
     case 'longitude':
       return (IsarNative.jsObjectGet(jsObj, 'longitude') ??
-          double.negativeInfinity) as P;
+              double.negativeInfinity)
+          as P;
     case 'tags':
       return ((IsarNative.jsObjectGet(jsObj, 'tags') as List?)
-              ?.map((e) => e ?? '')
-              .toList()
-              .cast<String>() ??
-          []) as P;
+                  ?.map((e) => e ?? '')
+                  .toList()
+                  .cast<String>() ??
+              [])
+          as P;
     case 'title':
       return (IsarNative.jsObjectGet(jsObj, 'title') ?? '') as P;
     case 'type':
       return (IsarNative.jsObjectGet(jsObj, 'type') ?? '') as P;
     case 'updatedAt':
       return (IsarNative.jsObjectGet(jsObj, 'updatedAt') != null
-          ? DateTime.fromMillisecondsSinceEpoch(
+              ? DateTime.fromMillisecondsSinceEpoch(
                   IsarNative.jsObjectGet(jsObj, 'updatedAt'),
-                  isUtc: true)
-              .toLocal()
-          : null) as P;
+                  isUtc: true,
+                ).toLocal()
+              : null)
+          as P;
     default:
       throw 'Illegal propertyName';
   }
 }
 
 void _resourcePointAttachLinks(
-    IsarCollection col, int id, ResourcePoint object) {}
+  IsarCollection col,
+  int id,
+  ResourcePoint object,
+) {}
 
 extension ResourcePointQueryWhereSort
     on QueryBuilder<ResourcePoint, ResourcePoint, QWhere> {
@@ -358,17 +389,20 @@ extension ResourcePointQueryWhereSort
 extension ResourcePointQueryWhere
     on QueryBuilder<ResourcePoint, ResourcePoint, QWhereClause> {
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause> isarIdEqualTo(
-      int isarId) {
-    return addWhereClauseInternal(IdWhereClause.between(
-      lower: isarId,
-      includeLower: true,
-      upper: isarId,
-      includeUpper: true,
-    ));
+    int isarId,
+  ) {
+    return addWhereClauseInternal(
+      IdWhereClause.between(
+        lower: isarId,
+        includeLower: true,
+        upper: isarId,
+        includeUpper: true,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause>
-      isarIdNotEqualTo(int isarId) {
+  isarIdNotEqualTo(int isarId) {
     if (whereSortInternal == Sort.asc) {
       return addWhereClauseInternal(
         IdWhereClause.lessThan(upper: isarId, includeUpper: false),
@@ -385,15 +419,16 @@ extension ResourcePointQueryWhere
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause>
-      isarIdGreaterThan(int isarId, {bool include = false}) {
+  isarIdGreaterThan(int isarId, {bool include = false}) {
     return addWhereClauseInternal(
       IdWhereClause.greaterThan(lower: isarId, includeLower: include),
     );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterWhereClause> isarIdLessThan(
-      int isarId,
-      {bool include = false}) {
+    int isarId, {
+    bool include = false,
+  }) {
     return addWhereClauseInternal(
       IdWhereClause.lessThan(upper: isarId, includeUpper: include),
     );
@@ -405,510 +440,551 @@ extension ResourcePointQueryWhere
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addWhereClauseInternal(IdWhereClause.between(
-      lower: lowerIsarId,
-      includeLower: includeLower,
-      upper: upperIsarId,
-      includeUpper: includeUpper,
-    ));
+    return addWhereClauseInternal(
+      IdWhereClause.between(
+        lower: lowerIsarId,
+        includeLower: includeLower,
+        upper: upperIsarId,
+        includeUpper: includeUpper,
+      ),
+    );
   }
 }
 
 extension ResourcePointQueryFilter
     on QueryBuilder<ResourcePoint, ResourcePoint, QFilterCondition> {
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'address',
-      value: null,
-    ));
+  addressIsNull() {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.isNull,
+        property: 'address',
+        value: null,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'address',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  addressEqualTo(String? value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'address',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressGreaterThan(
-    String? value, {
-    bool caseSensitive = true,
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'address',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressLessThan(
+  addressGreaterThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'address',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'address',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressBetween(
+  addressLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'address',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+  addressBetween(
     String? lower,
     String? upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'address',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'address',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'address',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  addressStartsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.startsWith,
+        property: 'address',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'address',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  addressEndsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.endsWith,
+        property: 'address',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressContains(String value, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'address',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  addressContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.contains,
+        property: 'address',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      addressMatches(String pattern, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'address',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+  addressMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.matches,
+        property: 'address',
+        value: pattern,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdAtIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'createdAt',
-      value: null,
-    ));
+  createdAtIsNull() {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.isNull,
+        property: 'createdAt',
+        value: null,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdAtEqualTo(DateTime? value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'createdAt',
-      value: value,
-    ));
+  createdAtEqualTo(DateTime? value) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'createdAt',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdAtGreaterThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'createdAt',
-      value: value,
-    ));
+  createdAtGreaterThan(DateTime? value, {bool include = false}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'createdAt',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdAtLessThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'createdAt',
-      value: value,
-    ));
+  createdAtLessThan(DateTime? value, {bool include = false}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'createdAt',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdAtBetween(
+  createdAtBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'createdAt',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'createdAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'createdBy',
-      value: null,
-    ));
+  createdByIsNull() {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.isNull,
+        property: 'createdBy',
+        value: null,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'createdBy',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  createdByEqualTo(String? value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'createdBy',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByGreaterThan(
-    String? value, {
-    bool caseSensitive = true,
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'createdBy',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByLessThan(
+  createdByGreaterThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'createdBy',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'createdBy',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByBetween(
+  createdByLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'createdBy',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+  createdByBetween(
     String? lower,
     String? upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'createdBy',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'createdBy',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'createdBy',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  createdByStartsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.startsWith,
+        property: 'createdBy',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'createdBy',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  createdByEndsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.endsWith,
+        property: 'createdBy',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByContains(String value, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'createdBy',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  createdByContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.contains,
+        property: 'createdBy',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      createdByMatches(String pattern, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'createdBy',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+  createdByMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.matches,
+        property: 'createdBy',
+        value: pattern,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'description',
-      value: null,
-    ));
+  descriptionIsNull() {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.isNull,
+        property: 'description',
+        value: null,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'description',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  descriptionEqualTo(String? value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionGreaterThan(
-    String? value, {
-    bool caseSensitive = true,
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'description',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionLessThan(
+  descriptionGreaterThan(
     String? value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'description',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionBetween(
+  descriptionLessThan(
+    String? value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+  descriptionBetween(
     String? lower,
     String? upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'description',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'description',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'description',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  descriptionStartsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.startsWith,
+        property: 'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'description',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  descriptionEndsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.endsWith,
+        property: 'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionContains(String value, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'description',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  descriptionContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.contains,
+        property: 'description',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      descriptionMatches(String pattern, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'description',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+  descriptionMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.matches,
+        property: 'description',
+        value: pattern,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      expiresAtIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'expiresAt',
-      value: null,
-    ));
+  expiresAtIsNull() {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.isNull,
+        property: 'expiresAt',
+        value: null,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      expiresAtEqualTo(DateTime? value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'expiresAt',
-      value: value,
-    ));
+  expiresAtEqualTo(DateTime? value) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'expiresAt',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      expiresAtGreaterThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'expiresAt',
-      value: value,
-    ));
+  expiresAtGreaterThan(DateTime? value, {bool include = false}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'expiresAt',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      expiresAtLessThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'expiresAt',
-      value: value,
-    ));
+  expiresAtLessThan(DateTime? value, {bool include = false}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'expiresAt',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      expiresAtBetween(
+  expiresAtBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'expiresAt',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'expiresAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'id',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      idGreaterThan(
+  idGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'id',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idLessThan(
@@ -916,13 +992,15 @@ extension ResourcePointQueryFilter
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'id',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idBetween(
@@ -932,555 +1010,605 @@ extension ResourcePointQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'id',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      idStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'id',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  idStartsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.startsWith,
+        property: 'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'id',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.endsWith,
+        property: 'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idContains(
-      String value,
-      {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'id',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.contains,
+        property: 'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> idMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'id',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesAnyEqualTo(
-    String value, {
+    String pattern, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'images',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.matches,
+        property: 'id',
+        value: pattern,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesAnyGreaterThan(
-    String value, {
-    bool caseSensitive = true,
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'images',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  imagesAnyEqualTo(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'images',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesAnyLessThan(
+  imagesAnyGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'images',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'images',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesAnyBetween(
+  imagesAnyLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'images',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+  imagesAnyBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'images',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'images',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesAnyStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'images',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  imagesAnyStartsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.startsWith,
+        property: 'images',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesAnyEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'images',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  imagesAnyEndsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.endsWith,
+        property: 'images',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesAnyContains(String value, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'images',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  imagesAnyContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.contains,
+        property: 'images',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      imagesAnyMatches(String pattern, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'images',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+  imagesAnyMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.matches,
+        property: 'images',
+        value: pattern,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isActiveEqualTo(bool value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'isActive',
-      value: value,
-    ));
+  isActiveEqualTo(bool value) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'isActive',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'isarId',
-      value: null,
-    ));
+  isarIdIsNull() {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.isNull,
+        property: 'isarId',
+        value: null,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdEqualTo(int value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'isarId',
-      value: value,
-    ));
+  isarIdEqualTo(int value) {
+    return addFilterConditionInternal(
+      FilterCondition(type: ConditionType.eq, property: 'isarId', value: value),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdGreaterThan(
-    int value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'isarId',
-      value: value,
-    ));
+  isarIdGreaterThan(int value, {bool include = false}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'isarId',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdLessThan(
-    int value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'isarId',
-      value: value,
-    ));
+  isarIdLessThan(int value, {bool include = false}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'isarId',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      isarIdBetween(
+  isarIdBetween(
     int lower,
     int upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'isarId',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'isarId',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      latitudeGreaterThan(double value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: false,
-      property: 'latitude',
-      value: value,
-    ));
+  latitudeGreaterThan(double value) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: false,
+        property: 'latitude',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      latitudeLessThan(double value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: false,
-      property: 'latitude',
-      value: value,
-    ));
+  latitudeLessThan(double value) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: false,
+        property: 'latitude',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      latitudeBetween(double lower, double upper) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'latitude',
-      lower: lower,
-      includeLower: false,
-      upper: upper,
-      includeUpper: false,
-    ));
+  latitudeBetween(double lower, double upper) {
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'latitude',
+        lower: lower,
+        includeLower: false,
+        upper: upper,
+        includeUpper: false,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      longitudeGreaterThan(double value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: false,
-      property: 'longitude',
-      value: value,
-    ));
+  longitudeGreaterThan(double value) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: false,
+        property: 'longitude',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      longitudeLessThan(double value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: false,
-      property: 'longitude',
-      value: value,
-    ));
+  longitudeLessThan(double value) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: false,
+        property: 'longitude',
+        value: value,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      longitudeBetween(double lower, double upper) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'longitude',
-      lower: lower,
-      includeLower: false,
-      upper: upper,
-      includeUpper: false,
-    ));
+  longitudeBetween(double lower, double upper) {
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'longitude',
+        lower: lower,
+        includeLower: false,
+        upper: upper,
+        includeUpper: false,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      tagsAnyEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'tags',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  tagsAnyEqualTo(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'tags',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      tagsAnyGreaterThan(
+  tagsAnyGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'tags',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'tags',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      tagsAnyLessThan(
+  tagsAnyLessThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'tags',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'tags',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      tagsAnyBetween(
+  tagsAnyBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'tags',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'tags',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      tagsAnyStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'tags',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  tagsAnyStartsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.startsWith,
+        property: 'tags',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      tagsAnyEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'tags',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  tagsAnyEndsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.endsWith,
+        property: 'tags',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      tagsAnyContains(String value, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'tags',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  tagsAnyContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.contains,
+        property: 'tags',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      tagsAnyMatches(String pattern, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'tags',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+  tagsAnyMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.matches,
+        property: 'tags',
+        value: pattern,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'title',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  titleEqualTo(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleGreaterThan(
-    String value, {
-    bool caseSensitive = true,
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'title',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleLessThan(
+  titleGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'title',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleBetween(
+  titleLessThan(
+    String value, {
+    bool caseSensitive = true,
+    bool include = false,
+  }) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+  titleBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'title',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'title',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'title',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  titleStartsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.startsWith,
+        property: 'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'title',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  titleEndsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.endsWith,
+        property: 'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleContains(String value, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'title',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  titleContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.contains,
+        property: 'title',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      titleMatches(String pattern, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'title',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
+  titleMatches(String pattern, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.matches,
+        property: 'title',
+        value: pattern,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> typeEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'type',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'type',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      typeGreaterThan(
+  typeGreaterThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'type',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'type',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      typeLessThan(
+  typeLessThan(
     String value, {
     bool caseSensitive = true,
     bool include = false,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'type',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'type',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> typeBetween(
@@ -1490,121 +1618,130 @@ extension ResourcePointQueryFilter
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'type',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-      caseSensitive: caseSensitive,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'type',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      typeStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.startsWith,
-      property: 'type',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  typeStartsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.startsWith,
+        property: 'type',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      typeEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.endsWith,
-      property: 'type',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  typeEndsWith(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.endsWith,
+        property: 'type',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      typeContains(String value, {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.contains,
-      property: 'type',
-      value: value,
-      caseSensitive: caseSensitive,
-    ));
+  typeContains(String value, {bool caseSensitive = true}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.contains,
+        property: 'type',
+        value: value,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition> typeMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.matches,
-      property: 'type',
-      value: pattern,
-      caseSensitive: caseSensitive,
-    ));
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      updatedAtIsNull() {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.isNull,
-      property: 'updatedAt',
-      value: null,
-    ));
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      updatedAtEqualTo(DateTime? value) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.eq,
-      property: 'updatedAt',
-      value: value,
-    ));
-  }
-
-  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      updatedAtGreaterThan(
-    DateTime? value, {
-    bool include = false,
+    String pattern, {
+    bool caseSensitive = true,
   }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.gt,
-      include: include,
-      property: 'updatedAt',
-      value: value,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.matches,
+        property: 'type',
+        value: pattern,
+        caseSensitive: caseSensitive,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      updatedAtLessThan(
-    DateTime? value, {
-    bool include = false,
-  }) {
-    return addFilterConditionInternal(FilterCondition(
-      type: ConditionType.lt,
-      include: include,
-      property: 'updatedAt',
-      value: value,
-    ));
+  updatedAtIsNull() {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.isNull,
+        property: 'updatedAt',
+        value: null,
+      ),
+    );
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
-      updatedAtBetween(
+  updatedAtEqualTo(DateTime? value) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.eq,
+        property: 'updatedAt',
+        value: value,
+      ),
+    );
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+  updatedAtGreaterThan(DateTime? value, {bool include = false}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.gt,
+        include: include,
+        property: 'updatedAt',
+        value: value,
+      ),
+    );
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+  updatedAtLessThan(DateTime? value, {bool include = false}) {
+    return addFilterConditionInternal(
+      FilterCondition(
+        type: ConditionType.lt,
+        include: include,
+        property: 'updatedAt',
+        value: value,
+      ),
+    );
+  }
+
+  QueryBuilder<ResourcePoint, ResourcePoint, QAfterFilterCondition>
+  updatedAtBetween(
     DateTime? lower,
     DateTime? upper, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
-    return addFilterConditionInternal(FilterCondition.between(
-      property: 'updatedAt',
-      lower: lower,
-      includeLower: includeLower,
-      upper: upper,
-      includeUpper: includeUpper,
-    ));
+    return addFilterConditionInternal(
+      FilterCondition.between(
+        property: 'updatedAt',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ),
+    );
   }
 }
 
@@ -1626,7 +1763,7 @@ extension ResourcePointQueryWhereSortBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      sortByCreatedAtDesc() {
+  sortByCreatedAtDesc() {
     return addSortByInternal('createdAt', Sort.desc);
   }
 
@@ -1635,7 +1772,7 @@ extension ResourcePointQueryWhereSortBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      sortByCreatedByDesc() {
+  sortByCreatedByDesc() {
     return addSortByInternal('createdBy', Sort.desc);
   }
 
@@ -1644,7 +1781,7 @@ extension ResourcePointQueryWhereSortBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      sortByDescriptionDesc() {
+  sortByDescriptionDesc() {
     return addSortByInternal('description', Sort.desc);
   }
 
@@ -1653,7 +1790,7 @@ extension ResourcePointQueryWhereSortBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      sortByExpiresAtDesc() {
+  sortByExpiresAtDesc() {
     return addSortByInternal('expiresAt', Sort.desc);
   }
 
@@ -1670,7 +1807,7 @@ extension ResourcePointQueryWhereSortBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      sortByIsActiveDesc() {
+  sortByIsActiveDesc() {
     return addSortByInternal('isActive', Sort.desc);
   }
 
@@ -1687,7 +1824,7 @@ extension ResourcePointQueryWhereSortBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      sortByLatitudeDesc() {
+  sortByLatitudeDesc() {
     return addSortByInternal('latitude', Sort.desc);
   }
 
@@ -1696,7 +1833,7 @@ extension ResourcePointQueryWhereSortBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      sortByLongitudeDesc() {
+  sortByLongitudeDesc() {
     return addSortByInternal('longitude', Sort.desc);
   }
 
@@ -1721,7 +1858,7 @@ extension ResourcePointQueryWhereSortBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      sortByUpdatedAtDesc() {
+  sortByUpdatedAtDesc() {
     return addSortByInternal('updatedAt', Sort.desc);
   }
 }
@@ -1741,7 +1878,7 @@ extension ResourcePointQueryWhereSortThenBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      thenByCreatedAtDesc() {
+  thenByCreatedAtDesc() {
     return addSortByInternal('createdAt', Sort.desc);
   }
 
@@ -1750,7 +1887,7 @@ extension ResourcePointQueryWhereSortThenBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      thenByCreatedByDesc() {
+  thenByCreatedByDesc() {
     return addSortByInternal('createdBy', Sort.desc);
   }
 
@@ -1759,7 +1896,7 @@ extension ResourcePointQueryWhereSortThenBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      thenByDescriptionDesc() {
+  thenByDescriptionDesc() {
     return addSortByInternal('description', Sort.desc);
   }
 
@@ -1768,7 +1905,7 @@ extension ResourcePointQueryWhereSortThenBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      thenByExpiresAtDesc() {
+  thenByExpiresAtDesc() {
     return addSortByInternal('expiresAt', Sort.desc);
   }
 
@@ -1785,7 +1922,7 @@ extension ResourcePointQueryWhereSortThenBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      thenByIsActiveDesc() {
+  thenByIsActiveDesc() {
     return addSortByInternal('isActive', Sort.desc);
   }
 
@@ -1802,7 +1939,7 @@ extension ResourcePointQueryWhereSortThenBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      thenByLatitudeDesc() {
+  thenByLatitudeDesc() {
     return addSortByInternal('latitude', Sort.desc);
   }
 
@@ -1811,7 +1948,7 @@ extension ResourcePointQueryWhereSortThenBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      thenByLongitudeDesc() {
+  thenByLongitudeDesc() {
     return addSortByInternal('longitude', Sort.desc);
   }
 
@@ -1836,15 +1973,16 @@ extension ResourcePointQueryWhereSortThenBy
   }
 
   QueryBuilder<ResourcePoint, ResourcePoint, QAfterSortBy>
-      thenByUpdatedAtDesc() {
+  thenByUpdatedAtDesc() {
     return addSortByInternal('updatedAt', Sort.desc);
   }
 }
 
 extension ResourcePointQueryWhereDistinct
     on QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> {
-  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByAddress(
-      {bool caseSensitive = true}) {
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByAddress({
+    bool caseSensitive = true,
+  }) {
     return addDistinctByInternal('address', caseSensitive: caseSensitive);
   }
 
@@ -1852,13 +1990,15 @@ extension ResourcePointQueryWhereDistinct
     return addDistinctByInternal('createdAt');
   }
 
-  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByCreatedBy(
-      {bool caseSensitive = true}) {
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByCreatedBy({
+    bool caseSensitive = true,
+  }) {
     return addDistinctByInternal('createdBy', caseSensitive: caseSensitive);
   }
 
-  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByDescription(
-      {bool caseSensitive = true}) {
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByDescription({
+    bool caseSensitive = true,
+  }) {
     return addDistinctByInternal('description', caseSensitive: caseSensitive);
   }
 
@@ -1866,8 +2006,9 @@ extension ResourcePointQueryWhereDistinct
     return addDistinctByInternal('expiresAt');
   }
 
-  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctById(
-      {bool caseSensitive = true}) {
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctById({
+    bool caseSensitive = true,
+  }) {
     return addDistinctByInternal('id', caseSensitive: caseSensitive);
   }
 
@@ -1887,13 +2028,15 @@ extension ResourcePointQueryWhereDistinct
     return addDistinctByInternal('longitude');
   }
 
-  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByTitle(
-      {bool caseSensitive = true}) {
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByTitle({
+    bool caseSensitive = true,
+  }) {
     return addDistinctByInternal('title', caseSensitive: caseSensitive);
   }
 
-  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByType(
-      {bool caseSensitive = true}) {
+  QueryBuilder<ResourcePoint, ResourcePoint, QDistinct> distinctByType({
+    bool caseSensitive = true,
+  }) {
     return addDistinctByInternal('type', caseSensitive: caseSensitive);
   }
 
@@ -1989,13 +2132,14 @@ _$ResourcePointImpl _$$ResourcePointImplFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
-      images: (json['images'] as List<dynamic>?)
+      images:
+          (json['images'] as List<dynamic>?)
               ?.map((e) => e as String)
               .toList() ??
           const [],
       tags:
           (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
-              const [],
+          const [],
     );
 
 Map<String, dynamic> _$$ResourcePointImplToJson(_$ResourcePointImpl instance) =>

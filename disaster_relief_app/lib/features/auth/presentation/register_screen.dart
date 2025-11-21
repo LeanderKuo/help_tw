@@ -33,7 +33,9 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
 
   void _signUp() {
     if (_formKey.currentState!.validate()) {
-      ref.read(authControllerProvider.notifier).signUp(
+      ref
+          .read(authControllerProvider.notifier)
+          .signUp(
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
@@ -207,6 +209,14 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                         : Text(l10n.register),
                   ),
                   const SizedBox(height: 24),
+                  OutlinedButton.icon(
+                    onPressed: state.isLoading
+                        ? null
+                        : () => context.push('/login/phone'),
+                    icon: const Icon(Icons.phone_android),
+                    label: const Text('Use phone OTP instead'),
+                  ),
+                  const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

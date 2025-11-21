@@ -30,10 +30,15 @@ class AuthRepository {
     required String email,
     required String password,
   }) async {
-    return await _client.auth.signUp(
-      email: email,
-      password: password,
-    );
+    return await _client.auth.signUp(email: email, password: password);
+  }
+
+  Future<void> signInWithOtp({required String phone}) async {
+    await _client.auth.signInWithOtp(phone: phone);
+  }
+
+  Future<void> verifyOtp({required String phone, required String token}) async {
+    await _client.auth.verifyOTP(phone: phone, token: token, type: OtpType.sms);
   }
 
   Future<bool> signInWithGoogle() async {
@@ -50,13 +55,13 @@ class AuthRepository {
   }
 
   Future<bool> signInWithLine() async {
-    // Using generic OAuth provider if 'line' enum is missing, 
-    // or assuming it will be available. 
-    // If OAuthProvider.line is missing, we can try to use the string 'line' 
+    // Using generic OAuth provider if 'line' enum is missing,
+    // or assuming it will be available.
+    // If OAuthProvider.line is missing, we can try to use the string 'line'
     // via a cast or just rely on the fact that we might need to upgrade the package.
-    // For now, we will try to use OAuthProvider.line. 
+    // For now, we will try to use OAuthProvider.line.
     // If it fails to compile, the user needs to upgrade supabase_flutter.
-    
+
     // return await _client.auth.signInWithOAuth(
     //   OAuthProvider.line,
     //   redirectTo: 'tw.help.disasterrelief://login-callback',

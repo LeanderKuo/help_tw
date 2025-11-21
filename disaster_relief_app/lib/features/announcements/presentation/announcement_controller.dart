@@ -13,8 +13,7 @@ class AnnouncementController {
 
   final Ref _ref;
 
-  AnnouncementRepository get _repo =>
-      _ref.read(announcementRepositoryProvider);
+  AnnouncementRepository get _repo => _ref.read(announcementRepositoryProvider);
 
   AppLanguage get _locale =>
       _ref.read(localeControllerProvider).valueOrNull ?? AppLanguage.zhTw;

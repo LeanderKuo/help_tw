@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../services/supabase_service.dart';
 import '../../../models/user_profile.dart';
+import '../../../core/utils/phone_masking.dart';
 
 final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   return ProfileRepository(SupabaseService.client);
@@ -31,14 +32,26 @@ class ProfileRepository {
         .stream(primaryKey: ['id'])
         .eq('id', userId)
         .map((rows) {
-      if (rows.isEmpty) return null;
-      final first = rows.first;
-      if (first is Map<String, dynamic>) {
-        return UserProfile.fromJson(first);
-      }
-      return UserProfile.fromJson(Map<String, dynamic>.from(first as Map));
+          final List<dynamic> data = rows;
+          if (data.isEmpty) return null;
+          final first = Map<String, dynamic>.from(data.first as Map);
+          return UserProfile.fromJson(first);
+        });
+  }
+
+  Future<void> upsertPhone({
+    required String userId,
+    required String phoneNumber,
+  }) async {
+    final masked = maskPhone(phoneNumber);
+    await _client.from('profiles_private').upsert({
+      'id': userId,
+      'phone': phoneNumber,
+      'masked_phone': masked,
+    });
+    await _client.from('profiles_public').upsert({
+      'id': userId,
+      'masked_phone': masked,
     });
   }
-  
-  // TODO: Add update profile methods
 }

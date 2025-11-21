@@ -75,8 +75,6 @@ class ResourcePoint with _$ResourcePoint {
   Map<String, dynamic> toSupabasePayload({String locale = 'zh-TW'}) {
     final normalizedType = type.toLowerCase();
     final category = expiresAt != null ? 'temporary' : 'permanent';
-    final lng = longitude;
-    final lat = latitude;
     return {
       'id': id,
       'title': {locale: title, 'en-US': title},
@@ -85,7 +83,7 @@ class ResourcePoint with _$ResourcePoint {
       'resource_type': normalizedType,
       'category': category,
       'address': address,
-      if (lat != null) 'location': 'POINT($lng $lat)',
+      'location': 'POINT($longitude $latitude)',
       'expires_at': expiresAt?.toIso8601String(),
       'is_active': isActive,
       'tags': tags,

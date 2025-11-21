@@ -50,7 +50,9 @@ class ResourceRepository {
           .timeout(const Duration(seconds: 12));
 
       final resources = (data as List)
-          .map((json) => ResourcePoint.fromSupabase(json as Map<String, dynamic>))
+          .map(
+            (json) => ResourcePoint.fromSupabase(json as Map<String, dynamic>),
+          )
           .toList();
       final resourcesWithIds = resources
           .map((r) => r.copyWith(isarId: fastHash(r.id)))
@@ -80,7 +82,9 @@ class ResourceRepository {
   // Create a new resource point
   Future<void> createResourcePoint(ResourcePoint resource) async {
     final payload = resource
-        .copyWith(createdBy: _supabase.auth.currentUser?.id ?? resource.createdBy)
+        .copyWith(
+          createdBy: _supabase.auth.currentUser?.id ?? resource.createdBy,
+        )
         .toSupabasePayload();
 
     await _supabase.from('resource_points').insert(payload);

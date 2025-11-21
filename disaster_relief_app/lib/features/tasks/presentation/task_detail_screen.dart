@@ -9,7 +9,10 @@ import '../../chat/data/chat_repository.dart';
 import '../../auth/data/auth_repository.dart';
 import '../../../l10n/app_localizations.dart';
 
-final taskDetailProvider = FutureProvider.family<TaskModel?, String>((ref, id) async {
+final taskDetailProvider = FutureProvider.family<TaskModel?, String>((
+  ref,
+  id,
+) async {
   final tasks = await ref.watch(taskRepositoryProvider).getTasks();
   try {
     return tasks.firstWhere((t) => t.id == id);
@@ -18,12 +21,17 @@ final taskDetailProvider = FutureProvider.family<TaskModel?, String>((ref, id) a
   }
 });
 
-final chatMessagesProvider = StreamProvider.family<List<ChatMessage>, String>((ref, taskId) {
+final chatMessagesProvider = StreamProvider.family<List<ChatMessage>, String>((
+  ref,
+  taskId,
+) {
   return ref.watch(chatRepositoryProvider).subscribeToTaskMessages(taskId);
 });
 
-final taskParticipationProvider =
-    FutureProvider.family<bool, String>((ref, taskId) async {
+final taskParticipationProvider = FutureProvider.family<bool, String>((
+  ref,
+  taskId,
+) async {
   return ref.watch(taskRepositoryProvider).isUserParticipant(taskId);
 });
 
@@ -62,7 +70,10 @@ class TaskDetailScreen extends ConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(task.title, style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+          Text(
+            task.title,
+            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -151,7 +162,9 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
     setState(() => _isJoining = true);
     try {
       if (joined) {
-        await ref.read(taskControllerProvider.notifier).leaveTask(widget.taskId);
+        await ref
+            .read(taskControllerProvider.notifier)
+            .leaveTask(widget.taskId);
       } else {
         await ref
             .read(taskControllerProvider.notifier)
@@ -171,7 +184,9 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
       children: [
         Consumer(
           builder: (context, ref, _) {
-            final joinedAsync = ref.watch(taskParticipationProvider(widget.taskId));
+            final joinedAsync = ref.watch(
+              taskParticipationProvider(widget.taskId),
+            );
             return joinedAsync.when(
               data: (joined) => Column(
                 children: [
@@ -191,9 +206,7 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
                         onPressed: _isJoining
                             ? null
                             : () => _toggleParticipation(joined),
-                        child: Text(
-                          joined ? '退出任務' : '加入任務',
-                        ),
+                        child: Text(joined ? '退出任務' : '加入任務'),
                       ),
                     ),
                   ),
@@ -208,16 +221,24 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
           child: messagesAsync.when(
             data: (messages) {
               return ListView.builder(
-                reverse: true, // Show newest at bottom if we reverse list, but stream is ordered asc.
+                reverse:
+                    true, // Show newest at bottom if we reverse list, but stream is ordered asc.
                 // Actually standard chat is bottom-up. Let's keep it simple.
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
                   final msg = messages[index];
-                  final isMe = msg.senderId == ref.read(authRepositoryProvider).currentUser?.id;
+                  final isMe =
+                      msg.senderId ==
+                      ref.read(authRepositoryProvider).currentUser?.id;
                   return Align(
-                    alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
+                    alignment: isMe
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
                     child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 8,
+                      ),
                       padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
                         color: isMe ? Colors.blue[100] : Colors.grey[200],
@@ -228,8 +249,13 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
                         children: [
                           Text(msg.content ?? ''),
                           Text(
-                            msg.createdAt != null ? timeago.format(msg.createdAt!) : '',
-                            style: const TextStyle(fontSize: 10, color: Colors.grey),
+                            msg.createdAt != null
+                                ? timeago.format(msg.createdAt!)
+                                : '',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -255,10 +281,7 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
                   ),
                 ),
               ),
-              IconButton(
-                icon: const Icon(Icons.send),
-                onPressed: _sendMessage,
-              ),
+              IconButton(icon: const Icon(Icons.send), onPressed: _sendMessage),
             ],
           ),
         ),

@@ -90,20 +90,14 @@ class InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(
-          icon,
-          size: 20,
-          color: iconColor ?? AppColors.textSecondaryLight,
-        ),
+        Icon(icon, size: 20, color: iconColor ?? AppColors.textSecondaryLight),
         const SizedBox(width: 8),
         Expanded(
           child: Text(
             text,
-            style: textStyle ??
-                TextStyle(
-                  color: AppColors.textSecondaryLight,
-                  fontSize: 14,
-                ),
+            style:
+                textStyle ??
+                TextStyle(color: AppColors.textSecondaryLight, fontSize: 14),
           ),
         ),
       ],
@@ -138,10 +132,7 @@ class LoadingOverlay extends StatelessWidget {
                   const CircularProgressIndicator(color: Colors.white),
                   if (message != null) ...[
                     const SizedBox(height: 16),
-                    Text(
-                      message!,
-                      style: const TextStyle(color: Colors.white),
-                    ),
+                    Text(message!, style: const TextStyle(color: Colors.white)),
                   ],
                 ],
               ),
@@ -174,11 +165,7 @@ class EmptyState extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              size: 64,
-              color: AppColors.textSecondaryLight,
-            ),
+            Icon(icon, size: 64, color: AppColors.textSecondaryLight),
             const SizedBox(height: 16),
             Text(
               title,
@@ -200,10 +187,7 @@ class EmptyState extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ],
-            if (action != null) ...[
-              const SizedBox(height: 24),
-              action!,
-            ],
+            if (action != null) ...[const SizedBox(height: 24), action!],
           ],
         ),
       ),
@@ -251,7 +235,10 @@ class SearchBar extends StatelessWidget {
           borderSide: BorderSide.none,
         ),
         filled: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
       ),
     );
   }
@@ -272,7 +259,8 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      padding:
+          padding ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

@@ -1,4 +1,4 @@
-﻿// ignore_for_file: invalid_annotation_target
+// ignore_for_file: invalid_annotation_target
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
@@ -23,7 +23,9 @@ class TaskModel with _$TaskModel {
     String? address,
     @JsonKey(name: 'materials_status') @Default('蝛拙?') String materialsStatus,
     @JsonKey(name: 'participant_count') @Default(0) int participantCount,
-    @JsonKey(name: 'required_participants') @Default(0) int requiredParticipants,
+    @JsonKey(name: 'required_participants')
+    @Default(0)
+    int requiredParticipants,
     @Default([]) List<String> images,
     @JsonKey(name: 'assigned_to') String? assignedTo,
     @JsonKey(name: 'created_by') String? createdBy,
@@ -41,8 +43,8 @@ class TaskModel with _$TaskModel {
     final lat = _toDouble(json['lat'] ?? json['latitude']);
     final lng = _toDouble(json['lng'] ?? json['longitude']);
     final isPriority = json['is_priority'] == true;
-    final priorityStr = (json['priority'] as String?) ??
-        (isPriority ? 'Emergency' : 'Normal');
+    final priorityStr =
+        (json['priority'] as String?) ?? (isPriority ? 'Emergency' : 'Normal');
 
     return TaskModel(
       id: json['id'] as String,
@@ -58,10 +60,8 @@ class TaskModel with _$TaskModel {
       participantCount: (json['participant_count'] as num?)?.toInt() ?? 0,
       requiredParticipants:
           (json['required_participants'] as num?)?.toInt() ?? 0,
-      images: (json['images'] as List?)
-              ?.whereType<String>()
-              .toList() ??
-          const [],
+      images:
+          (json['images'] as List?)?.whereType<String>().toList() ?? const [],
       assignedTo: json['assigned_to'] as String?,
       createdBy: json['author_id'] as String? ?? json['created_by'] as String?,
       createdAt: _parseDate(json['created_at']),
@@ -109,4 +109,3 @@ String _normalizeTaskStatus(String status) {
   if (lower == 'cancelled') return 'canceled';
   return lower;
 }
-

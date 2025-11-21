@@ -12,7 +12,8 @@ part of 'resource_point.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 ResourcePoint _$ResourcePointFromJson(Map<String, dynamic> json) {
   return _ResourcePoint.fromJson(json);
@@ -40,7 +41,7 @@ mixin _$ResourcePoint {
   DateTime? get updatedAt => throw _privateConstructorUsedError;
   List<String> get images => throw _privateConstructorUsedError;
   List<String> get tags => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @Id()
   int? get isarId => throw _privateConstructorUsedError;
 
@@ -53,25 +54,27 @@ mixin _$ResourcePoint {
 /// @nodoc
 abstract class $ResourcePointCopyWith<$Res> {
   factory $ResourcePointCopyWith(
-          ResourcePoint value, $Res Function(ResourcePoint) then) =
-      _$ResourcePointCopyWithImpl<$Res, ResourcePoint>;
+    ResourcePoint value,
+    $Res Function(ResourcePoint) then,
+  ) = _$ResourcePointCopyWithImpl<$Res, ResourcePoint>;
   @useResult
-  $Res call(
-      {String id,
-      String title,
-      String? description,
-      String type,
-      double latitude,
-      double longitude,
-      String? address,
-      @JsonKey(name: 'expires_at') DateTime? expiresAt,
-      @JsonKey(name: 'is_active') bool isActive,
-      @JsonKey(name: 'created_by') String? createdBy,
-      @JsonKey(name: 'created_at') DateTime? createdAt,
-      @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      List<String> images,
-      List<String> tags,
-      @JsonKey(ignore: true) @Id() int? isarId});
+  $Res call({
+    String id,
+    String title,
+    String? description,
+    String type,
+    double latitude,
+    double longitude,
+    String? address,
+    @JsonKey(name: 'expires_at') DateTime? expiresAt,
+    @JsonKey(name: 'is_active') bool isActive,
+    @JsonKey(name: 'created_by') String? createdBy,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
+    List<String> images,
+    List<String> tags,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
+  });
 }
 
 /// @nodoc
@@ -103,68 +106,71 @@ class _$ResourcePointCopyWithImpl<$Res, $Val extends ResourcePoint>
     Object? tags = null,
     Object? isarId = freezed,
   }) {
-    return _then(_value.copyWith(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      address: freezed == address
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
-              as String?,
-      expiresAt: freezed == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      images: null == images
-          ? _value.images
-          : images // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      tags: null == tags
-          ? _value.tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      isarId: freezed == isarId
-          ? _value.isarId
-          : isarId // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            id: null == id
+                ? _value.id
+                : id // ignore: cast_nullable_to_non_nullable
+                      as String,
+            title: null == title
+                ? _value.title
+                : title // ignore: cast_nullable_to_non_nullable
+                      as String,
+            description: freezed == description
+                ? _value.description
+                : description // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            type: null == type
+                ? _value.type
+                : type // ignore: cast_nullable_to_non_nullable
+                      as String,
+            latitude: null == latitude
+                ? _value.latitude
+                : latitude // ignore: cast_nullable_to_non_nullable
+                      as double,
+            longitude: null == longitude
+                ? _value.longitude
+                : longitude // ignore: cast_nullable_to_non_nullable
+                      as double,
+            address: freezed == address
+                ? _value.address
+                : address // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            expiresAt: freezed == expiresAt
+                ? _value.expiresAt
+                : expiresAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            isActive: null == isActive
+                ? _value.isActive
+                : isActive // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            createdBy: freezed == createdBy
+                ? _value.createdBy
+                : createdBy // ignore: cast_nullable_to_non_nullable
+                      as String?,
+            createdAt: freezed == createdAt
+                ? _value.createdAt
+                : createdAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            updatedAt: freezed == updatedAt
+                ? _value.updatedAt
+                : updatedAt // ignore: cast_nullable_to_non_nullable
+                      as DateTime?,
+            images: null == images
+                ? _value.images
+                : images // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            tags: null == tags
+                ? _value.tags
+                : tags // ignore: cast_nullable_to_non_nullable
+                      as List<String>,
+            isarId: freezed == isarId
+                ? _value.isarId
+                : isarId // ignore: cast_nullable_to_non_nullable
+                      as int?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -172,26 +178,28 @@ class _$ResourcePointCopyWithImpl<$Res, $Val extends ResourcePoint>
 abstract class _$$ResourcePointImplCopyWith<$Res>
     implements $ResourcePointCopyWith<$Res> {
   factory _$$ResourcePointImplCopyWith(
-          _$ResourcePointImpl value, $Res Function(_$ResourcePointImpl) then) =
-      __$$ResourcePointImplCopyWithImpl<$Res>;
+    _$ResourcePointImpl value,
+    $Res Function(_$ResourcePointImpl) then,
+  ) = __$$ResourcePointImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String id,
-      String title,
-      String? description,
-      String type,
-      double latitude,
-      double longitude,
-      String? address,
-      @JsonKey(name: 'expires_at') DateTime? expiresAt,
-      @JsonKey(name: 'is_active') bool isActive,
-      @JsonKey(name: 'created_by') String? createdBy,
-      @JsonKey(name: 'created_at') DateTime? createdAt,
-      @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      List<String> images,
-      List<String> tags,
-      @JsonKey(ignore: true) @Id() int? isarId});
+  $Res call({
+    String id,
+    String title,
+    String? description,
+    String type,
+    double latitude,
+    double longitude,
+    String? address,
+    @JsonKey(name: 'expires_at') DateTime? expiresAt,
+    @JsonKey(name: 'is_active') bool isActive,
+    @JsonKey(name: 'created_by') String? createdBy,
+    @JsonKey(name: 'created_at') DateTime? createdAt,
+    @JsonKey(name: 'updated_at') DateTime? updatedAt,
+    List<String> images,
+    List<String> tags,
+    @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
+  });
 }
 
 /// @nodoc
@@ -199,8 +207,9 @@ class __$$ResourcePointImplCopyWithImpl<$Res>
     extends _$ResourcePointCopyWithImpl<$Res, _$ResourcePointImpl>
     implements _$$ResourcePointImplCopyWith<$Res> {
   __$$ResourcePointImplCopyWithImpl(
-      _$ResourcePointImpl _value, $Res Function(_$ResourcePointImpl) _then)
-      : super(_value, _then);
+    _$ResourcePointImpl _value,
+    $Res Function(_$ResourcePointImpl) _then,
+  ) : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -221,93 +230,95 @@ class __$$ResourcePointImplCopyWithImpl<$Res>
     Object? tags = null,
     Object? isarId = freezed,
   }) {
-    return _then(_$ResourcePointImpl(
-      id: null == id
-          ? _value.id
-          : id // ignore: cast_nullable_to_non_nullable
-              as String,
-      title: null == title
-          ? _value.title
-          : title // ignore: cast_nullable_to_non_nullable
-              as String,
-      description: freezed == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String?,
-      type: null == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as String,
-      latitude: null == latitude
-          ? _value.latitude
-          : latitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      longitude: null == longitude
-          ? _value.longitude
-          : longitude // ignore: cast_nullable_to_non_nullable
-              as double,
-      address: freezed == address
-          ? _value.address
-          : address // ignore: cast_nullable_to_non_nullable
-              as String?,
-      expiresAt: freezed == expiresAt
-          ? _value.expiresAt
-          : expiresAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      isActive: null == isActive
-          ? _value.isActive
-          : isActive // ignore: cast_nullable_to_non_nullable
-              as bool,
-      createdBy: freezed == createdBy
-          ? _value.createdBy
-          : createdBy // ignore: cast_nullable_to_non_nullable
-              as String?,
-      createdAt: freezed == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      updatedAt: freezed == updatedAt
-          ? _value.updatedAt
-          : updatedAt // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      images: null == images
-          ? _value._images
-          : images // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      tags: null == tags
-          ? _value._tags
-          : tags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
-      isarId: freezed == isarId
-          ? _value.isarId
-          : isarId // ignore: cast_nullable_to_non_nullable
-              as int?,
-    ));
+    return _then(
+      _$ResourcePointImpl(
+        id: null == id
+            ? _value.id
+            : id // ignore: cast_nullable_to_non_nullable
+                  as String,
+        title: null == title
+            ? _value.title
+            : title // ignore: cast_nullable_to_non_nullable
+                  as String,
+        description: freezed == description
+            ? _value.description
+            : description // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        type: null == type
+            ? _value.type
+            : type // ignore: cast_nullable_to_non_nullable
+                  as String,
+        latitude: null == latitude
+            ? _value.latitude
+            : latitude // ignore: cast_nullable_to_non_nullable
+                  as double,
+        longitude: null == longitude
+            ? _value.longitude
+            : longitude // ignore: cast_nullable_to_non_nullable
+                  as double,
+        address: freezed == address
+            ? _value.address
+            : address // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        expiresAt: freezed == expiresAt
+            ? _value.expiresAt
+            : expiresAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        isActive: null == isActive
+            ? _value.isActive
+            : isActive // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        createdBy: freezed == createdBy
+            ? _value.createdBy
+            : createdBy // ignore: cast_nullable_to_non_nullable
+                  as String?,
+        createdAt: freezed == createdAt
+            ? _value.createdAt
+            : createdAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        updatedAt: freezed == updatedAt
+            ? _value.updatedAt
+            : updatedAt // ignore: cast_nullable_to_non_nullable
+                  as DateTime?,
+        images: null == images
+            ? _value._images
+            : images // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        tags: null == tags
+            ? _value._tags
+            : tags // ignore: cast_nullable_to_non_nullable
+                  as List<String>,
+        isarId: freezed == isarId
+            ? _value.isarId
+            : isarId // ignore: cast_nullable_to_non_nullable
+                  as int?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ResourcePointImpl extends _ResourcePoint {
-  const _$ResourcePointImpl(
-      {required this.id,
-      required this.title,
-      this.description,
-      this.type = 'Other',
-      required this.latitude,
-      required this.longitude,
-      this.address,
-      @JsonKey(name: 'expires_at') this.expiresAt,
-      @JsonKey(name: 'is_active') this.isActive = true,
-      @JsonKey(name: 'created_by') this.createdBy,
-      @JsonKey(name: 'created_at') this.createdAt,
-      @JsonKey(name: 'updated_at') this.updatedAt,
-      final List<String> images = const [],
-      final List<String> tags = const [],
-      @JsonKey(ignore: true) @Id() this.isarId})
-      : _images = images,
-        _tags = tags,
-        super._();
+  const _$ResourcePointImpl({
+    required this.id,
+    required this.title,
+    this.description,
+    this.type = 'Other',
+    required this.latitude,
+    required this.longitude,
+    this.address,
+    @JsonKey(name: 'expires_at') this.expiresAt,
+    @JsonKey(name: 'is_active') this.isActive = true,
+    @JsonKey(name: 'created_by') this.createdBy,
+    @JsonKey(name: 'created_at') this.createdAt,
+    @JsonKey(name: 'updated_at') this.updatedAt,
+    final List<String> images = const [],
+    final List<String> tags = const [],
+    @JsonKey(includeFromJson: false, includeToJson: false) @Id() this.isarId,
+  }) : _images = images,
+       _tags = tags,
+       super._();
 
   factory _$ResourcePointImpl.fromJson(Map<String, dynamic> json) =>
       _$$ResourcePointImplFromJson(json);
@@ -321,7 +332,7 @@ class _$ResourcePointImpl extends _ResourcePoint {
   @override
   @JsonKey()
   final String type;
-// Water, Shelter, Medical, Food, Other
+  // Water, Shelter, Medical, Food, Other
   @override
   final double latitude;
   @override
@@ -362,7 +373,7 @@ class _$ResourcePointImpl extends _ResourcePoint {
   }
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @Id()
   final int? isarId;
 
@@ -404,22 +415,23 @@ class _$ResourcePointImpl extends _ResourcePoint {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      title,
-      description,
-      type,
-      latitude,
-      longitude,
-      address,
-      expiresAt,
-      isActive,
-      createdBy,
-      createdAt,
-      updatedAt,
-      const DeepCollectionEquality().hash(_images),
-      const DeepCollectionEquality().hash(_tags),
-      isarId);
+    runtimeType,
+    id,
+    title,
+    description,
+    type,
+    latitude,
+    longitude,
+    address,
+    expiresAt,
+    isActive,
+    createdBy,
+    createdAt,
+    updatedAt,
+    const DeepCollectionEquality().hash(_images),
+    const DeepCollectionEquality().hash(_tags),
+    isarId,
+  );
 
   @JsonKey(ignore: true)
   @override
@@ -429,29 +441,30 @@ class _$ResourcePointImpl extends _ResourcePoint {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ResourcePointImplToJson(
-      this,
-    );
+    return _$$ResourcePointImplToJson(this);
   }
 }
 
 abstract class _ResourcePoint extends ResourcePoint {
-  const factory _ResourcePoint(
-      {required final String id,
-      required final String title,
-      final String? description,
-      final String type,
-      required final double latitude,
-      required final double longitude,
-      final String? address,
-      @JsonKey(name: 'expires_at') final DateTime? expiresAt,
-      @JsonKey(name: 'is_active') final bool isActive,
-      @JsonKey(name: 'created_by') final String? createdBy,
-      @JsonKey(name: 'created_at') final DateTime? createdAt,
-      @JsonKey(name: 'updated_at') final DateTime? updatedAt,
-      final List<String> images,
-      final List<String> tags,
-      @JsonKey(ignore: true) @Id() final int? isarId}) = _$ResourcePointImpl;
+  const factory _ResourcePoint({
+    required final String id,
+    required final String title,
+    final String? description,
+    final String type,
+    required final double latitude,
+    required final double longitude,
+    final String? address,
+    @JsonKey(name: 'expires_at') final DateTime? expiresAt,
+    @JsonKey(name: 'is_active') final bool isActive,
+    @JsonKey(name: 'created_by') final String? createdBy,
+    @JsonKey(name: 'created_at') final DateTime? createdAt,
+    @JsonKey(name: 'updated_at') final DateTime? updatedAt,
+    final List<String> images,
+    final List<String> tags,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Id()
+    final int? isarId,
+  }) = _$ResourcePointImpl;
   const _ResourcePoint._() : super._();
 
   factory _ResourcePoint.fromJson(Map<String, dynamic> json) =
@@ -491,7 +504,7 @@ abstract class _ResourcePoint extends ResourcePoint {
   @override
   List<String> get tags;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @Id()
   int? get isarId;
   @override

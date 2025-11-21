@@ -50,7 +50,10 @@ class Responsive {
     return EdgeInsets.symmetric(horizontal: padding);
   }
 
-  static SizedBox responsiveSpacing(BuildContext context, {double factor = 1.0}) {
+  static SizedBox responsiveSpacing(
+    BuildContext context, {
+    double factor = 1.0,
+  }) {
     final baseSpacing = isMobile(context) ? 16.0 : 24.0;
     return SizedBox(height: baseSpacing * factor);
   }
@@ -84,11 +87,7 @@ class ResponsiveLayout extends StatelessWidget {
   final Widget child;
   final double? maxWidth;
 
-  const ResponsiveLayout({
-    super.key,
-    required this.child,
-    this.maxWidth,
-  });
+  const ResponsiveLayout({super.key, required this.child, this.maxWidth});
 
   @override
   Widget build(BuildContext context) {

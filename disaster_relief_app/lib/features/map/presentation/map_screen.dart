@@ -21,7 +21,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   Position? _userPosition;
   bool _locationLoading = false;
   String? _locationError;
-  
+
   // Default to Taiwan center
   static const CameraPosition _kDefaultLocation = CameraPosition(
     target: LatLng(23.6978, 120.9605),
@@ -86,10 +86,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
       return Marker(
         markerId: MarkerId(resource.id),
         position: LatLng(resource.latitude, resource.longitude),
-        infoWindow: InfoWindow(
-          title: resource.title,
-          snippet: resource.type,
-        ),
+        infoWindow: InfoWindow(title: resource.title, snippet: resource.type),
         icon: BitmapDescriptor.defaultMarkerWithHue(
           _getMarkerHue(resource.type),
         ),

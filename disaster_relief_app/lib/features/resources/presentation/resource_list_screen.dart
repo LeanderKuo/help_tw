@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -391,18 +391,20 @@ class _ResourceCard extends StatelessWidget {
 
   const _ResourceCard({required this.resource, required this.l10n});
 
-    Future<void> _navigate(BuildContext context) async {
+  Future<void> _navigate(BuildContext context) async {
     try {
       await launchGoogleMapsNavigation(
         lat: resource.latitude,
         lng: resource.longitude,
       );
     } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Navigation failed: ')));
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Navigation failed: $e')));
     }
   }
-@override
+
+  @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -602,4 +604,3 @@ class _ResourceHeader extends StatelessWidget {
     );
   }
 }
-

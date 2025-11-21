@@ -13,9 +13,11 @@ class ShuttleModel with _$ShuttleModel {
 
   const factory ShuttleModel({
     required String id,
+    @JsonKey(name: 'display_id') String? displayId,
     required String title,
     String? description,
-    @Default('Scheduled') String status, // Scheduled, En Route, Arrived, Cancelled
+    @Default('Scheduled')
+    String status, // Scheduled, En Route, Arrived, Cancelled
     @JsonKey(name: 'route_start_lat') double? routeStartLat,
     @JsonKey(name: 'route_start_lng') double? routeStartLng,
     @JsonKey(name: 'route_end_lat') double? routeEndLat,
@@ -23,6 +25,7 @@ class ShuttleModel with _$ShuttleModel {
     @JsonKey(name: 'origin_address') String? originAddress,
     @JsonKey(name: 'destination_address') String? destinationAddress,
     @JsonKey(name: 'departure_time') DateTime? departureTime,
+    @JsonKey(name: 'arrive_at') DateTime? arriveAt,
     @JsonKey(name: 'signup_deadline') DateTime? signupDeadline,
     @JsonKey(name: 'cost_type') @Default('free') String costType,
     @JsonKey(name: 'fare_total') double? fareTotal,
@@ -33,6 +36,11 @@ class ShuttleModel with _$ShuttleModel {
     @JsonKey(name: 'created_by') String? createdBy,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
+    @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
+    @JsonKey(name: 'contact_name') String? contactName,
+    @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
+    @JsonKey(name: 'participants') @Default([]) List<String> participantIds,
+    @JsonKey(name: 'is_priority') @Default(false) bool isPriority,
     @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
   }) = _ShuttleModel;
 
@@ -46,10 +54,12 @@ class ShuttleModel with _$ShuttleModel {
 
     double? startLat = _toDouble(json['origin_lat'] ?? json['route_start_lat']);
     double? startLng = _toDouble(json['origin_lng'] ?? json['route_start_lng']);
-    double? endLat =
-        _toDouble(json['destination_lat'] ?? json['route_end_lat']);
-    double? endLng =
-        _toDouble(json['destination_lng'] ?? json['route_end_lng']);
+    double? endLat = _toDouble(
+      json['destination_lat'] ?? json['route_end_lat'],
+    );
+    double? endLng = _toDouble(
+      json['destination_lng'] ?? json['route_end_lng'],
+    );
 
     if ((startLat == null || startLng == null) &&
         origin is Map &&
@@ -83,11 +93,13 @@ class ShuttleModel with _$ShuttleModel {
       originAddress: json['origin_address'] as String?,
       destinationAddress: json['destination_address'] as String?,
       departureTime: _parseDate(json['depart_at'] ?? json['departure_time']),
+      arriveAt: _parseDate(json['arrive_at']),
       signupDeadline: _parseDate(json['signup_deadline']),
       costType: (json['cost_type'] as String?) ?? 'free',
       fareTotal: _toDouble(json['fare_total']),
       farePerPerson: _toDouble(json['fare_per_person']),
-      capacity: (json['seats_total'] as num?)?.toInt() ??
+      capacity:
+          (json['seats_total'] as num?)?.toInt() ??
           (json['capacity'] as num?)?.toInt() ??
           0,
       seatsTaken: (json['seats_taken'] as num?)?.toInt() ?? 0,
@@ -95,6 +107,14 @@ class ShuttleModel with _$ShuttleModel {
       createdBy: json['created_by'] as String?,
       createdAt: _parseDate(json['created_at']),
       updatedAt: _parseDate(json['updated_at']),
+      displayId: json['display_id'] as String?,
+      vehicle: json['vehicle'] as Map<String, dynamic>?,
+      contactName: json['contact_name'] as String?,
+      contactPhoneMasked: json['contact_phone_masked'] as String?,
+      participantIds:
+          (json['participants'] as List?)?.whereType<String>().toList() ??
+          const [],
+      isPriority: (json['is_priority'] as bool?) ?? false,
     );
   }
 
@@ -119,6 +139,7 @@ class ShuttleModel with _$ShuttleModel {
       'origin_address': originAddress,
       'destination_address': destinationAddress,
       'depart_at': departureTime?.toIso8601String(),
+      'arrive_at': arriveAt?.toIso8601String(),
       'signup_deadline': signupDeadline?.toIso8601String(),
       'cost_type': costType,
       'fare_total': fareTotal,
@@ -126,6 +147,11 @@ class ShuttleModel with _$ShuttleModel {
       'seats_total': capacity,
       'driver_id': driverId,
       'created_by': creatorId ?? createdBy,
+      'vehicle': vehicle,
+      'contact_name': contactName,
+      'contact_phone_masked': contactPhoneMasked,
+      'participants': participantIds.isEmpty ? null : participantIds,
+      'is_priority': isPriority,
     }..removeWhere((key, value) => value == null);
   }
 }

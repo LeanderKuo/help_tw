@@ -28,7 +28,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   void _signIn() {
     if (_formKey.currentState!.validate()) {
-      ref.read(authControllerProvider.notifier).signInWithEmailAndPassword(
+      ref
+          .read(authControllerProvider.notifier)
+          .signInWithEmailAndPassword(
             email: _emailController.text.trim(),
             password: _passwordController.text,
           );
@@ -65,11 +67,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Icon(
-                      Icons.emergency,
-                      size: 64,
-                      color: AppColors.primary,
-                    ),
+                    Icon(Icons.emergency, size: 64, color: AppColors.primary),
                     const SizedBox(height: 16),
                     Text(
                       l10n.appTitle,
@@ -78,16 +76,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         fontWeight: FontWeight.bold,
                         color: AppColors.textPrimaryLight,
                       ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    l10n.signInSubtitle,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: AppColors.textSecondaryLight,
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
+                    const SizedBox(height: 8),
+                    Text(
+                      l10n.signInSubtitle,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: AppColors.textSecondaryLight,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 48),
                     TextFormField(
@@ -182,8 +180,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: state.isLoading
                           ? null
                           : () => ref
-                              .read(authControllerProvider.notifier)
-                              .signInWithGoogle(),
+                                .read(authControllerProvider.notifier)
+                                .signInWithGoogle(),
                       icon: const Icon(Icons.g_mobiledata, size: 28),
                       label: Text(l10n.continueWithGoogle),
                     ),
@@ -192,10 +190,18 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: state.isLoading
                           ? null
                           : () => ref
-                              .read(authControllerProvider.notifier)
-                              .signInWithLine(),
+                                .read(authControllerProvider.notifier)
+                                .signInWithLine(),
                       icon: const Icon(Icons.chat_bubble_outline, size: 20),
                       label: Text(l10n.continueWithLine),
+                    ),
+                    const SizedBox(height: 12),
+                    OutlinedButton.icon(
+                      onPressed: state.isLoading
+                          ? null
+                          : () => context.push('/login/phone'),
+                      icon: const Icon(Icons.phone_android, size: 20),
+                      label: const Text('Sign in with phone'),
                     ),
                     const SizedBox(height: 32),
                     Row(

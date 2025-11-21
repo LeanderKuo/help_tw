@@ -39,7 +39,10 @@ class GlobalTopNavBar extends StatelessWidget implements PreferredSizeWidget {
             children: [
               IconButton(
                 onPressed: onMenuTap,
-                icon: const Icon(Icons.menu_rounded, color: AppColors.textPrimaryLight),
+                icon: const Icon(
+                  Icons.menu_rounded,
+                  color: AppColors.textPrimaryLight,
+                ),
                 tooltip: '開啟選單',
               ),
               Expanded(
@@ -57,9 +60,12 @@ class GlobalTopNavBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   IconButton(
                     onPressed:
-                        onNotificationTap ?? () => GoRouter.of(context).push('/announcements'),
-                    icon: const Icon(Icons.notifications_none_rounded,
-                        color: AppColors.textPrimaryLight),
+                        onNotificationTap ??
+                        () => GoRouter.of(context).push('/announcements'),
+                    icon: const Icon(
+                      Icons.notifications_none_rounded,
+                      color: AppColors.textPrimaryLight,
+                    ),
                     tooltip: '通知',
                   ),
                   const SizedBox(width: 4),
@@ -67,7 +73,9 @@ class GlobalTopNavBar extends StatelessWidget implements PreferredSizeWidget {
                     onTap: onAvatarTap,
                     child: CircleAvatar(
                       radius: 18,
-                      backgroundColor: AppColors.primary.withValues(alpha: 0.12),
+                      backgroundColor: AppColors.primary.withValues(
+                        alpha: 0.12,
+                      ),
                       child: const Icon(Icons.person, color: AppColors.primary),
                     ),
                   ),
@@ -107,20 +115,21 @@ class _EmergencyMarqueeState extends ConsumerState<EmergencyMarquee>
 
   void _startScroll() {
     if (!mounted) return;
-    if (!_scrollController.hasClients || _scrollController.position.maxScrollExtent <= 0) {
+    if (!_scrollController.hasClients ||
+        _scrollController.position.maxScrollExtent <= 0) {
       return;
     }
     _scrollController.jumpTo(0);
     _scrollController
         .animateTo(
-      _scrollController.position.maxScrollExtent,
-      duration: const Duration(seconds: 12),
-      curve: Curves.linear,
-    )
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(seconds: 12),
+          curve: Curves.linear,
+        )
         .whenComplete(() {
-      if (!mounted) return;
-      _startScroll();
-    });
+          if (!mounted) return;
+          _startScroll();
+        });
   }
 
   @override
@@ -150,11 +159,17 @@ class _EmergencyMarqueeState extends ConsumerState<EmergencyMarquee>
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     physics: const NeverScrollableScrollPhysics(),
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.campaign_rounded, color: Colors.white),
+                          const Icon(
+                            Icons.campaign_rounded,
+                            color: Colors.white,
+                          ),
                           const SizedBox(width: 12),
                           Text(
                             announcement.body,
