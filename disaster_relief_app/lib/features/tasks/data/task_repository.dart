@@ -82,14 +82,14 @@ class TaskRepository {
   // Create Task (Offline first approach)
   Future<void> createTask(TaskModel task) async {
     final isar = await _isarService.db;
-    
+
     // 1. Save to local as draft (or not draft if we are optimistic)
     // For now, let's try to send to server, if fail, mark as draft.
     try {
       final authorId = _supabase.auth.currentUser?.id ?? task.createdBy;
-      await _supabase.from('tasks').insert(
-        task.toSupabasePayload(authorId: authorId),
-      );
+      await _supabase
+          .from('tasks')
+          .insert(task.toSupabasePayload(authorId: authorId));
       // If success, save to local as synced
       await isar.writeTxn((isar) async {
         await isar.taskModels.put(
@@ -110,14 +110,17 @@ class TaskRepository {
   // Sync Drafts
   Future<void> syncDrafts() async {
     final isar = await _isarService.db;
-    final drafts = await isar.taskModels.filter().isDraftEqualTo(true).findAll();
+    final drafts = await isar.taskModels
+        .filter()
+        .isDraftEqualTo(true)
+        .findAll();
 
     for (final task in drafts) {
       try {
         final authorId = _supabase.auth.currentUser?.id ?? task.createdBy;
-        await _supabase.from('tasks').insert(
-          task.toSupabasePayload(authorId: authorId),
-        );
+        await _supabase
+            .from('tasks')
+            .insert(task.toSupabasePayload(authorId: authorId));
         await isar.writeTxn((isar) async {
           await isar.taskModels.put(task.copyWith(isDraft: false));
         });
@@ -132,12 +135,14 @@ class TaskRepository {
     final userId = _supabase.auth.currentUser?.id;
     if (userId == null) return false;
 
-    final rows = await _supabase
-        .from('task_participants')
-        .select('user_id')
-        .eq('task_id', taskId)
-        .eq('user_id', userId)
-        .limit(1) as List;
+    final rows =
+        await _supabase
+                .from('task_participants')
+                .select('user_id')
+                .eq('task_id', taskId)
+                .eq('user_id', userId)
+                .limit(1)
+            as List;
     return rows.isNotEmpty;
   }
 
@@ -161,5 +166,37 @@ class TaskRepository {
         .delete()
         .eq('task_id', taskId)
         .eq('user_id', userId);
+  }
+
+  Future<void> updateTask(TaskModel task) async {
+    final authorId = _supabase.auth.currentUser?.id ?? task.createdBy;
+    await _supabase
+        .from('tasks')
+        .update(task.toSupabasePayload(authorId: authorId))
+        .eq('id', task.id);
+  }
+
+  Future<void> completeTask(String taskId) async {
+    await _supabase.from('tasks').update({'status': 'done'}).eq('id', taskId);
+  }
+
+  Future<void> deleteTask(String taskId) async {
+    await _supabase.from('tasks').delete().eq('id', taskId);
+  }
+
+  Future<Set<String>> getJoinedTaskIds() async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) return {};
+
+    final rows =
+        await _supabase
+                .from('task_participants')
+                .select('task_id')
+                .eq('user_id', userId)
+            as List<dynamic>;
+
+    return rows
+        .map((row) => (row as Map<String, dynamic>)['task_id'] as String)
+        .toSet();
   }
 }

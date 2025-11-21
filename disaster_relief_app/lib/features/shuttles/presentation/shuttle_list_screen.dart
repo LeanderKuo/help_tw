@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'shuttle_controller.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/navigation_utils.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/common_widgets.dart';
 import '../../../core/widgets/global_chrome.dart';
@@ -50,7 +51,9 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
     if (position == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Unable to fetch location. Please enable permissions and location services.'),
+          content: Text(
+            'Unable to fetch location. Please enable permissions and location services.',
+          ),
         ),
       );
       return;
@@ -59,6 +62,12 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
       _latController.text = position.latitude.toStringAsFixed(5);
       _lngController.text = position.longitude.toStringAsFixed(5);
     });
+  }
+
+  Future<void> _openCreateShuttle() async {
+    await context.push('/shuttles/create');
+    if (!mounted) return;
+    await ref.read(shuttleControllerProvider.notifier).loadShuttles();
   }
 
   @override
@@ -96,8 +105,8 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                     final matchesSearch =
                         _searchQuery.isEmpty ||
                         s.title.toLowerCase().contains(
-                              _searchQuery.toLowerCase(),
-                            );
+                          _searchQuery.toLowerCase(),
+                        );
                     final matchesCost =
                         _costType == 'All costs' || s.costType == _costType;
                     return matchesSearch && matchesCost;
@@ -112,9 +121,11 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                       )
                       .toList();
                   final joined = filtered
-                      .where((s) =>
-                          s.status.toLowerCase() == 'in_progress' ||
-                          s.status.toLowerCase() == 'en route')
+                      .where(
+                        (s) =>
+                            s.status.toLowerCase() == 'in_progress' ||
+                            s.status.toLowerCase() == 'en route',
+                      )
                       .toList();
                   final completed = filtered
                       .where(
@@ -183,13 +194,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               children: [
                 Expanded(
                   child: ElevatedButton.icon(
-                    onPressed: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Create shuttle flow is not wired yet.'),
-                        ),
-                      );
-                    },
+                    onPressed: _openCreateShuttle,
                     icon: const Icon(Icons.directions_bus),
                     label: const Text('Create shuttle'),
                     style: ElevatedButton.styleFrom(
@@ -278,25 +283,29 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
                 Expanded(
                   child: DropdownButtonFormField<String>(
                     value: _costType,
-                    items: const [
-                      'All costs',
-                      'free',
-                      'share_gas',
-                      'paid',
-                    ]
-                        .map((cost) =>
-                            DropdownMenuItem(value: cost, child: Text(cost)))
+                    items: const ['All costs', 'free', 'share_gas', 'paid']
+                        .map(
+                          (cost) =>
+                              DropdownMenuItem(value: cost, child: Text(cost)),
+                        )
                         .toList(),
                     onChanged: (v) {
                       if (v == null) return;
                       setState(() => _costType = v);
                     },
-                    decoration: const InputDecoration(
-                      labelText: 'Cost type',
-                    ),
+                    decoration: const InputDecoration(labelText: 'Cost type'),
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () => context.push('/shuttles/my'),
+                icon: const Icon(Icons.assignment_ind_outlined),
+                label: const Text('My shuttles'),
+              ),
             ),
           ],
         ),
@@ -324,7 +333,9 @@ class _ShuttleListView extends StatelessWidget {
       return EmptyState(
         icon: Icons.directions_bus_outlined,
         title: emptyMessage,
-        message: isCompleted ? l10n.noShuttlesCompleted : l10n.noShuttlesHosting,
+        message: isCompleted
+            ? l10n.noShuttlesCompleted
+            : l10n.noShuttlesHosting,
       );
     }
 
@@ -348,6 +359,26 @@ class _ShuttleCard extends StatelessWidget {
   int get remainingSeats =>
       (shuttle.capacity - shuttle.seatsTaken).clamp(0, shuttle.capacity);
 
+  Future<void> _navigate(BuildContext context) async {
+    final targetLat = shuttle.routeEndLat ?? shuttle.routeStartLat;
+    final targetLng = shuttle.routeEndLng ?? shuttle.routeStartLng;
+    if (targetLat == null || targetLng == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No coordinates available for navigation'),
+        ),
+      );
+      return;
+    }
+    try {
+      await launchGoogleMapsNavigation(lat: targetLat, lng: targetLng);
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Navigation failed: $e')));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -365,8 +396,7 @@ class _ShuttleCard extends StatelessWidget {
                 children: [
                   StatusChip(
                     label: shuttle.status,
-                    backgroundColor:
-                        AppColors.primary.withValues(alpha: 0.12),
+                    backgroundColor: AppColors.primary.withValues(alpha: 0.12),
                     textColor: AppColors.primary,
                   ),
                   const Spacer(),
@@ -432,7 +462,7 @@ class _ShuttleCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => _navigate(context),
                       icon: const Icon(Icons.navigation, size: 18),
                       label: const Text('Navigate'),
                       style: OutlinedButton.styleFrom(

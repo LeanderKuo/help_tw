@@ -14,8 +14,13 @@ import '../../features/resources/presentation/create_resource_screen.dart';
 import '../../features/tasks/presentation/task_list_screen.dart';
 import '../../features/tasks/presentation/create_task_screen.dart';
 import '../../features/tasks/presentation/task_detail_screen.dart';
+import '../../features/tasks/presentation/my_tasks_screen.dart';
 import '../../features/shuttles/presentation/shuttle_list_screen.dart';
+import '../../features/shuttles/presentation/create_shuttle_screen.dart';
 import '../../features/shuttles/presentation/shuttle_detail_screen.dart';
+import '../../features/shuttles/presentation/my_shuttles_screen.dart';
+import '../../models/shuttle_model.dart';
+import '../../models/task_model.dart';
 import '../../features/auth/data/auth_repository.dart';
 import '../../features/profile/presentation/settings_screen.dart';
 import '../../l10n/app_localizations.dart';
@@ -74,6 +79,19 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (context, state) => const CreateTaskScreen(),
               ),
               GoRoute(
+                path: 'my',
+                builder: (context, state) => const MyTasksScreen(),
+              ),
+              GoRoute(
+                path: ':id/edit',
+                builder: (context, state) {
+                  final task = state.extra is TaskModel
+                      ? state.extra as TaskModel
+                      : null;
+                  return CreateTaskScreen(task: task, isEditing: true);
+                },
+              ),
+              GoRoute(
                 path: ':id',
                 builder: (context, state) =>
                     TaskDetailScreen(taskId: state.pathParameters['id']!),
@@ -84,6 +102,23 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: '/shuttles',
             builder: (context, state) => const ShuttleListScreen(),
             routes: [
+              GoRoute(
+                path: 'create',
+                builder: (context, state) => const CreateShuttleScreen(),
+              ),
+              GoRoute(
+                path: 'my',
+                builder: (context, state) => const MyShuttlesScreen(),
+              ),
+              GoRoute(
+                path: ':id/edit',
+                builder: (context, state) {
+                  final shuttle = state.extra is ShuttleModel
+                      ? state.extra as ShuttleModel
+                      : null;
+                  return CreateShuttleScreen(shuttle: shuttle, isEditing: true);
+                },
+              ),
               GoRoute(
                 path: ':id',
                 builder: (context, state) =>
@@ -160,14 +195,26 @@ class ScaffoldWithBottomNavBar extends ConsumerWidget {
           currentIndex: _calculateSelectedIndex(context),
           onTap: (int idx) => _onItemTapped(idx, context),
           items: [
-            BottomNavigationBarItem(icon: const Icon(Icons.home), label: l10n.home),
-            BottomNavigationBarItem(icon: const Icon(Icons.map), label: l10n.map),
-            BottomNavigationBarItem(icon: const Icon(Icons.task), label: l10n.tasks),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.home),
+              label: l10n.home,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.map),
+              label: l10n.map,
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.task),
+              label: l10n.tasks,
+            ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.directions_bus),
               label: l10n.shuttles,
             ),
-            BottomNavigationBarItem(icon: const Icon(Icons.person), label: l10n.profile),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.person),
+              label: l10n.profile,
+            ),
           ],
         ),
       ),

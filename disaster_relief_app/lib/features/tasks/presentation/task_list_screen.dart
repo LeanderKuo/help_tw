@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import 'task_controller.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/navigation_utils.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/common_widgets.dart';
 import '../../../core/widgets/global_chrome.dart';
@@ -52,7 +53,9 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
     if (position == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Unable to fetch location. Please enable permissions and location services.'),
+          content: Text(
+            'Unable to fetch location. Please enable permissions and location services.',
+          ),
         ),
       );
       return;
@@ -271,12 +274,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    items: const [
-                      'All tasks',
-                      'My tasks',
-                      'Urgent',
-                      'Drafts',
-                    ]
+                    items: const ['All tasks', 'My tasks', 'Urgent', 'Drafts']
                         .map(
                           (filter) => DropdownMenuItem(
                             value: filter,
@@ -320,6 +318,15 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                   ),
                 ),
               ],
+            ),
+            const SizedBox(height: 8),
+            Align(
+              alignment: Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: () => context.push('/tasks/my'),
+                icon: const Icon(Icons.assignment_ind_outlined),
+                label: const Text('My tasks'),
+              ),
             ),
           ],
         ),
@@ -375,6 +382,27 @@ class _TaskCard extends StatelessWidget {
 
   int get remainingSlots =>
       (task.requiredParticipants - task.participantCount).clamp(0, 999);
+
+  Future<void> _navigate(BuildContext context) async {
+    if (task.latitude == null || task.longitude == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No coordinates available for navigation'),
+        ),
+      );
+      return;
+    }
+    try {
+      await launchGoogleMapsNavigation(
+        lat: task.latitude!,
+        lng: task.longitude!,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Navigation failed: $e')));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -483,7 +511,7 @@ class _TaskCard extends StatelessWidget {
                 children: [
                   Expanded(
                     child: OutlinedButton.icon(
-                      onPressed: () {},
+                      onPressed: () => _navigate(context),
                       icon: const Icon(Icons.navigation, size: 18),
                       label: const Text('Navigate'),
                       style: OutlinedButton.styleFrom(

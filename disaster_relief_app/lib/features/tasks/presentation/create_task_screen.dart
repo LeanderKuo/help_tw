@@ -7,7 +7,10 @@ import '../../../models/task_model.dart';
 import '../../../l10n/app_localizations.dart';
 
 class CreateTaskScreen extends ConsumerStatefulWidget {
-  const CreateTaskScreen({super.key});
+  const CreateTaskScreen({super.key, this.task, this.isEditing = false});
+
+  final TaskModel? task;
+  final bool isEditing;
 
   @override
   ConsumerState<CreateTaskScreen> createState() => _CreateTaskScreenState();
@@ -17,9 +20,19 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   final _formKey = GlobalKey<FormState>();
   final _titleController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String _priority = 'Normal';
+  late String _priority;
 
   final List<String> _priorities = ['Low', 'Normal', 'High', 'Emergency'];
+
+  @override
+  void initState() {
+    super.initState();
+    _priority = widget.task?.priority ?? 'Normal';
+    if (widget.task != null) {
+      _titleController.text = widget.task!.title;
+      _descriptionController.text = widget.task!.description ?? '';
+    }
+  }
 
   @override
   void dispose() {
@@ -30,18 +43,31 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
 
   void _submit() {
     if (_formKey.currentState!.validate()) {
-      final newTask = TaskModel(
-        id: const Uuid().v4(),
-        title: _titleController.text,
-        description: _descriptionController.text,
-        priority: _priority,
-        status: 'Open',
-        materialsStatus: '穩定',
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-      );
+      final now = DateTime.now();
+      final isEditing = widget.isEditing && widget.task != null;
+      final task = isEditing
+          ? widget.task!.copyWith(
+              title: _titleController.text,
+              description: _descriptionController.text,
+              priority: _priority,
+              updatedAt: now,
+            )
+          : TaskModel(
+              id: const Uuid().v4(),
+              title: _titleController.text,
+              description: _descriptionController.text,
+              priority: _priority,
+              status: 'Open',
+              materialsStatus: 'í??',
+              createdAt: now,
+              updatedAt: now,
+            );
 
-      ref.read(taskControllerProvider.notifier).createTask(newTask);
+      if (isEditing) {
+        ref.read(taskControllerProvider.notifier).updateTask(task);
+      } else {
+        ref.read(taskControllerProvider.notifier).createTask(task);
+      }
       context.pop();
     }
   }
@@ -49,8 +75,9 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final titleText = widget.isEditing ? 'Edit task' : l10n.createTask;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.createTask)),
+      appBar: AppBar(title: Text(titleText)),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
@@ -65,7 +92,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                initialValue: _priority,
+                value: _priority,
                 decoration: InputDecoration(labelText: l10n.priorityLabel),
                 items: _priorities.map((p) {
                   return DropdownMenuItem(
@@ -88,7 +115,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
               const SizedBox(height: 24),
               ElevatedButton(
                 onPressed: _submit,
-                child: Text(l10n.createTask),
+                child: Text(widget.isEditing ? 'Update task' : l10n.createTask),
               ),
             ],
           ),

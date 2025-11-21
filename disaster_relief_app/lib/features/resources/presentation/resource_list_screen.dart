@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import 'resource_controller.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/utils/navigation_utils.dart';
 import '../../../core/utils/responsive.dart';
 import '../../../core/widgets/common_widgets.dart';
 import '../../../core/widgets/global_chrome.dart';
@@ -61,8 +62,10 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                       ),
                       filled: true,
                       fillColor: Colors.white,
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 10,
+                      ),
                     ),
                     onChanged: (value) => setState(() => _searchQuery = value),
                   ),
@@ -73,7 +76,11 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                       children: [
                         _buildFilterChip('All', null, l10n),
                         const SizedBox(width: 8),
-                        _buildFilterChip('Shelter', AppColors.chipShelter, l10n),
+                        _buildFilterChip(
+                          'Shelter',
+                          AppColors.chipShelter,
+                          l10n,
+                        ),
                         const SizedBox(width: 8),
                         _buildFilterChip('Water', AppColors.chipWater, l10n),
                         const SizedBox(width: 8),
@@ -81,7 +88,11 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                         const SizedBox(width: 8),
                         _buildFilterChip('Medical', AppColors.error, l10n),
                         const SizedBox(width: 8),
-                        _buildFilterChip('Other', AppColors.textSecondaryLight, l10n),
+                        _buildFilterChip(
+                          'Other',
+                          AppColors.textSecondaryLight,
+                          l10n,
+                        ),
                       ],
                     ),
                   ),
@@ -95,7 +106,9 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
                   final filteredResources = resources.where((r) {
                     if (!r.isActive) return false;
                     if (_searchQuery.isNotEmpty) {
-                      return r.title.toLowerCase().contains(_searchQuery.toLowerCase());
+                      return r.title.toLowerCase().contains(
+                        _searchQuery.toLowerCase(),
+                      );
                     }
                     if (_selectedTypes.isEmpty) return true;
                     return _selectedTypes.contains(_normalizeType(r.type));
@@ -138,126 +151,129 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
   }
 
   Widget _buildMapView(BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
+    padding: const EdgeInsets.symmetric(horizontal: 16),
+    child: Column(
+      children: [
+        Row(
           children: [
-            Row(
-              children: [
-                Expanded(
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      _pillButton(
-                        label: 'Locate me',
-                        icon: Icons.my_location,
-                        background: AppColors.primary.withValues(alpha: 0.1),
-                        foreground: AppColors.primary,
-                        onTap: () {},
+            Expanded(
+              child: Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _pillButton(
+                    label: 'Locate me',
+                    icon: Icons.my_location,
+                    background: AppColors.primary.withValues(alpha: 0.1),
+                    foreground: AppColors.primary,
+                    onTap: () {},
+                  ),
+                  _pillButton(
+                    label: 'Add resource',
+                    icon: Icons.add_location_alt_outlined,
+                    background: AppColors.secondary.withValues(alpha: 0.1),
+                    foreground: AppColors.secondary,
+                    onTap: () => context.push('/resources/create'),
+                  ),
+                ],
+              ),
+            ),
+            TextButton.icon(
+              onPressed: () {},
+              icon: const Icon(Icons.open_in_new),
+              label: const Text('Open map'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Container(
+          height: 200,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.05),
+                blurRadius: 10,
+                offset: const Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        AppColors.primary.withValues(alpha: 0.05),
+                        AppColors.secondary.withValues(alpha: 0.05),
+                      ],
+                    ),
+                  ),
+                  child: const Center(
+                    child: Text(
+                      'Map preview coming soon',
+                      style: TextStyle(color: AppColors.textSecondaryLight),
+                    ),
+                  ),
+                ),
+              ),
+              Positioned(
+                right: 12,
+                top: 12,
+                child: Column(
+                  children: [
+                    _zoomButton(Icons.add),
+                    const SizedBox(height: 8),
+                    _zoomButton(Icons.remove),
+                  ],
+                ),
+              ),
+              Positioned(
+                left: 12,
+                right: 12,
+                bottom: 12,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.05),
+                        blurRadius: 8,
+                        offset: const Offset(0, 4),
                       ),
-                      _pillButton(
-                        label: 'Add resource',
-                        icon: Icons.add_location_alt_outlined,
-                        background: AppColors.secondary.withValues(alpha: 0.1),
-                        foreground: AppColors.secondary,
-                        onTap: () => context.push('/resources/create'),
+                    ],
+                  ),
+                  child: Row(
+                    children: const [
+                      Icon(Icons.search, color: AppColors.textSecondaryLight),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Search resource points or address',
+                          style: TextStyle(color: AppColors.textSecondaryLight),
+                        ),
+                      ),
+                      Text(
+                        'Filter',
+                        style: TextStyle(color: AppColors.primary),
                       ),
                     ],
                   ),
                 ),
-                TextButton.icon(
-                  onPressed: () {},
-                  icon: const Icon(Icons.open_in_new),
-                  label: const Text('Open map'),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Container(
-              height: 200,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
               ),
-              child: Stack(
-                children: [
-                  Positioned.fill(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            AppColors.primary.withValues(alpha: 0.05),
-                            AppColors.secondary.withValues(alpha: 0.05),
-                          ],
-                        ),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          'Map preview coming soon',
-                          style: TextStyle(color: AppColors.textSecondaryLight),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    right: 12,
-                    top: 12,
-                    child: Column(
-                      children: [
-                        _zoomButton(Icons.add),
-                        const SizedBox(height: 8),
-                        _zoomButton(Icons.remove),
-                      ],
-                    ),
-                  ),
-                  Positioned(
-                    left: 12,
-                    right: 12,
-                    bottom: 12,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.05),
-                            blurRadius: 8,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        children: const [
-                          Icon(Icons.search, color: AppColors.textSecondaryLight),
-                          SizedBox(width: 10),
-                          Expanded(
-                            child: Text(
-                              'Search resource points or address',
-                              style: TextStyle(color: AppColors.textSecondaryLight),
-                            ),
-                          ),
-                          Text(
-                            'Filter',
-                            style: TextStyle(color: AppColors.primary),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
-      );
+      ],
+    ),
+  );
 
   Widget _pillButton({
     required String label,
@@ -303,8 +319,9 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
   }
 
   Widget _buildFilterChip(String label, Color? color, AppLocalizations l10n) {
-    final isSelected =
-        label == 'All' ? _selectedTypes.isEmpty : _selectedTypes.contains(label);
+    final isSelected = label == 'All'
+        ? _selectedTypes.isEmpty
+        : _selectedTypes.contains(label);
     return FilterChip(
       label: Text(_getTypeLabel(label, l10n)),
       selected: isSelected,
@@ -321,8 +338,11 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
           }
         });
       },
-      backgroundColor: color?.withValues(alpha: 0.1) ?? AppColors.backgroundLight,
-      selectedColor: color?.withValues(alpha: 0.3) ?? AppColors.primary.withValues(alpha: 0.2),
+      backgroundColor:
+          color?.withValues(alpha: 0.1) ?? AppColors.backgroundLight,
+      selectedColor:
+          color?.withValues(alpha: 0.3) ??
+          AppColors.primary.withValues(alpha: 0.2),
       labelStyle: TextStyle(
         color: isSelected ? AppColors.primary : AppColors.textPrimaryLight,
         fontWeight: isSelected ? FontWeight.w700 : FontWeight.normal,
@@ -371,7 +391,18 @@ class _ResourceCard extends StatelessWidget {
 
   const _ResourceCard({required this.resource, required this.l10n});
 
-  @override
+    Future<void> _navigate(BuildContext context) async {
+    try {
+      await launchGoogleMapsNavigation(
+        lat: resource.latitude,
+        lng: resource.longitude,
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Navigation failed: ')));
+    }
+  }
+@override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -388,19 +419,29 @@ class _ResourceCard extends StatelessWidget {
                 children: [
                   StatusChip(
                     label: _typeLabel(resource.type),
-                    backgroundColor: _typeColor(resource.type).withValues(alpha: 0.12),
+                    backgroundColor: _typeColor(
+                      resource.type,
+                    ).withValues(alpha: 0.12),
                     textColor: _typeColor(resource.type),
                   ),
                   const Spacer(),
                   StatusChip(
-                    label: resource.isActive ? l10n.activeStatus : l10n.inactiveStatus,
+                    label: resource.isActive
+                        ? l10n.activeStatus
+                        : l10n.inactiveStatus,
                     backgroundColor: resource.isActive
                         ? AppColors.success.withValues(alpha: 0.12)
                         : AppColors.statusCompleted.withValues(alpha: 0.12),
-                    textColor: resource.isActive ? AppColors.success : AppColors.statusCompleted,
+                    textColor: resource.isActive
+                        ? AppColors.success
+                        : AppColors.statusCompleted,
+                  ),
+                  IconButton(
+                    onPressed: () => _navigate(context),
+                    icon: const Icon(Icons.navigation_outlined),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () => context.push('/map'),
                     child: const Text('Details'),
                   ),
                 ],
@@ -414,7 +455,8 @@ class _ResourceCard extends StatelessWidget {
                   color: AppColors.textPrimaryLight,
                 ),
               ),
-              if (resource.description != null && resource.description!.isNotEmpty) ...[
+              if (resource.description != null &&
+                  resource.description!.isNotEmpty) ...[
                 const SizedBox(height: 6),
                 Text(
                   resource.description!,
@@ -428,15 +470,20 @@ class _ResourceCard extends StatelessWidget {
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
-                children: (resource.tags.isEmpty ? const ['no-tag'] : resource.tags)
-                    .map((tag) => Chip(
-                          label: Text(
-                            tag,
-                            style: const TextStyle(fontWeight: FontWeight.w600),
+                children:
+                    (resource.tags.isEmpty ? const ['no-tag'] : resource.tags)
+                        .map(
+                          (tag) => Chip(
+                            label: Text(
+                              tag,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            backgroundColor: AppColors.backgroundLight,
                           ),
-                          backgroundColor: AppColors.backgroundLight,
-                        ))
-                    .toList(),
+                        )
+                        .toList(),
               ),
               const SizedBox(height: 10),
               _infoRow(
@@ -445,10 +492,16 @@ class _ResourceCard extends StatelessWidget {
                     '${resource.latitude.toStringAsFixed(4)}, ${resource.longitude.toStringAsFixed(4)}',
               ),
               const SizedBox(height: 4),
-              _infoRow(Icons.access_time, _formatDate(resource.updatedAt ?? resource.createdAt)),
+              _infoRow(
+                Icons.access_time,
+                _formatDate(resource.updatedAt ?? resource.createdAt),
+              ),
               if (resource.expiresAt != null) ...[
                 const SizedBox(height: 4),
-                _infoRow(Icons.hourglass_bottom, 'Expires: ${_formatDate(resource.expiresAt)}'),
+                _infoRow(
+                  Icons.hourglass_bottom,
+                  'Expires: ${_formatDate(resource.expiresAt)}',
+                ),
               ],
             ],
           ),
@@ -465,7 +518,10 @@ class _ResourceCard extends StatelessWidget {
         Expanded(
           child: Text(
             text,
-            style: const TextStyle(fontSize: 12, color: AppColors.textSecondaryLight),
+            style: const TextStyle(
+              fontSize: 12,
+              color: AppColors.textSecondaryLight,
+            ),
           ),
         ),
       ],
@@ -546,3 +602,4 @@ class _ResourceHeader extends StatelessWidget {
     );
   }
 }
+
