@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
+import 'package:uuid/uuid.dart';
 import '../../../services/supabase_service.dart';
 import '../../../services/isar_service.dart';
+import '../../../services/offline_queue_service.dart';
 import '../../../models/shuttle_model.dart';
 import '../../../models/resource_point.dart'; // for fastHash
 import '../../../core/utils/geohash.dart';
@@ -111,7 +114,12 @@ class ShuttleRepository {
       throw const AuthException('User not logged in');
     }
 
+    final List<ConnectivityResult> connectivityStatus = await Connectivity()
+        .checkConnectivity();
+    final shuttleId = const Uuid().v4();
+
     final payload = {
+      'id': shuttleId,
       'title': title,
       'description': description,
       'origin': 'POINT($originLng $originLat)',
@@ -135,6 +143,24 @@ class ShuttleRepository {
       'origin_geohash': encodeGeohash(originLat, originLng),
       'destination_geohash': encodeGeohash(destinationLat, destinationLng),
     }..removeWhere((key, value) => value == null);
+
+    final bool isOffline = connectivityStatus.contains(ConnectivityResult.none);
+
+    if (isOffline) {
+      await OfflineQueueService.instance.enqueue(
+        table: 'shuttles',
+        payload: payload,
+      );
+      final local = ShuttleModel.fromSupabase({
+        ...payload,
+        'seats_total': seatsTotal,
+        'seats_taken': 0,
+        'depart_at': departAt.toIso8601String(),
+        'arrive_at': arriveAt?.toIso8601String(),
+        'status': 'open',
+      });
+      return local.copyWith(isarId: fastHash(local.id));
+    }
 
     final Map<String, dynamic> result = await _supabase
         .from('shuttles')

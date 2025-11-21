@@ -5,9 +5,27 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:go_router/go_router.dart';
 import '../../resources/presentation/resource_controller.dart';
+import '../../tasks/data/task_repository.dart';
+import '../../shuttles/data/shuttle_repository.dart';
 import '../../../models/resource_point.dart';
+import '../../../models/task_model.dart';
+import '../../../models/shuttle_model.dart';
 import '../../../l10n/app_localizations.dart';
 import '../../../services/location_service.dart';
+
+final tasksWithLocationProvider = FutureProvider<List<TaskModel>>((ref) async {
+  final tasks = await ref.watch(taskRepositoryProvider).getTasks();
+  return tasks.where((t) => t.latitude != null && t.longitude != null).toList();
+});
+
+final shuttlesWithLocationProvider = FutureProvider<List<ShuttleModel>>((
+  ref,
+) async {
+  final shuttles = await ref.watch(shuttleRepositoryProvider).getShuttles();
+  return shuttles
+      .where((s) => s.routeStartLat != null && s.routeStartLng != null)
+      .toList();
+});
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
@@ -94,6 +112,53 @@ class _MapScreenState extends ConsumerState<MapScreen> {
     }).toSet();
   }
 
+  Set<Marker> _createTaskMarkers(List<TaskModel> tasks) {
+    return tasks.where((t) => t.latitude != null && t.longitude != null).map((
+      task,
+    ) {
+      return Marker(
+        markerId: MarkerId('task-${task.id}'),
+        position: LatLng(task.latitude!, task.longitude!),
+        infoWindow: InfoWindow(title: task.title, snippet: task.roleLabel),
+        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen),
+      );
+    }).toSet();
+  }
+
+  Set<Marker> _createShuttleMarkers(List<ShuttleModel> shuttles) {
+    final markers = <Marker>{};
+    for (final shuttle in shuttles) {
+      if (shuttle.routeStartLat != null && shuttle.routeStartLng != null) {
+        markers.add(
+          Marker(
+            markerId: MarkerId('shuttle-origin-${shuttle.id}'),
+            position: LatLng(shuttle.routeStartLat!, shuttle.routeStartLng!),
+            infoWindow: InfoWindow(title: shuttle.title, snippet: 'Origin'),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueOrange,
+            ),
+          ),
+        );
+      }
+      if (shuttle.routeEndLat != null && shuttle.routeEndLng != null) {
+        markers.add(
+          Marker(
+            markerId: MarkerId('shuttle-dest-${shuttle.id}'),
+            position: LatLng(shuttle.routeEndLat!, shuttle.routeEndLng!),
+            infoWindow: InfoWindow(
+              title: shuttle.title,
+              snippet: 'Destination',
+            ),
+            icon: BitmapDescriptor.defaultMarkerWithHue(
+              BitmapDescriptor.hueViolet,
+            ),
+          ),
+        );
+      }
+    }
+    return markers;
+  }
+
   double _getMarkerHue(String type) {
     switch (type) {
       case 'Water':
@@ -112,30 +177,44 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   @override
   Widget build(BuildContext context) {
     final resourcesAsync = ref.watch(resourceControllerProvider);
+    final tasksAsync = ref.watch(tasksWithLocationProvider);
+    final shuttlesAsync = ref.watch(shuttlesWithLocationProvider);
     final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       body: Stack(
         children: [
-          resourcesAsync.when(
-            data: (resources) {
-              return GoogleMap(
-                mapType: MapType.normal,
-                initialCameraPosition: _initialCamera,
-                myLocationEnabled: true,
-                myLocationButtonEnabled: true,
-                markers: _createMarkers(resources),
-                onMapCreated: (GoogleMapController controller) {
-                  if (!_controller.isCompleted) {
-                    _controller.complete(controller);
-                  }
-                },
-              );
-            },
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (error, stack) =>
-                Center(child: Text(l10n.errorWithMessage('$error'))),
-          ),
+          if (resourcesAsync.isLoading ||
+              tasksAsync.isLoading ||
+              shuttlesAsync.isLoading)
+            const Center(child: CircularProgressIndicator())
+          else if (resourcesAsync.hasError ||
+              tasksAsync.hasError ||
+              shuttlesAsync.hasError)
+            Center(
+              child: Text(
+                l10n.errorWithMessage(
+                  '${resourcesAsync.error ?? tasksAsync.error ?? shuttlesAsync.error}',
+                ),
+              ),
+            )
+          else
+            GoogleMap(
+              mapType: MapType.normal,
+              initialCameraPosition: _initialCamera,
+              myLocationEnabled: true,
+              myLocationButtonEnabled: true,
+              markers: {
+                ..._createMarkers(resourcesAsync.value ?? const []),
+                ..._createTaskMarkers(tasksAsync.value ?? const []),
+                ..._createShuttleMarkers(shuttlesAsync.value ?? const []),
+              },
+              onMapCreated: (GoogleMapController controller) {
+                if (!_controller.isCompleted) {
+                  _controller.complete(controller);
+                }
+              },
+            ),
           if (_locationLoading)
             const Positioned(
               top: 16,

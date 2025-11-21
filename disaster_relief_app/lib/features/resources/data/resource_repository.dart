@@ -1,10 +1,12 @@
 import 'dart:async';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:isar/isar.dart';
 import '../../../services/supabase_service.dart';
 import '../../../services/isar_service.dart';
+import '../../../services/offline_queue_service.dart';
 import '../../../models/resource_point.dart';
 
 final isarServiceProvider = Provider<IsarService>((ref) {
@@ -81,11 +83,27 @@ class ResourceRepository {
 
   // Create a new resource point
   Future<void> createResourcePoint(ResourcePoint resource) async {
-    final payload = resource
-        .copyWith(
-          createdBy: _supabase.auth.currentUser?.id ?? resource.createdBy,
-        )
-        .toSupabasePayload();
+    final creator = _supabase.auth.currentUser?.id ?? resource.createdBy;
+    final payload = resource.copyWith(createdBy: creator).toSupabasePayload();
+
+    final List<ConnectivityResult> connectivityStatus = await Connectivity()
+        .checkConnectivity();
+    final bool isOffline = connectivityStatus.contains(ConnectivityResult.none);
+    if (isOffline) {
+      await OfflineQueueService.instance.enqueue(
+        table: 'resource_points',
+        payload: payload,
+      );
+      // Cache locally for offline viewing
+      if (!kIsWeb) {
+        final isar = await _isarService.db;
+        final cached = resource.copyWith(isarId: fastHash(resource.id));
+        await isar.writeTxn((isar) async {
+          await isar.resourcePoints.put(cached);
+        });
+      }
+      return;
+    }
 
     await _supabase.from('resource_points').insert(payload);
 

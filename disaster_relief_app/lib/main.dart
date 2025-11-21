@@ -6,6 +6,7 @@ import 'core/config/app_config.dart';
 import 'core/theme/app_theme.dart';
 import 'core/router/app_router.dart';
 import 'services/supabase_service.dart';
+import 'services/offline_queue_service.dart';
 import 'l10n/app_localizations.dart';
 import 'core/localization/app_language.dart';
 import 'core/localization/locale_controller.dart';
@@ -16,6 +17,7 @@ void main() async {
   await dotenv.load(fileName: ".env");
   // Initialize Services
   await SupabaseService.initialize();
+  await OfflineQueueService.instance.initialize();
 
   runApp(const ProviderScope(child: DisasterReliefApp()));
 }

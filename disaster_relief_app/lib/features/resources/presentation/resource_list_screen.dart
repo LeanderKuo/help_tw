@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 
 import 'resource_controller.dart';
@@ -46,7 +47,13 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
           children: [
             const _ResourceHeader(),
             const SizedBox(height: 12),
-            _buildMapView(context),
+            resourcesAsync.maybeWhen(
+              data: (resources) => _buildMapView(context, resources),
+              orElse: () => const SizedBox(
+                height: 220,
+                child: Center(child: CircularProgressIndicator()),
+              ),
+            ),
             const SizedBox(height: 12),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -150,130 +157,76 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
     );
   }
 
-  Widget _buildMapView(BuildContext context) => Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 16),
-    child: Column(
-      children: [
-        Row(
+  Widget _buildMapView(BuildContext context, List<ResourcePoint> resources) =>
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Column(
           children: [
-            Expanded(
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: [
-                  _pillButton(
-                    label: 'Locate me',
-                    icon: Icons.my_location,
-                    background: AppColors.primary.withValues(alpha: 0.1),
-                    foreground: AppColors.primary,
-                    onTap: () {},
+            Row(
+              children: [
+                Expanded(
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _pillButton(
+                        label: 'Locate me',
+                        icon: Icons.my_location,
+                        background: AppColors.primary.withValues(alpha: 0.1),
+                        foreground: AppColors.primary,
+                        onTap: () {},
+                      ),
+                      _pillButton(
+                        label: 'Add resource',
+                        icon: Icons.add_location_alt_outlined,
+                        background: AppColors.secondary.withValues(alpha: 0.1),
+                        foreground: AppColors.secondary,
+                        onTap: () => context.push('/resources/create'),
+                      ),
+                    ],
                   ),
-                  _pillButton(
-                    label: 'Add resource',
-                    icon: Icons.add_location_alt_outlined,
-                    background: AppColors.secondary.withValues(alpha: 0.1),
-                    foreground: AppColors.secondary,
-                    onTap: () => context.push('/resources/create'),
-                  ),
-                ],
-              ),
+                ),
+                TextButton.icon(
+                  onPressed: () {},
+                  icon: const Icon(Icons.open_in_new),
+                  label: const Text('Open map'),
+                ),
+              ],
             ),
-            TextButton.icon(
-              onPressed: () {},
-              icon: const Icon(Icons.open_in_new),
-              label: const Text('Open map'),
+            const SizedBox(height: 12),
+            SizedBox(
+              height: 200,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(18),
+                child: GoogleMap(
+                  initialCameraPosition: CameraPosition(
+                    target: resources.isNotEmpty
+                        ? LatLng(
+                            resources.first.latitude,
+                            resources.first.longitude,
+                          )
+                        : const LatLng(25.0330, 121.5654),
+                    zoom: 12,
+                  ),
+                  markers: resources
+                      .take(30)
+                      .map(
+                        (r) => Marker(
+                          markerId: MarkerId(r.id),
+                          position: LatLng(r.latitude, r.longitude),
+                          infoWindow: InfoWindow(title: r.title),
+                        ),
+                      )
+                      .toSet(),
+                  myLocationEnabled: false,
+                  zoomControlsEnabled: false,
+                  onTap: (_) => context.push('/map'),
+                ),
+              ),
             ),
           ],
         ),
-        const SizedBox(height: 12),
-        Container(
-          height: 200,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(18),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.05),
-                blurRadius: 10,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [
-                        AppColors.primary.withValues(alpha: 0.05),
-                        AppColors.secondary.withValues(alpha: 0.05),
-                      ],
-                    ),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      'Map preview coming soon',
-                      style: TextStyle(color: AppColors.textSecondaryLight),
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                right: 12,
-                top: 12,
-                child: Column(
-                  children: [
-                    _zoomButton(Icons.add),
-                    const SizedBox(height: 8),
-                    _zoomButton(Icons.remove),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 12,
-                right: 12,
-                bottom: 12,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 8,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    children: const [
-                      Icon(Icons.search, color: AppColors.textSecondaryLight),
-                      SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          'Search resource points or address',
-                          style: TextStyle(color: AppColors.textSecondaryLight),
-                        ),
-                      ),
-                      Text(
-                        'Filter',
-                        style: TextStyle(color: AppColors.primary),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
+      );
 
   Widget _pillButton({
     required String label,
@@ -294,26 +247,6 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
           label,
           style: TextStyle(color: foreground, fontWeight: FontWeight.w700),
         ),
-      ),
-    );
-  }
-
-  Widget _zoomButton(IconData icon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: IconButton(
-        icon: Icon(icon, color: AppColors.textPrimaryLight),
-        onPressed: () {},
       ),
     );
   }

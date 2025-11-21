@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import '../models/resource_point.dart';
 import '../models/task_model.dart';
 import '../models/shuttle_model.dart';
+import '../models/pending_mutation.dart';
 
 class IsarService {
   late Future<Isar> db;
@@ -17,13 +18,23 @@ class IsarService {
       if (kIsWeb) {
         // Web uses isar_web (IndexedDB); no directory needed.
         return Isar.open(
-          schemas: [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
+          schemas: [
+            ResourcePointSchema,
+            TaskModelSchema,
+            ShuttleModelSchema,
+            PendingMutationSchema,
+          ],
           inspector: false,
         );
       } else {
         final dir = await getApplicationDocumentsDirectory();
         return Isar.open(
-          schemas: [ResourcePointSchema, TaskModelSchema, ShuttleModelSchema],
+          schemas: [
+            ResourcePointSchema,
+            TaskModelSchema,
+            ShuttleModelSchema,
+            PendingMutationSchema,
+          ],
           directory: dir.path,
           inspector: true,
         );
