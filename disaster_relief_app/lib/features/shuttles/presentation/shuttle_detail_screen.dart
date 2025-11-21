@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../data/shuttle_repository.dart';
 import 'shuttle_controller.dart';
@@ -13,6 +14,8 @@ import '../../../models/shuttle_model.dart';
 import '../../auth/data/auth_repository.dart';
 import '../../profile/data/profile_repository.dart';
 import '../../../models/user_profile.dart';
+import '../../chat/data/chat_repository.dart';
+import '../../../models/chat_message.dart';
 
 final shuttleDetailProvider = FutureProvider.family<ShuttleModel?, String>((
   ref,
@@ -40,6 +43,13 @@ final shuttleHostProfileProvider = FutureProvider.family<UserProfile?, String?>(
   },
 );
 
+final shuttleMessagesProvider =
+    StreamProvider.family<List<ChatMessage>, String>((ref, shuttleId) {
+      return ref
+          .watch(chatRepositoryProvider)
+          .subscribeToShuttleMessages(shuttleId);
+    });
+
 class ShuttleDetailScreen extends ConsumerStatefulWidget {
   const ShuttleDetailScreen({required this.shuttleId, super.key});
 
@@ -53,6 +63,15 @@ class ShuttleDetailScreen extends ConsumerStatefulWidget {
 class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
   bool _isVisible = true;
   bool _isBusy = false;
+  final _messageController = TextEditingController();
+  final _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _messageController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +80,18 @@ class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
       shuttleParticipationProvider(widget.shuttleId),
     );
     final l10n = AppLocalizations.of(context)!;
+
+    ref.listen(shuttleMessagesProvider(widget.shuttleId), (_, next) {
+      if (next.hasValue) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (_scrollController.hasClients) {
+            _scrollController.jumpTo(
+              _scrollController.position.maxScrollExtent,
+            );
+          }
+        });
+      }
+    });
 
     return Scaffold(
       appBar: GlobalTopNavBar(
@@ -74,9 +105,8 @@ class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
           }
           final joined = joinedAsync.valueOrNull ?? false;
           final isFull =
-              shuttle.capacity > 0 &&
-              shuttle.seatsTaken >= shuttle.capacity &&
-              !joined;
+              shuttle.capacity > 0 && shuttle.seatsTaken >= shuttle.capacity;
+
           return Column(
             children: [
               SizedBox(
@@ -154,6 +184,7 @@ class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
                             ),
                             style: const TextStyle(
                               color: AppColors.textSecondaryLight,
+                              fontSize: 12,
                             ),
                           ),
                         ],
@@ -211,34 +242,13 @@ class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
                             ? null
                             : (v) => setState(() => _isVisible = v),
                       ),
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: AppColors.backgroundLight,
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
-                            Text(
-                              'Participants can chat and coordinate routes.',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w700,
-                                color: AppColors.textPrimaryLight,
-                              ),
-                            ),
-                            SizedBox(height: 6),
-                            Text(
-                              'Stay in chat to receive updates and changes.',
-                              style: TextStyle(
-                                color: AppColors.textSecondaryLight,
-                              ),
-                            ),
-                          ],
-                        ),
+                      const SizedBox(height: 12),
+                      _ShuttleChatSection(
+                        shuttleId: widget.shuttleId,
+                        joined: joined,
+                        messageController: _messageController,
+                        scrollController: _scrollController,
                       ),
-                      const SizedBox(height: 14),
                     ],
                   ),
                 ),
@@ -264,7 +274,7 @@ class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: isFull && !joined || _isBusy
+                          onPressed: (isFull && !joined) || _isBusy
                               ? null
                               : () => _toggleJoin(joined),
                           style: ElevatedButton.styleFrom(
@@ -465,6 +475,147 @@ class _HostContact extends ConsumerWidget {
       },
       loading: () => const SizedBox.shrink(),
       error: (_, __) => const SizedBox.shrink(),
+    );
+  }
+}
+
+class _ShuttleChatSection extends ConsumerWidget {
+  const _ShuttleChatSection({
+    required this.shuttleId,
+    required this.joined,
+    required this.messageController,
+    required this.scrollController,
+  });
+
+  final String shuttleId;
+  final bool joined;
+  final TextEditingController messageController;
+  final ScrollController scrollController;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final messagesAsync = ref.watch(shuttleMessagesProvider(shuttleId));
+    final userId = ref.watch(authRepositoryProvider).currentUser?.id;
+
+    if (!joined) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade100,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Text('Join this shuttle to view and send messages.'),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(vertical: 8),
+          child: Text(
+            'Shuttle chat',
+            style: TextStyle(fontWeight: FontWeight.w700),
+          ),
+        ),
+        SizedBox(
+          height: 240,
+          child: messagesAsync.when(
+            data: (messages) {
+              if (messages.isEmpty) {
+                return const Center(child: Text('No messages yet.'));
+              }
+              return ListView.builder(
+                controller: scrollController,
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  final msg = messages[index];
+                  final isMe = msg.senderId == userId;
+                  return Align(
+                    alignment: isMe
+                        ? Alignment.centerRight
+                        : Alignment.centerLeft,
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                        vertical: 4,
+                        horizontal: 8,
+                      ),
+                      padding: const EdgeInsets.all(10),
+                      decoration: BoxDecoration(
+                        color: isMe
+                            ? AppColors.primary.withValues(alpha: 0.12)
+                            : Colors.grey.shade200,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(msg.content ?? ''),
+                          const SizedBox(height: 4),
+                          Text(
+                            msg.createdAt != null
+                                ? timeago.format(msg.createdAt!)
+                                : '',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: AppColors.textSecondaryLight,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, _) => Center(child: Text('Chat load failed: $e')),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Row(
+          children: [
+            Expanded(
+              child: TextField(
+                controller: messageController,
+                decoration: const InputDecoration(
+                  hintText: 'Send a message',
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.send),
+              onPressed: () async {
+                final text = messageController.text.trim();
+                if (text.isEmpty) return;
+                final user = ref.read(authRepositoryProvider).currentUser?.id;
+                if (user == null) return;
+                messageController.clear();
+                await ref
+                    .read(chatRepositoryProvider)
+                    .sendShuttleMessage(
+                      ChatMessage(
+                        id: '',
+                        shuttleId: shuttleId,
+                        senderId: user,
+                        content: text,
+                        createdAt: DateTime.now(),
+                      ),
+                    );
+                if (scrollController.hasClients) {
+                  await scrollController.animateTo(
+                    scrollController.position.maxScrollExtent + 60,
+                    duration: const Duration(milliseconds: 200),
+                    curve: Curves.easeOut,
+                  );
+                }
+              },
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
