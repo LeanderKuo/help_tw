@@ -10,7 +10,7 @@ _version: 2025-10-10 • locale: Asia/Taipei • status: Extended/Final_
 
 ---
 
-## 1. 角色與權限矩陣（RBAC）— 
+## 1. 角色與權限矩陣（RBAC）—
 
 > MFA：Leader / Admin / Superadmin 建議啟用（至少 SMS 或 Authenticator）。  
 > Rate Limit：**一般使用者**建立任務「每小時 1 次」；**Leader/Admin 豁免**；Superadmin 亦豁免。
@@ -165,7 +165,7 @@ _version: 2025-10-10 • Extended/Final_
 
 ## 3. 身分鑑別與授權
 
-- Firebase Auth（Email/SMS/社群），App Check 強制。
+- supabase Auth（Email/SMS/社群），App Check 強制。
 - Custom Claims：`role`；Rules 以 `usersServer/{uid}.role` 或 claims 校對。
 - MFA：Leader/Admin/Superadmin 建議強制。
 

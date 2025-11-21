@@ -37,10 +37,6 @@ migrate_working_dir/
 .env.*
 *.keystore
 *.jks
-google-services.json
-GoogleService-Info.plist
-**/Generated.xcconfig
-**/firebase_app_id_file.json
 *.pem
 *.p12
 docs/uiux\ sample/*.png

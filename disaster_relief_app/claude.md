@@ -1,926 +1,1093 @@
-# Disaster Relief Platform - Development Roadmap & Issue Tracker
+# Disaster Relief Platform - Development Task List
 
-**Version:** 2025-01-21
+**Version:** 2025-11-21
 **Status:** Active Development
-**Spec Reference:** `specs_feature.md`
+**Tech Stack:** Flutter 3.38.1 + Supabase + Vercel
+**Spec References:** `specs_feature.md`, `specs_arch.md`
 
 ---
 
-## Table of Contents
+## Project Health Summary
 
-1. [Critical Issues Summary](#critical-issues-summary)
-2. [High Priority Tasks](#high-priority-tasks)
-3. [Medium Priority Tasks](#medium-priority-tasks)
-4. [Low Priority Tasks](#low-priority-tasks)
-5. [Code Quality Guidelines](#code-quality-guidelines)
-6. [Implementation Order](#implementation-order)
+**Overall Compliance: 82%**
 
----
-
-## Critical Issues Summary
-
-### Severity: HIGH (Blocking Core Features)
-
-1. **Incomplete RBAC Implementation**
-   - Missing: Invite/referral system, admin review panel (P12), approval queue, MFA, App Check
-   - Impact: Multi-step user onboarding (User→Superuser→Leader→Admin) cannot function
-   - Files: `lib/features/...`, `specs_feature.md`
-
-2. **Auth System Gaps**
-   - Current: Email/password + Google OAuth only
-   - Missing: LINE login (disabled), Phone OTP, MFA, App Check
-   - Impact: Spec-required auth methods unavailable
-   - Files: `lib/features/auth/data/auth_repository.dart`, `login_screen.dart`, `register_screen.dart`
-
-3. **Shuttle Module Incomplete**
-   - Missing: Creation page (button shows toast only), participant/role management, chat UI
-   - Data collection gaps: origin/destination, capacity, schedule, contact fields
-   - Impact: Database inserts will fail against current Supabase schema
-   - Files: `lib/features/shuttles/presentation/shuttle_list_screen.dart`, `shuttle_detail_screen.dart`
-
-4. **Task Flows Insufficient**
-   - Create form missing: location, required roles, participant caps, visibility toggle, materials status
-   - Missing: Join/leave rule enforcement, 30-day chat retention, participant list UI
-   - Files: `lib/features/tasks/presentation/create_task_screen.dart`, `task_detail_screen.dart`, `task_repository.dart`
-
-5. **Map/Resource Features Incomplete**
-   - Map displays only resource points (no tasks/shuttles)
-   - Resource creation: hardcoded Taipei coordinates, no geohash deduplication, no contact masking
-   - Files: `lib/features/map/presentation/map_screen.dart`, `features/resources/presentation/resource_list_screen.dart`, `create_resource_screen.dart`
-
-6. **Security: Exposed Secrets**
-   - Google Maps API keys hardcoded in Flutter config and web HTML
-   - Required: Environment variable injection
-   - Files: `lib/core/config/app_config.dart`, `web/index.html`
-
-### Severity: MEDIUM (Experience & Contract Issues)
-
-1. **Frontend-Backend Contract Mismatches**
-   - Schema requires non-null `origin`/`destination`, `author_id`/`created_by` under RLS
-   - Current create flows don't collect/pass these fields → operations will fail
-   - Files: `supabase_schema.sql`, `create_task_screen.dart`, `create_resource_screen.dart`, shuttle UI
-
-2. **Missing PWA/Offline Support**
-   - No Workbox caching, no IndexedDB/localStorage strategy
-   - Manifest remains Flutter default
-   - Files: `web/manifest.json`, missing service worker setup
-
-3. **Version/SDK Drift**
-   - Code uses `Color.withValues` (newer Flutter API)
-   - `pubspec.yaml` pins `sdk: ^3.10.0`, but Vercel build downloads `3.38.1`
-   - Impact: Local builds on 3.10 will fail
-   - Files: `pubspec.yaml`, multiple widgets
-
-4. **Uninitialized Firebase Services**
-   - Firebase messaging/analytics dependencies declared but not initialized
-   - No Supabase user device registration, no audit-log client hooks
-   - Files: `pubspec.yaml`, `lib/services`
+| Category | Score | Status |
+|----------|-------|--------|
+| Firebase Cleanup | 95% | ✅ Completed (需執行 flutter clean) |
+| Multi-language Strategy | 85% | ⚠️ Logic OK, input needs fix |
+| Database Schema | 70% | ❌ Missing critical tables |
+| Business Logic | 80% | ⚠️ Core complete, details pending |
+| RLS Policies | 90% | ✅ Comprehensive |
+| RBAC System | 95% | ✅ Complete, route guard needed |
+| Auth System | 75% | ⚠️ Email/OAuth OK, advanced features pending |
+| Core Modules | 85% | ✅ Main features complete |
+| UI Pages | 90% | ✅ Core pages complete |
+| Code Quality | 85% | ⚠️ Good architecture, low test coverage |
 
 ---
 
-## High Priority Tasks
+## Critical Issues Found
 
-### Phase 1: Core Missing Pages (Est. 20-25 hours)
+### 🚨 Blockers (Must Fix)
 
-#### Task 1.1: P07 "My Shuttles" Page
-**File:** `lib/features/shuttles/presentation/my_shuttles_screen.dart`
+1. **Missing `role_upgrade_requests` Table**
+   - **Impact:** P12 Admin Panel review功能無法運作，P13 Profile申請升級失敗
+   - **Files:** Database migration needed
 
-- [ ] Create `MyShuttlesScreen` with tab navigation
-- [ ] Implement tabs: **Hosting** / **Joined** / **History**
-- [ ] Filter logic:
-  - Hosting: `created_by = currentUser.id`
-  - Joined: `shuttle_participants` contains current user
-  - History: `status IN ('done', 'canceled')`
-- [ ] Action buttons:
-  - **Edit** (owner only)
-  - **Complete** (owner or Leader+)
-  - **Delete** (owner, with confirmation)
-- [ ] Add route: `/shuttles/my`
-- [ ] Wire to bottom navigation bar
+2. **Referral Codes Schema Mismatch**
+   - **Impact:** 推薦碼生成功能失敗（Repository期望 `max_uses`/`used_count` 欄位，但表格使用 `is_consumed` boolean）
+   - **Files:** `supabase/migrations/`, `lib/features/admin/data/referral_code_repository.dart`
 
-**Acceptance Criteria:**
-- User can view shuttles they created/joined separately
-- Historical shuttles are archived after 7 days from `depart_at`
-- Role-based actions enforced
+3. **Hardcoded Multilingual Content**
+   - **Impact:** 創建公告和資源點時，中英文內容完全相同
+   - **Files:** `lib/models/resource_point.dart`, `lib/features/resources/presentation/create_resource_screen.dart`
 
 ---
 
-#### Task 1.2: P10 "My Tasks" Page
-**File:** `lib/features/tasks/presentation/my_tasks_screen.dart`
+## Tech Stack Confirmation
 
-- [ ] Create `MyTasksScreen` with tab navigation
-- [ ] Implement tabs: **Created** / **In Progress** / **History**
-- [ ] Filter logic:
-  - Created: `author_id = currentUser.id`
-  - In Progress: `task_participants` contains user AND `status = 'in_progress'`
-  - History: `status IN ('done', 'canceled')`
-- [ ] Action buttons:
-  - **Edit** (author only)
-  - **Complete** (author or Leader+)
-  - **Delete** (author, with confirmation)
-- [ ] Add route: `/tasks/my`
-- [ ] Wire to task list screen
+### ✅ Correct Stack (Per specs_arch.md)
 
-**Acceptance Criteria:**
-- Clear separation between authored and participated tasks
-- Status transitions properly update tabs
-- Historical tasks maintain chat access (until 30-day expiry)
+**Frontend:**
+- Flutter 3.38.1 (Dart 3.10.0)
+- Riverpod 2.x (State Management)
+- GoRouter 14 (Navigation)
+- Material 3 (UI Framework)
+- Google Maps Flutter (Mobile/Desktop only, web deferred)
+- Isar (Offline cache, native only)
+- l10n (zh-TW / en-US)
 
----
+**Backend:**
+- Supabase PostgreSQL 15 + PostGIS
+- Supabase Auth (Email/SMS/OAuth)
+- Supabase Realtime (for subscriptions)
+- Supabase Storage
+- RLS (Row Level Security)
+- Edge Functions (role promotion, notifications)
 
-#### Task 1.3: P12 "Admin Panel" Page
-**File:** `lib/features/admin/presentation/admin_panel_screen.dart`
+**Deployment:**
+- Web: Vercel (via `vercel_build.sh`)
+- Mobile: Android/iOS native builds
+- **Absolutely NO Firebase**
 
-**Prerequisites:** Task 4.1 (Referral Code Repository)
+### ❌ Removed Dependencies
 
-- [ ] Create `AdminPanelScreen` (permission: Admin+)
-- [ ] Implement 3 tabs:
+The following Firebase packages have been removed from `pubspec.yaml`:
+- `firebase_core: ^3.6.0` ✅ REMOVED
+- `firebase_messaging: ^15.1.3` ✅ REMOVED
+- `firebase_analytics: ^11.3.3` ✅ REMOVED
 
-  **Tab 1: User Management**
-  - [ ] User list with search/filter (by role, status)
-  - [ ] Role promotion UI:
-    - Superuser → Leader (requires unit/reason review)
-    - Leader → Admin (requires referral code + Superadmin final approval)
-  - [ ] Display pending approval queue
-  - [ ] Approve/Reject actions (write to `audit_logs`)
-
-  **Tab 2: Referral Code Management**
-  - [ ] Generate referral code (max 1 active per Admin, TTL 1 hour)
-  - [ ] Display current code status (code, created_at, expires_at, used_count)
-  - [ ] Idempotency check (prevent duplicate active codes)
-  - [ ] Revoke code button
-
-  **Tab 3: Audit Logs**
-  - [ ] Query `audit_logs` table
-  - [ ] Filters: date range, operation type, role, user_id
-  - [ ] Paginated list view (50 entries per page)
-  - [ ] Export to CSV functionality
-
-- [ ] Add route: `/admin` (with role guard)
-- [ ] Wire to profile menu (visible only to Admin+)
-
-**Database Support:**
-- ✅ `referral_codes` table exists
-- ✅ `audit_logs` table exists
-- ✅ RLS policies support role checks
-
-**Acceptance Criteria:**
-- Admin cannot generate >1 active referral code
-- Superadmin sees all pending Leader→Admin promotions
-- All approval/rejection actions logged to audit_logs
+**Cleanup Required:**
+```bash
+flutter clean
+flutter pub get
+```
 
 ---
 
-#### Task 1.4: "Create Shuttle" Page
-**File:** `lib/features/shuttles/presentation/create_shuttle_screen.dart`
+## Development Roadmap
 
-- [ ] Create form with fields:
-  - **Title** (required, max 100 chars)
-  - **Description** (optional, max 500 chars)
-  - **Origin** (map picker + address autocomplete)
-  - **Destination** (map picker + address autocomplete)
-  - **Departure Time** (datetime picker, must be future)
-  - **Arrival Time** (optional, must be after departure)
-  - **Total Seats** (number, min 1, max 100)
-  - **Cost per Seat** (number, optional)
-  - **Vehicle Info** (type: van/bus/truck/other, plate number)
-  - **Contact Name** (optional, defaults to user profile)
-  - **Contact Phone** (masked in public view)
-  - **Priority** (checkbox, visible only to Leader+)
+---
 
-- [ ] Permission check: User+ can create (policy may require Superuser+)
-- [ ] Auto-generate `display_id` (e.g., `S-001234`)
-- [ ] Calculate geohash for origin/destination (precision 6)
-- [ ] Set `created_by = auth.uid()`
-- [ ] Validate required fields match schema
-- [ ] Add route: `/shuttles/create`
-- [ ] Remove "TODO: Wire creation page" toast from `shuttle_list_screen.dart`
+## Phase 1: Critical Blockers (Week 1) - MUST FIX
 
-**Schema Alignment:**
+### Task 1.1: Create `role_upgrade_requests` Database Table
+
+**Priority:** 🔴 **CRITICAL**
+**Estimated Time:** 2 hours
+**Files to Create:** `supabase/migrations/20250122000000_add_role_upgrade_requests.sql`
+
+**Migration SQL:**
 ```sql
--- Required fields per supabase_schema.sql
-origin geography(point, 4326) NOT NULL
-destination geography(point, 4326) NOT NULL
-depart_at timestamptz NOT NULL
-seats_total int NOT NULL
-created_by uuid NOT NULL REFERENCES auth.users(id)
+-- Create role upgrade requests table
+CREATE TABLE role_upgrade_requests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) NOT NULL,
+  current_role TEXT NOT NULL,
+  requested_role TEXT NOT NULL,
+  unit TEXT,  -- Organization/unit for Leader申請
+  reason TEXT,  -- Justification
+  referral_code TEXT,  -- Required for Leader→Admin
+  status TEXT DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
+  reviewed_by UUID REFERENCES auth.users(id),
+  reviewed_at TIMESTAMPTZ,
+  review_reason TEXT,  -- Rejection reason
+  created_at TIMESTAMPTZ DEFAULT now(),
+  updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Enable RLS
+ALTER TABLE role_upgrade_requests ENABLE ROW LEVEL SECURITY;
+
+-- Allow users to view their own requests
+CREATE POLICY role_upgrade_select ON role_upgrade_requests
+  FOR SELECT USING (
+    auth.uid() = user_id OR is_admin_or_above()
+  );
+
+-- Allow users to create upgrade requests
+CREATE POLICY role_upgrade_insert ON role_upgrade_requests
+  FOR INSERT WITH CHECK (
+    auth.uid() = user_id AND status = 'pending'
+  );
+
+-- Only Admin+ can update (review) requests
+CREATE POLICY role_upgrade_update ON role_upgrade_requests
+  FOR UPDATE USING (
+    is_admin_or_above()
+  );
+
+-- Create index for pending requests查詢
+CREATE INDEX idx_role_upgrade_pending
+  ON role_upgrade_requests(status, created_at DESC)
+  WHERE status = 'pending';
+
+-- Add trigger to update timestamps
+CREATE TRIGGER trg_role_upgrade_updated
+  BEFORE UPDATE ON role_upgrade_requests
+  FOR EACH ROW EXECUTE PROCEDURE update_updated_at();
+
+-- Log approvals/rejections to audit_logs
+CREATE OR REPLACE FUNCTION log_role_upgrade_review()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF (OLD.status = 'pending' AND NEW.status IN ('approved', 'rejected')) THEN
+    INSERT INTO audit_logs (
+      actor_id,
+      action,
+      target_type,
+      target_id,
+      meta
+    ) VALUES (
+      NEW.reviewed_by,
+      CASE WHEN NEW.status = 'approved' THEN 'role_upgrade_approved'
+           ELSE 'role_upgrade_rejected' END,
+      'role_upgrade_request',
+      NEW.id,
+      jsonb_build_object(
+        'user_id', NEW.user_id,
+        'from_role', NEW.current_role,
+        'to_role', NEW.requested_role,
+        'reason', NEW.review_reason
+      )
+    );
+
+    -- If approved, update user role
+    IF NEW.status = 'approved' THEN
+      UPDATE profiles_public
+      SET role = NEW.requested_role, updated_at = now()
+      WHERE id = NEW.user_id;
+    END IF;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER trg_log_role_upgrade_review
+  AFTER UPDATE ON role_upgrade_requests
+  FOR EACH ROW EXECUTE PROCEDURE log_role_upgrade_review();
 ```
 
 **Acceptance Criteria:**
-- Form validation prevents submission of incomplete data
-- Database insert succeeds with RLS enabled
-- User is auto-joined as participant with `role = 'driver'`
+- Migration executes without errors
+- Admin can query pending requests
+- Users can view own requests
+- Approval automatically updates `profiles_public.role`
+- All reviews logged to `audit_logs`
 
 ---
 
-#### Task 1.5: Implement Google Maps Navigation Deep Links
-**Files:**
-- `lib/features/shuttles/presentation/shuttle_list_screen.dart`
-- `lib/features/shuttles/presentation/shuttle_detail_screen.dart`
-- `lib/features/tasks/presentation/task_list_screen.dart`
-- `lib/features/resources/presentation/resource_list_screen.dart`
+### Task 1.2: Fix Referral Codes Schema Mismatch
 
-**Prerequisites:** `url_launcher` package (✅ already in pubspec.yaml)
+**Priority:** 🔴 **CRITICAL**
+**Estimated Time:** 2 hours
+**Files to Modify:** `supabase/migrations/20250122000001_fix_referral_codes_schema.sql`
 
-- [ ] Create utility function:
-  **File:** `lib/core/utils/navigation_utils.dart`
-  ```dart
-  import 'package:url_launcher/url_launcher.dart';
-
-  Future<void> launchGoogleMapsNavigation({
-    required double lat,
-    required double lng,
-  }) async {
-    final url = Uri.parse(
-      'https://www.google.com/maps/dir/?api=1&destination=$lat,$lng'
-    );
-    if (await canLaunchUrl(url)) {
-      await launchUrl(url, mode: LaunchMode.externalApplication);
-    } else {
-      throw 'Could not launch Google Maps';
-    }
-  }
-  ```
-
-- [ ] Replace all empty `IconButton(onPressed: () {})` with actual navigation calls
-- [ ] Test on Web, Android, iOS:
-  - Web: Opens Google Maps in new tab
-  - Mobile: Opens Google Maps app or browser
-
-**Acceptance Criteria:**
-- Navigation button works on all platforms
-- Coordinates are accurate (no hardcoded Taipei defaults)
-- Error handling for missing location data
-
----
-
-#### Task 1.6: Add Chat UI to Shuttle Detail Page
-**File:** `lib/features/shuttles/presentation/shuttle_detail_screen.dart`
-
-**Prerequisites:** `lib/features/chat/data/chat_repository.dart` (✅ exists)
-
-- [ ] Remove `Text('TODO: Chat messages...')` placeholder
-- [ ] Integrate `ChatBox` widget (reference `task_detail_screen.dart` implementation)
-- [ ] Subscribe to `shuttle_messages` stream:
-  ```dart
-  final messagesAsync = ref.watch(
-    shuttleMessagesProvider(widget.shuttleId)
-  );
-  ```
-- [ ] Display chat messages with:
-  - Author name/avatar
-  - Message text
-  - Timestamp (using `timeago` package)
-- [ ] Input field with send button (fixed at bottom)
-- [ ] Visibility: Only participants can see/send messages
-- [ ] Auto-scroll to latest message on new entry
-
-**Database Support:**
-- ✅ `shuttle_messages` table exists
-- ✅ `expires_at` auto-set to 30 days
-- ✅ RLS policies restrict to participants
-
-**Acceptance Criteria:**
-- Non-participants see "Join this shuttle to view chat"
-- Messages sync in real-time via Supabase subscriptions
-- Expired messages (>30 days) not displayed
-
----
-
-### Phase 2: Authentication & Security (Est. 15-20 hours)
-
-#### Task 2.1: Implement Phone OTP Authentication
-**Files:**
-- `lib/features/auth/presentation/phone_login_screen.dart` (new)
-- `lib/features/auth/data/auth_repository.dart` (update)
-
-- [ ] Create `PhoneLoginScreen` with:
-  - Phone number input (with country code picker, default +886 for Taiwan)
-  - OTP code input (6-digit)
-  - Resend OTP button (rate limited to 1/minute)
-
-- [ ] Update `AuthRepository`:
-  ```dart
-  Future<void> signInWithOtp({required String phone}) async {
-    await supabase.auth.signInWithOtp(phone: phone);
-  }
-
-  Future<void> verifyOTP({
-    required String phone,
-    required String token
-  }) async {
-    await supabase.auth.verifyOTP(
-      phone: phone,
-      token: token,
-      type: OtpType.sms
-    );
-  }
-  ```
-
-- [ ] Add "Sign in with Phone" button to `LoginScreen`
-- [ ] Add phone registration option to `RegisterScreen`
-- [ ] Handle errors: invalid phone, OTP expired, wrong code
-
-**Spec Requirement:**
-- Superuser promotion requires phone verification
-- Store phone in `profiles_private.phone` table
-
-**Acceptance Criteria:**
-- Users can register/login with phone number
-- OTP code expires after 5 minutes
-- Rate limiting prevents spam
-
----
-
-#### Task 2.2: Implement Referral Code System
-**Files:**
-- `lib/features/admin/data/referral_code_repository.dart` (new)
-- `lib/features/admin/presentation/referral_code_panel.dart` (new)
-- `lib/features/profile/presentation/apply_admin_screen.dart` (new)
-
-**Database Support:** ✅ `referral_codes` table exists
-
-- [ ] Create `ReferralCodeRepository`:
-  ```dart
-  // Generate code (Admin only, max 1 active)
-  Future<ReferralCode> generateReferralCode() async {
-    // Check active count
-    final activeCount = await supabase
-      .from('referral_codes')
-      .select()
-      .eq('issuer_id', currentUserId)
-      .eq('is_active', true)
-      .count();
-
-    if (activeCount >= 1) {
-      throw 'You already have an active referral code';
-    }
-
-    // Generate 8-char alphanumeric code
-    final code = generateSecureCode(length: 8);
-    final expiresAt = DateTime.now().add(Duration(hours: 1));
-
-    return await supabase.from('referral_codes').insert({
-      'code': code,
-      'issuer_id': currentUserId,
-      'expires_at': expiresAt.toIso8601String(),
-    }).select().single();
-  }
-
-  // Validate and redeem code
-  Future<bool> validateReferralCode(String code) async {
-    final result = await supabase
-      .rpc('validate_referral_code', params: {'code_input': code});
-    return result['is_valid'] ?? false;
-  }
-
-  Future<void> redeemReferralCode(String code) async {
-    await supabase.rpc('redeem_referral_code', params: {
-      'code_input': code,
-      'user_id': currentUserId,
-    });
-  }
-  ```
-
-- [ ] Admin Panel Integration:
-  - Display current active code (or "Generate New Code" button)
-  - Show expiry countdown
-  - List historical codes with usage stats
-
-- [ ] User Application Flow:
-  - Add "Apply for Admin" button in `ProfileScreen` (visible to Leader only)
-  - Input field for referral code
-  - Submission triggers pending review (Superadmin approval required)
-
-**Database Functions Required:**
+**Migration SQL:**
 ```sql
--- Add to supabase_schema.sql
-CREATE OR REPLACE FUNCTION validate_referral_code(code_input text)
+-- Add missing columns expected by ReferralCodeRepository
+ALTER TABLE referral_codes
+  ADD COLUMN max_uses INT DEFAULT 3,
+  ADD COLUMN used_count INT DEFAULT 0,
+  ADD COLUMN is_active BOOLEAN DEFAULT true;
+
+-- Migrate existing data
+UPDATE referral_codes SET
+  used_count = CASE WHEN is_consumed THEN 1 ELSE 0 END,
+  is_active = NOT is_consumed,
+  max_uses = 1;  -- Legacy codes are single-use
+
+-- Add constraint: used_count cannot exceed max_uses
+ALTER TABLE referral_codes ADD CONSTRAINT check_referral_uses
+  CHECK (used_count <= max_uses);
+
+-- Create function to increment used_count
+CREATE OR REPLACE FUNCTION increment_referral_usage(p_code TEXT)
+RETURNS VOID AS $$
+BEGIN
+  UPDATE referral_codes
+  SET
+    used_count = used_count + 1,
+    is_active = CASE WHEN (used_count + 1) >= max_uses THEN false ELSE true END,
+    updated_at = now()
+  WHERE code = p_code;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Update validation function
+CREATE OR REPLACE FUNCTION validate_referral_code(p_code TEXT)
 RETURNS jsonb AS $$
 DECLARE
-  code_record referral_codes;
+  v_code referral_codes;
 BEGIN
-  SELECT * INTO code_record
+  SELECT * INTO v_code
   FROM referral_codes
-  WHERE code = code_input
+  WHERE code = p_code
     AND is_active = true
     AND expires_at > now()
-    AND max_uses > used_count;
+    AND used_count < max_uses;
 
   RETURN jsonb_build_object(
-    'is_valid', code_record IS NOT NULL,
-    'issuer_id', code_record.issuer_id
+    'is_valid', v_code IS NOT NULL,
+    'issuer_id', v_code.issuer_id,
+    'issued_for_role', v_code.issued_for_role,
+    'remaining_uses', CASE WHEN v_code IS NOT NULL THEN v_code.max_uses - v_code.used_count ELSE 0 END
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 ```
 
 **Acceptance Criteria:**
-- Admin cannot have >1 active code simultaneously
-- Expired codes cannot be redeemed
-- Code redemption increments `used_count`
-- All actions logged to `audit_logs`
+- Existing codes migrated successfully
+- `ReferralCodeRepository.generateCode()` works without errors
+- `ReferralCodeRepository.validateAndRedeemCode()` correctly increments `used_count`
+- Multi-use codes (max_uses=3) can be redeemed by multiple users
 
 ---
 
-#### Task 2.3: Implement Role Upgrade Application Flow
-**Files:**
-- `lib/features/profile/presentation/role_upgrade_dialog.dart` (new)
-- `lib/features/admin/presentation/user_review_panel.dart` (new)
+### Task 1.3: Fix Multilingual Content Input
 
-- [ ] Create `RoleUpgradeDialog` (shown from ProfileScreen):
-  - User → Superuser: Requires phone verification
-  - Superuser → Leader: Requires unit/organization + reason
-  - Leader → Admin: Requires referral code input
+**Priority:** 🔴 **CRITICAL**
+**Estimated Time:** 4 hours
+**Files to Modify:**
+- `lib/models/resource_point.dart`
+- `lib/models/announcement_model.dart` (需新增檔案)
+- `lib/features/resources/presentation/create_resource_screen.dart`
+- `lib/features/announcements/presentation/create_announcement_dialog.dart` (需新增檔案)
 
-- [ ] Create application submission logic:
-  ```dart
-  Future<void> submitRoleUpgrade({
-    required UserRole targetRole,
-    String? unit,
-    String? reason,
-    String? referralCode,
-  }) async {
-    await supabase.from('role_upgrade_requests').insert({
-      'user_id': currentUserId,
-      'current_role': currentUser.role.name,
-      'requested_role': targetRole.name,
-      'unit': unit,
-      'reason': reason,
-      'referral_code': referralCode,
-      'status': 'pending',
-    });
+#### Step 1: Fix ResourcePoint Model
+
+**File:** `lib/models/resource_point.dart`
+
+```dart
+// BEFORE (hardcoded same value for both languages)
+Map<String, dynamic> toSupabasePayload() {
+  return {
+    'title': {locale: title, 'en-US': title},  // ❌ Wrong
+    // ...
+  };
+}
+
+// AFTER (accept separate translations)
+Map<String, dynamic> toSupabasePayload({
+  required String titleZh,
+  required String titleEn,
+  required String descriptionZh,
+  required String descriptionEn,
+}) {
+  return {
+    'title': {'zh-TW': titleZh, 'en-US': titleEn},
+    'description': {'zh-TW': descriptionZh, 'en-US': descriptionEn},
+    'category': category,
+    'location': 'POINT($longitude $latitude)',
+    'address': address,
+    'contact_name': contactName,
+    'contact_phone': contactPhone,
+    'verified': verified,
+  };
+}
+```
+
+#### Step 2: Update CreateResourceScreen UI
+
+**File:** `lib/features/resources/presentation/create_resource_screen.dart`
+
+Add separate input fields:
+
+```dart
+class CreateResourceScreen extends ConsumerStatefulWidget {
+  // ... existing code
+}
+
+class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
+  final _titleZhController = TextEditingController();
+  final _titleEnController = TextEditingController();
+  final _descZhController = TextEditingController();
+  final _descEnController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.createResource)),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            // Chinese Title
+            TextField(
+              controller: _titleZhController,
+              decoration: InputDecoration(
+                labelText: '標題 (中文) *',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+
+            // English Title
+            TextField(
+              controller: _titleEnController,
+              decoration: InputDecoration(
+                labelText: 'Title (English) *',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+
+            // Chinese Description
+            TextField(
+              controller: _descZhController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                labelText: '描述 (中文) *',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+
+            // English Description
+            TextField(
+              controller: _descEnController,
+              maxLines: 3,
+              decoration: InputDecoration(
+                labelText: 'Description (English) *',
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            // ... existing fields (location, category, contact)
+
+            ElevatedButton(
+              onPressed: _submitResource,
+              child: Text(l10n.submit),
+            ),
+          ],
+        ),
+      ),
+    );
   }
-  ```
 
-- [ ] Create `UserReviewPanel` (Admin Panel Tab 1):
-  - Query `role_upgrade_requests` where `status = 'pending'`
-  - Display: user info, current role, requested role, justification
-  - Actions:
-    - **Approve**: Update `profiles_public.role`, set request `status = 'approved'`, log to `audit_logs`
-    - **Reject**: Set `status = 'rejected'`, add reason
-  - Superadmin-only: Final approval for Leader→Admin (verify referral code)
+  Future<void> _submitResource() async {
+    if (_titleZhController.text.isEmpty || _titleEnController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('請填寫中英文標題 / Please fill in both titles')),
+      );
+      return;
+    }
 
-**Database Schema Required:**
-```sql
-CREATE TABLE role_upgrade_requests (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL REFERENCES auth.users(id),
-  current_role text NOT NULL,
-  requested_role text NOT NULL,
-  unit text,
-  reason text,
-  referral_code text,
-  status text NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
-  reviewed_by uuid REFERENCES auth.users(id),
-  reviewed_at timestamptz,
-  created_at timestamptz DEFAULT now()
-);
+    final payload = {
+      'title': {
+        'zh-TW': _titleZhController.text.trim(),
+        'en-US': _titleEnController.text.trim(),
+      },
+      'description': {
+        'zh-TW': _descZhController.text.trim(),
+        'en-US': _descEnController.text.trim(),
+      },
+      // ... other fields
+    };
+
+    await ref.read(resourceRepositoryProvider).createResource(payload);
+    if (mounted) Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    _titleZhController.dispose();
+    _titleEnController.dispose();
+    _descZhController.dispose();
+    _descEnController.dispose();
+    super.dispose();
+  }
+}
+```
+
+#### Step 3: Apply Same Pattern to Announcements
+
+Create `lib/features/announcements/presentation/create_announcement_dialog.dart` with dual-language inputs.
+
+**Acceptance Criteria:**
+- Creating resource point with different Chinese/English titles works
+- Database stores correct jsonb structure: `{'zh-TW': '中文', 'en-US': 'English'}`
+- Switching app language displays correct translation
+- Form validation requires both languages filled
+
+---
+
+### Task 1.4: Add Admin Route Guard
+
+**Priority:** 🔴 **HIGH**
+**Estimated Time:** 1 hour
+**Files to Modify:** `lib/core/router/app_router.dart`
+
+```dart
+// BEFORE (no role check for /admin)
+GoRoute(
+  path: '/admin',
+  builder: (context, state) => const AdminPanelScreen(),
+),
+
+// AFTER (redirect non-admins)
+GoRoute(
+  path: '/admin',
+  builder: (context, state) => const AdminPanelScreen(),
+  redirect: (context, state) async {
+    final authRepository = ref.read(authRepositoryProvider);
+    final user = authRepository.currentUser;
+
+    if (user == null) return '/login';
+
+    final profileRepository = ref.read(profileRepositoryProvider);
+    final profile = await profileRepository.getProfile(user.id);
+
+    if (!profile.role.isAdminOrAbove) {
+      return '/home';  // Redirect non-admins
+    }
+
+    return null;  // Allow access
+  },
+),
 ```
 
 **Acceptance Criteria:**
-- User cannot submit duplicate pending requests
-- Leader→Admin requires valid referral code
-- Approval updates user role in real-time (Supabase triggers)
-- Rejection includes reason visible to applicant
+- Non-admin users redirected to `/home` when accessing `/admin`
+- Admin+ users can access admin panel normally
+- No console errors
 
 ---
 
-#### Task 2.4: Fix Exposed API Keys (Security)
-**Files:**
-- `lib/core/config/app_config.dart`
-- `web/index.html`
+## Phase 2: Database Enhancements (Week 2)
 
-**Current Issue:** Google Maps API keys hardcoded in source code
+### Task 2.1: Configure pg_cron for Message Cleanup
 
-- [ ] Remove hardcoded keys from:
-  ```dart
-  // lib/core/config/app_config.dart
-  static const String googleMapsApiKey = 'AIza...'; // ❌ REMOVE
-  ```
+**Priority:** 🟡 **MEDIUM**
+**Estimated Time:** 1 hour
+**Files to Create:** `supabase/migrations/20250122000003_setup_cron_jobs.sql`
 
-- [ ] Create environment variable injection:
-  - Create `.env` file (add to `.gitignore`):
-    ```
-    GOOGLE_MAPS_API_KEY=AIzaSyC...
-    SUPABASE_URL=https://...
-    SUPABASE_ANON_KEY=eyJh...
-    ```
+```sql
+-- Schedule daily cleanup at 2 AM
+SELECT cron.schedule(
+  'prune-expired-messages',
+  '0 2 * * *',
+  $$SELECT prune_expired_messages();$$
+);
 
-  - Add `flutter_dotenv` package:
-    ```yaml
-    dependencies:
-      flutter_dotenv: ^5.1.0
-    ```
+-- Verify cron job created
+SELECT * FROM cron.job WHERE jobname = 'prune-expired-messages';
+```
 
-  - Load in `main.dart`:
-    ```dart
-    import 'package:flutter_dotenv/flutter_dotenv.dart';
-
-    void main() async {
-      await dotenv.load(fileName: ".env");
-      runApp(MyApp());
-    }
-    ```
-
-  - Update `app_config.dart`:
-    ```dart
-    static String get googleMapsApiKey =>
-      dotenv.env['GOOGLE_MAPS_API_KEY'] ?? '';
-    ```
-
-- [ ] Update `web/index.html`:
-  ```html
-  <!-- BEFORE -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIza..."></script>
-
-  <!-- AFTER -->
-  <script>
-    const MAPS_KEY = '{{GOOGLE_MAPS_API_KEY}}'; // Injected by build
-  </script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=${MAPS_KEY}"></script>
-  ```
-
-- [ ] Configure Vercel environment variables:
-  - Dashboard → Project → Settings → Environment Variables
-  - Add `GOOGLE_MAPS_API_KEY`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`
+**Alternative (Manual Setup):**
+1. Go to Supabase Dashboard → Database → Cron Jobs
+2. Create new job:
+   - Name: `prune-expired-messages`
+   - Schedule: `0 2 * * *` (Daily at 2 AM)
+   - Command: `SELECT prune_expired_messages();`
 
 **Acceptance Criteria:**
-- No secrets in source control
-- Build fails if `.env` is missing
-- Vercel builds inject environment variables correctly
+- Cron job visible in `cron.job` table
+- Messages older than 30 days deleted daily
+- Check logs after first run
 
 ---
 
-### Phase 3: Data Model & Contract Fixes (Est. 10-15 hours)
+### Task 2.2: Add Shuttle Priority Guard Trigger
 
-#### Task 3.1: Fix ShuttleModel Missing Fields
-**File:** `lib/models/shuttle_model.dart`
+**Priority:** 🟡 **MEDIUM**
+**Estimated Time:** 1 hour
+**Files to Create:** `supabase/migrations/20250122000002_add_shuttle_priority_guard.sql`
 
-**Issue:** Database has fields not mapped in Dart model
+```sql
+-- Protect shuttle is_priority field (same as tasks)
+CREATE OR REPLACE FUNCTION protect_shuttle_priority()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF (NEW.is_priority IS DISTINCT FROM OLD.is_priority)
+     AND NOT is_leader_or_above() THEN
+    RAISE EXCEPTION 'Permission denied: only Leader+ can change shuttle priority';
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
 
-- [ ] Add missing fields to `ShuttleModel`:
-  ```dart
-  @freezed
-  class ShuttleModel with _$ShuttleModel {
-    const factory ShuttleModel({
-      required String id,
-      required String displayId,
-      required String title,
-      String? description,
-      required ShuttleStatus status,
-      required LatLng origin,
-      required LatLng destination,
-      String? originAddress,
-      String? destinationAddress,
-      required DateTime departAt,
-      DateTime? arriveAt,
-      required int seatsTotal,
-      required int seatsTaken,
-      int? costPerSeat,
-      required String createdBy,
-      required DateTime createdAt,
-      required DateTime updatedAt,
-
-      // 🆕 MISSING FIELDS
-      @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
-      @JsonKey(name: 'contact_name') String? contactName,
-      @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
-      @JsonKey(name: 'participants') List<String>? participantIds, // Snapshot array
-      @JsonKey(name: 'is_priority') bool? isPriority,
-    }) = _ShuttleModel;
-
-    factory ShuttleModel.fromJson(Map<String, dynamic> json) =>
-        _$ShuttleModelFromJson(json);
-  }
-  ```
-
-- [ ] Run code generation:
-  ```bash
-  flutter pub run build_runner build --delete-conflicting-outputs
-  ```
-
-- [ ] Update `ShuttleRepository` to query participant IDs:
-  ```dart
-  Future<ShuttleModel> getShuttle(String id) async {
-    final data = await supabase
-      .from('shuttles')
-      .select('*, participants:shuttle_participants(user_id)')
-      .eq('id', id)
-      .single();
-
-    // Transform participants to ID array
-    data['participants'] = (data['participants'] as List)
-      .map((p) => p['user_id'] as String)
-      .toList();
-
-    return ShuttleModel.fromJson(data);
-  }
-  ```
-
-- [ ] Display vehicle info in `ShuttleDetailScreen`:
-  ```dart
-  if (shuttle.vehicle != null) {
-    final type = shuttle.vehicle!['type'] ?? 'N/A';
-    final plate = shuttle.vehicle!['plate'] ?? 'N/A';
-    Text('Vehicle: $type - $plate');
-  }
-  ```
-
-- [ ] Display masked contact:
-  ```dart
-  Text('Contact: ${shuttle.contactName ?? 'N/A'}');
-  Text('Phone: ${shuttle.contactPhoneMasked ?? 'Hidden'}');
-  ```
+CREATE TRIGGER trg_shuttle_priority_protect
+  BEFORE UPDATE ON shuttles
+  FOR EACH ROW EXECUTE PROCEDURE protect_shuttle_priority();
+```
 
 **Acceptance Criteria:**
-- No JSON deserialization errors
-- UI displays vehicle type, plate, contact info correctly
-- Participant count matches snapshot array length
+- Regular users cannot UPDATE `is_priority` field
+- Leader+ can set priority without errors
+- Error message displayed correctly in frontend
 
 ---
 
-#### Task 3.2: Fix TaskModel Missing Fields
-**File:** `lib/models/task_model.dart`
+### Task 2.3: Auto-mask Phone Numbers in Database
 
-**Issue:** Spec requires participant snapshot array
+**Priority:** 🟢 **LOW**
+**Estimated Time:** 2 hours
+**Files to Create:** `supabase/migrations/20250122000004_auto_mask_phones.sql`
 
-- [ ] Add `participants` field:
-  ```dart
-  @freezed
-  class TaskModel with _$TaskModel {
-    const factory TaskModel({
-      // ... existing fields
-      @JsonKey(name: 'participants') List<String>? participantIds,
-    }) = _TaskModel;
-  }
-  ```
+```sql
+-- Create trigger to auto-populate masked_phone from profiles_private
+CREATE OR REPLACE FUNCTION sync_masked_phone()
+RETURNS TRIGGER AS $$
+BEGIN
+  IF NEW.masked_phone IS NULL OR NEW.masked_phone = '' THEN
+    SELECT mask_phone(real_phone) INTO NEW.masked_phone
+    FROM profiles_private
+    WHERE id = NEW.id;
+  END IF;
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
 
-- [ ] Update `TaskRepository` query (same pattern as Task 3.1)
-
-- [ ] Regenerate code
+CREATE TRIGGER trg_mask_phone_on_profile
+  BEFORE INSERT OR UPDATE ON profiles_public
+  FOR EACH ROW EXECUTE PROCEDURE sync_masked_phone();
+```
 
 **Acceptance Criteria:**
-- Participant list UI can iterate over `participantIds`
-- No need for separate `task_participants` query for display
+- Inserting profile without `masked_phone` auto-generates masked version
+- `mask_phone()` function correctly formats Taiwan phone numbers
+- No PII leak in public table
 
 ---
 
-#### Task 3.3: Add Participant List UI to Shuttle Detail
-**File:** `lib/features/shuttles/presentation/shuttle_detail_screen.dart`
+## Phase 3: UI/UX Improvements (Week 3)
 
-**Prerequisites:** Task 3.1 completed
+### Task 3.1: Implement Resource Duplicate Detection Dialog
 
-- [ ] Create `_ParticipantList` widget:
-  ```dart
-  class _ParticipantList extends ConsumerWidget {
-    final String shuttleId;
+**Priority:** 🟡 **MEDIUM**
+**Estimated Time:** 3 hours
+**Files to Create:** `lib/features/resources/presentation/duplicate_resource_dialog.dart`
 
-    Widget build(BuildContext context, WidgetRef ref) {
-      final participantsAsync = ref.watch(
-        shuttleParticipantsProvider(shuttleId)
-      );
+```dart
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-      return participantsAsync.when(
-        data: (participants) => ListView.builder(
-          shrinkWrap: true,
-          physics: NeverScrollableScrollPhysics(),
-          itemCount: participants.length,
-          itemBuilder: (context, index) {
-            final p = participants[index];
-            return ListTile(
-              leading: CircleAvatar(child: Text(p.name[0])),
-              title: Text(p.name),
-              subtitle: Text(p.role), // driver/staff/passenger
-              trailing: p.isVisible
-                ? Text(p.phoneMasked ?? 'N/A')
-                : Icon(Icons.visibility_off),
-            );
-          },
+class DuplicateResourceDialog extends StatelessWidget {
+  final List<ResourcePoint> nearbyResources;
+
+  const DuplicateResourceDialog({required this.nearbyResources, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('發現附近資源點'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('以下資源點距離您小於 1.2 公里：'),
+          SizedBox(height: 16),
+          ...nearbyResources.map((r) => ListTile(
+            title: Text(r.title),
+            subtitle: Text('${r.distance.toStringAsFixed(0)} 公尺'),
+            trailing: Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.pop(context);
+              context.go('/map/resources/${r.id}');
+            },
+          )),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: Text('仍要建立新點'),
         ),
-        loading: () => CircularProgressIndicator(),
-        error: (e, _) => Text('Error: $e'),
-      );
-    }
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: Text('查看既有點'),
+        ),
+      ],
+    );
   }
-  ```
+}
+```
 
-- [ ] Create `shuttleParticipantsProvider`:
-  ```dart
-  final shuttleParticipantsProvider = StreamProvider.family<
-    List<ShuttleParticipant>, String
-  >((ref, shuttleId) {
-    return supabase
-      .from('shuttle_participants')
-      .stream(primaryKey: ['id'])
-      .eq('shuttle_id', shuttleId)
-      .map((data) => data.map((json) =>
-        ShuttleParticipant.fromJson(json)
-      ).toList());
-  });
-  ```
+**Modify CreateResourceScreen:**
 
-- [ ] Add to `ShuttleDetailScreen` below route info
-- [ ] Show role badges (driver/staff/passenger)
-- [ ] Respect `is_visible` privacy setting
+```dart
+Future<void> _submitResource() async {
+  // ... validation
 
-**Acceptance Criteria:**
-- Participant list shows all joined users
-- Driver is highlighted/badged
-- Hidden contacts show lock icon instead of phone
+  // Check for duplicates before submitting
+  final geohash = Geohash.encode(latitude, longitude, precision: 6);
+  final nearby = await ref.read(resourceRepositoryProvider)
+    .findByGeohash(geohash);
 
----
-
-#### Task 3.4: Enforce Schema Required Fields in Create Forms
-**Files:**
-- `lib/features/tasks/presentation/create_task_screen.dart`
-- `lib/features/resources/presentation/create_resource_screen.dart`
-- `lib/features/shuttles/presentation/create_shuttle_screen.dart` (Task 1.4)
-
-**Issue:** Current forms don't collect all required schema fields
-
-**Task Create Form Missing:**
-- `location` (geography point) - currently allows null
-- `required_roles` (jsonb)
-- `participant_cap` (int)
-- `visibility` (boolean)
-- `materials_status` (jsonb)
-
-**Changes:**
-- [ ] Add location picker (map or address search)
-- [ ] Add "Required Roles" multi-select (e.g., Medical, Driver, Logistics)
-- [ ] Add "Max Participants" number input (default 10)
-- [ ] Add "Public Task" checkbox (affects `is_visible`)
-- [ ] Add "Materials Needed" dynamic form (item + quantity)
-
-**Resource Create Form Missing:**
-- Geohash deduplication check
-- Contact phone masking
-
-**Changes:**
-- [ ] Remove hardcoded Taipei coordinates
-- [ ] Use current location or map picker
-- [ ] Check geohash-6 before insert:
-  ```dart
-  try {
-    await resourceRepository.create(resource);
-  } on PostgrestException catch (e) {
-    if (e.code == '23505') { // Unique violation
-      // Show dialog: "Resource exists nearby. View or merge?"
-      final nearby = await resourceRepository.findByGeohash(geohash);
-      showMergeDialog(nearby);
-    }
+  if (nearby.isNotEmpty) {
+    final shouldCancel = await showDialog<bool>(
+      context: context,
+      builder: (_) => DuplicateResourceDialog(nearbyResources: nearby),
+    );
+    if (shouldCancel == true) return;  // User chose to view existing
   }
-  ```
+
+  // Proceed with creation
+  await ref.read(resourceRepositoryProvider).createResource(payload);
+}
+```
 
 **Acceptance Criteria:**
-- All form submissions succeed with RLS enabled
-- No hardcoded coordinates
-- Geohash conflicts handled gracefully
-- Contact phones stored masked in `contact_masked_phone`
+- Dialog shows when duplicate geohash detected
+- User can navigate to existing resource point
+- User can choose to create anyway
 
 ---
 
-#### Task 3.5: Fix Flutter SDK Version Drift
-**File:** `pubspec.yaml`
+### Task 3.2: Implement Forgot Password Flow
 
-**Issue:** Code uses `Color.withValues` (Flutter 3.16+) but pubspec pins `sdk: ^3.10.0`
+**Priority:** 🟡 **MEDIUM**
+**Estimated Time:** 2 hours
+**Files to Create:** `lib/features/auth/presentation/forgot_password_screen.dart`
 
-- [ ] Update SDK constraint:
-  ```yaml
-  environment:
-    sdk: '>=3.16.0 <4.0.0'
-  ```
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-- [ ] Update Vercel build script (if exists) to match
-- [ ] Test local build with Flutter 3.16+
-- [ ] Search codebase for other new API usage:
-  ```bash
-  grep -r "withValues" lib/
-  ```
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
-**Acceptance Criteria:**
-- No compilation errors
-- Local and Vercel builds use same SDK version
+  @override
+  ConsumerState<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
+}
 
----
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
+  final _emailController = TextEditingController();
+  bool _isLoading = false;
 
-### Phase 4: PWA & Offline Support (Est. 8-10 hours)
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('重設密碼')),
+      body: Padding(
+        padding: EdgeInsets.all(24),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              '請輸入您的註冊信箱，我們將發送重設連結',
+              style: Theme.of(context).textTheme.bodyLarge,
+            ),
+            SizedBox(height: 24),
+            TextField(
+              controller: _emailController,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                labelText: 'Email',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 24),
+            ElevatedButton(
+              onPressed: _isLoading ? null : _sendResetEmail,
+              child: _isLoading
+                ? CircularProgressIndicator()
+                : Text('發送重設連結'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
-#### Task 4.1: Configure PWA Manifest
-**File:** `web/manifest.json`
+  Future<void> _sendResetEmail() async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty) return;
 
-**Current:** Default Flutter template
+    setState(() => _isLoading = true);
 
-- [ ] Update manifest:
-  ```json
-  {
-    "name": "Disaster Relief Resource Platform",
-    "short_name": "Relief Platform",
-    "description": "Taiwan Disaster Resource Integration Platform",
-    "start_url": "/",
-    "display": "standalone",
-    "background_color": "#ffffff",
-    "theme_color": "#1976d2",
-    "orientation": "portrait-primary",
-    "icons": [
-      {
-        "src": "icons/icon-192.png",
-        "sizes": "192x192",
-        "type": "image/png",
-        "purpose": "any maskable"
-      },
-      {
-        "src": "icons/icon-512.png",
-        "sizes": "512x512",
-        "type": "image/png",
-        "purpose": "any maskable"
+    try {
+      await ref.read(authRepositoryProvider).resetPassword(email);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('重設連結已發送至 $email')),
+        );
+        Navigator.pop(context);
       }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('發送失敗：$e')),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+}
+```
+
+**Update AuthRepository:**
+
+```dart
+Future<void> resetPassword(String email) async {
+  await _supabase.auth.resetPasswordForEmail(
+    email,
+    redirectTo: 'your-app://reset-password',  // Configure deep link
+  );
+}
+```
+
+**Update LoginScreen:**
+
+```dart
+// Replace TODO comment with:
+TextButton(
+  onPressed: () => context.go('/forgot-password'),
+  child: Text('忘記密碼？'),
+),
+```
+
+**Add Route:**
+
+```dart
+GoRoute(
+  path: '/forgot-password',
+  builder: (context, state) => const ForgotPasswordScreen(),
+),
+```
+
+**Acceptance Criteria:**
+- User receives password reset email
+- Email contains valid reset link
+- Reset link opens app (deep linking configured)
+- User can set new password
+
+---
+
+### Task 3.3: Extract Nested Widgets in Detail Screens
+
+**Priority:** 🟢 **LOW**
+**Estimated Time:** 4 hours
+**Files to Modify:**
+- `lib/features/shuttles/presentation/shuttle_detail_screen.dart`
+- `lib/features/tasks/presentation/task_detail_screen.dart`
+
+**Example Refactor (ShuttleDetailScreen):**
+
+```dart
+// BEFORE (deep nesting)
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Column(
+      children: [
+        Container(
+          child: Padding(
+            child: Column(
+              children: [
+                Row(children: [...]),  // Deeply nested
+                // ...
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+// AFTER (extracted components)
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Column(
+      children: [
+        _buildHeader(),
+        _buildRouteInfo(),
+        _buildParticipantsList(),
+        _buildChatSection(),
+      ],
+    ),
+  );
+}
+
+Widget _buildHeader() {
+  return Container(
+    padding: EdgeInsets.all(16),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(shuttle.title, style: Theme.of(context).textTheme.headlineSmall),
+        SizedBox(height: 8),
+        _buildStatusBadge(),
+      ],
+    ),
+  );
+}
+
+Widget _buildRouteInfo() {
+  return Card(
+    margin: EdgeInsets.all(16),
+    child: Padding(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        children: [
+          _buildLocationRow(Icons.my_location, shuttle.originAddress),
+          Divider(),
+          _buildLocationRow(Icons.place, shuttle.destinationAddress),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _buildLocationRow(IconData icon, String address) {
+  return Row(
+    children: [
+      Icon(icon),
+      SizedBox(width: 8),
+      Expanded(child: Text(address)),
+      IconButton(
+        icon: Icon(Icons.navigation),
+        onPressed: () => _launchNavigation(address),
+      ),
     ],
-    "screenshots": [
-      {
-        "src": "screenshots/home.png",
-        "sizes": "540x720",
-        "type": "image/png"
-      }
-    ]
-  }
-  ```
+  );
+}
 
-- [ ] Generate icons (192x192, 512x512) using design assets
-- [ ] Add install prompt detection:
-  ```dart
-  // lib/core/utils/pwa_utils.dart
-  void listenForInstallPrompt() {
-    window.addEventListener('beforeinstallprompt', (event) {
-      // Show custom install banner
+// ... more extracted methods
+```
+
+**Acceptance Criteria:**
+- No widget tree deeper than 5 levels
+- Each extracted method has single responsibility
+- Code easier to read and maintain
+- No functionality broken
+
+---
+
+## Phase 4: Testing & Quality (Week 4)
+
+### Task 4.1: Add Integration Tests
+
+**Priority:** 🟡 **MEDIUM**
+**Estimated Time:** 8 hours
+**Files to Create:**
+- `integration_test/auth_flow_test.dart`
+- `integration_test/task_lifecycle_test.dart`
+- `integration_test/shuttle_booking_test.dart`
+
+**Example Test (auth_flow_test.dart):**
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:disaster_relief_platform/main.dart' as app;
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+
+  group('Authentication Flow', () {
+    testWidgets('User can register and login', (tester) async {
+      app.main();
+      await tester.pumpAndSettle();
+
+      // Navigate to register
+      await tester.tap(find.text('註冊'));
+      await tester.pumpAndSettle();
+
+      // Fill registration form
+      await tester.enterText(find.byKey(Key('email_field')), 'test@example.com');
+      await tester.enterText(find.byKey(Key('password_field')), 'Test123456');
+      await tester.enterText(find.byKey(Key('confirm_password_field')), 'Test123456');
+
+      // Submit
+      await tester.tap(find.text('註冊'));
+      await tester.pumpAndSettle();
+
+      // Verify success message
+      expect(find.text('註冊成功'), findsOneWidget);
+
+      // Login with same credentials
+      await tester.tap(find.text('登入'));
+      await tester.pumpAndSettle();
+
+      await tester.enterText(find.byKey(Key('login_email')), 'test@example.com');
+      await tester.enterText(find.byKey(Key('login_password')), 'Test123456');
+      await tester.tap(find.text('登入'));
+      await tester.pumpAndSettle();
+
+      // Verify redirected to home
+      expect(find.byType(HomeScreen), findsOneWidget);
+    });
+
+    testWidgets('Admin can access admin panel', (tester) async {
+      // ... test admin login and panel access
+    });
+  });
+}
+```
+
+**Run Tests:**
+```bash
+flutter test integration_test/auth_flow_test.dart
+```
+
+**Acceptance Criteria:**
+- All critical user flows covered
+- Tests run without errors
+- CI pipeline includes integration tests
+
+---
+
+### Task 4.2: Add Unit Tests for Repositories
+
+**Priority:** 🟡 **MEDIUM**
+**Estimated Time:** 6 hours
+**Files to Create:**
+- `test/features/tasks/task_repository_test.dart`
+- `test/features/shuttles/shuttle_repository_test.dart`
+- `test/features/admin/referral_code_repository_test.dart`
+
+**Example Test:**
+
+```dart
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:disaster_relief_platform/features/tasks/data/task_repository.dart';
+
+void main() {
+  late TaskRepository repository;
+  late MockSupabaseClient mockClient;
+
+  setUp(() {
+    mockClient = MockSupabaseClient();
+    repository = TaskRepository(mockClient);
+  });
+
+  group('TaskRepository', () {
+    test('createTask enforces rate limit for regular users', () async {
+      // Arrange
+      when(mockClient.auth.currentUser).thenReturn(
+        MockUser(role: UserRole.user)
+      );
+
+      // Act & Assert
+      await repository.createTask(task1);
+      expect(
+        () => repository.createTask(task2),  // Within 1 hour
+        throwsA(isA<RateLimitException>()),
+      );
+    });
+
+    test('createTask allows Leader+ without rate limit', () async {
+      // Arrange
+      when(mockClient.auth.currentUser).thenReturn(
+        MockUser(role: UserRole.leader)
+      );
+
+      // Act
+      await repository.createTask(task1);
+      await repository.createTask(task2);  // Should succeed
+
+      // Assert
+      verify(mockClient.from('tasks').insert(any)).called(2);
+    });
+  });
+}
+```
+
+**Acceptance Criteria:**
+- Repository logic tested independently
+- Mock Supabase client used
+- Edge cases covered (rate limits, permissions, etc.)
+
+---
+
+## Phase 5: PWA & Deployment (Week 5)
+
+### Task 5.1: Configure PWA Service Worker Cache
+
+**Priority:** 🟡 **MEDIUM**
+**Estimated Time:** 4 hours
+**Files to Modify:** `web/service_worker.js`
+
+**Replace Flutter default service worker:**
+
+```javascript
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
+
+// Cache static assets (images, fonts)
+workbox.routing.registerRoute(
+  ({request}) => request.destination === 'image' || request.destination === 'font',
+  new workbox.strategies.CacheFirst({
+    cacheName: 'static-assets',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60,  // 30 days
+      }),
+    ],
+  })
+);
+
+// Stale-while-revalidate for API calls
+workbox.routing.registerRoute(
+  ({url}) => url.origin === 'https://your-project.supabase.co',
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: 'supabase-api',
+    plugins: [
+      new workbox.expiration.ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 5 * 60,  // 5 minutes
+      }),
+    ],
+  })
+);
+
+// Network-first for auth endpoints
+workbox.routing.registerRoute(
+  ({url}) => url.pathname.includes('/auth/'),
+  new workbox.strategies.NetworkFirst({
+    cacheName: 'auth-cache',
+  })
+);
+
+// Precache Flutter build files
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
+```
+
+**Update `web/index.html`:**
+
+```html
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/service_worker.js')
+        .then(reg => console.log('SW registered:', reg))
+        .catch(err => console.log('SW registration failed:', err));
     });
   }
-  ```
-
-**Acceptance Criteria:**
-- PWA installable on Android/Desktop
-- Correct app name and icon in launcher
-- Standalone mode hides browser chrome
-
----
-
-#### Task 4.2: Implement Service Worker Caching Strategy
-**File:** `web/service_worker.js` (new, custom)
-
-**Spec Requirement:**
-- `stale-while-revalidate` for lists (announcements, tasks, shuttles)
-- `CacheFirst` for static assets
-- IndexedDB for offline mutations
-
-- [ ] Create custom service worker (replace Flutter default):
-  ```javascript
-  importScripts('https://storage.googleapis.com/workbox-cdn/releases/6.5.4/workbox-sw.js');
-
-  // Cache static assets
-  workbox.routing.registerRoute(
-    ({request}) => request.destination === 'image' ||
-                    request.destination === 'font',
-    new workbox.strategies.CacheFirst({
-      cacheName: 'static-assets',
-      plugins: [
-        new workbox.expiration.ExpirationPlugin({
-          maxEntries: 60,
-          maxAgeSeconds: 30 * 24 * 60 * 60, // 30 days
-        }),
-      ],
-    })
-  );
-
-  // Stale-while-revalidate for API calls
-  workbox.routing.registerRoute(
-    ({url}) => url.pathname.startsWith('/rest/v1/'),
-    new workbox.strategies.StaleWhileRevalidate({
-      cacheName: 'supabase-api',
-      plugins: [
-        new workbox.expiration.ExpirationPlugin({
-          maxEntries: 100,
-          maxAgeSeconds: 5 * 60, // 5 minutes
-        }),
-      ],
-    })
-  );
-
-  // Network-first for auth/critical
-  workbox.routing.registerRoute(
-    ({url}) => url.pathname.includes('/auth/'),
-    new workbox.strategies.NetworkFirst()
-  );
-  ```
-
-- [ ] Integrate with `index.html`:
-  ```html
-  <script>
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service_worker.js');
-    }
-  </script>
-  ```
+</script>
+```
 
 **Acceptance Criteria:**
 - App loads basic UI when offline
@@ -929,477 +1096,326 @@ CREATE TABLE role_upgrade_requests (
 
 ---
 
-#### Task 4.3: Implement IndexedDB Offline Mutation Queue
-**File:** `lib/services/offline_queue_service.dart` (new)
+### Task 5.2: Add Web Map Fallback
 
-**Use Case:** User creates task/shuttle while offline
+**Priority:** 🟢 **LOW**
+**Estimated Time:** 3 hours
+**Files to Modify:** `lib/features/map/presentation/map_screen.dart`
 
-- [ ] Create `OfflineQueueService`:
-  ```dart
-  class OfflineQueueService {
-    final Isar isar;
+```dart
+import 'package:flutter/foundation.dart' show kIsWeb;
 
-    Future<void> queueMutation({
-      required String type, // 'create_task', 'join_shuttle', etc.
-      required Map<String, dynamic> payload,
-    }) async {
-      await isar.writeTxn(() async {
-        await isar.offlineMutations.put(OfflineMutation(
-          type: type,
-          payload: jsonEncode(payload),
-          createdAt: DateTime.now(),
-        ));
-      });
+class MapScreen extends ConsumerWidget {
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (kIsWeb) {
+      return _buildWebFallback(context);
     }
 
-    Future<void> syncPendingMutations() async {
-      final pending = await isar.offlineMutations.where().findAll();
-      for (final mutation in pending) {
-        try {
-          await _executeMutation(mutation);
-          await isar.writeTxn(() => isar.offlineMutations.delete(mutation.id));
-        } catch (e) {
-          // Retry later
-        }
-      }
-    }
-
-    Future<void> _executeMutation(OfflineMutation m) async {
-      switch (m.type) {
-        case 'create_task':
-          await supabase.from('tasks').insert(jsonDecode(m.payload));
-        case 'join_shuttle':
-          await supabase.rpc('join_shuttle', params: jsonDecode(m.payload));
-        // ...
-      }
-    }
-  }
-  ```
-
-- [ ] Trigger sync on network reconnect:
-  ```dart
-  Connectivity().onConnectivityChanged.listen((result) {
-    if (result != ConnectivityResult.none) {
-      offlineQueueService.syncPendingMutations();
-    }
-  });
-  ```
-
-**Acceptance Criteria:**
-- Offline-created tasks appear as "Draft" (synced when online)
-- No data loss during network transitions
-- Conflict resolution (optimistic UI with rollback)
-
----
-
-### Phase 5: Map & Resource Enhancements (Est. 6-8 hours)
-
-#### Task 5.1: Display Tasks & Shuttles on Map
-**File:** `lib/features/map/presentation/map_screen.dart`
-
-**Current Issue:** Only resource points displayed
-
-- [ ] Query tasks and shuttles with location:
-  ```dart
-  final tasks = ref.watch(tasksWithLocationProvider);
-  final shuttles = ref.watch(shuttlesWithLocationProvider);
-  ```
-
-- [ ] Add markers with different colors:
-  - **Resource Points:** Blue pin
-  - **Tasks:** Green pin
-  - **Shuttles:** Orange pin (origin) + Purple pin (destination)
-
-- [ ] Cluster markers when zoomed out (use `google_maps_cluster_manager`)
-
-- [ ] On marker tap, show bottom sheet with:
-  - Title, status, distance from user
-  - Quick actions: Navigate, View Details, Join/Leave
-
-**Acceptance Criteria:**
-- Map displays all 3 entity types
-- Marker clusters prevent UI clutter
-- Bottom sheet actions work correctly
-
----
-
-#### Task 5.2: Fix Resource List "Map Preview Coming Soon"
-**File:** `lib/features/resources/presentation/resource_list_screen.dart`
-
-**Current:** Placeholder text instead of map
-
-- [ ] Replace `Text('Map preview coming soon')` with actual map widget
-- [ ] Show single resource point on small map
-- [ ] Tapping map opens full `MapScreen` centered on resource
-- [ ] Use `GoogleMap` widget in `SizedBox(height: 200)`
-
-**Acceptance Criteria:**
-- Resource location preview visible in list cards
-- Map interactive (pan/zoom)
-
----
-
-#### Task 5.3: Implement Contact Phone Masking
-**File:** `lib/core/utils/phone_masking.dart` (new)
-
-**Spec Requirement:** Taiwan phone masking (保留前 4 碼、末 3 碼)
-
-- [ ] Create utility function:
-  ```dart
-  String maskPhone(String phone) {
-    if (phone.length < 10) return phone;
-    // Example: +886-912-345-678 → +886-912-***-678
-    final countryCode = phone.substring(0, 4); // +886
-    final prefix = phone.substring(4, 8); // -912
-    final suffix = phone.substring(phone.length - 3); // 678
-    return '$countryCode$prefix-***-$suffix';
-  }
-  ```
-
-- [ ] Apply in UI:
-  - `resource_list_screen.dart`: Contact phone
-  - `shuttle_detail_screen.dart`: Host/participant phones
-  - `task_detail_screen.dart`: Author phone
-
-- [ ] Show unmasked phone only when:
-  - User is logged in
-  - User is participant (tasks/shuttles)
-  - User toggled "Show Contact Info" in privacy settings
-
-**Database Support:**
-- ✅ `mask_phone()` SQL function exists
-- ✅ `contact_masked_phone` columns exist
-
-**Acceptance Criteria:**
-- Visitors see masked phones
-- Logged-in participants see full numbers
-- Privacy preference respected
-
----
-
-### Phase 6: Analytics & Monitoring (Est. 5-7 hours)
-
-#### Task 6.1: Initialize Firebase Analytics
-**File:** `lib/main.dart`
-
-**Current Issue:** `firebase_analytics` declared but not initialized
-
-- [ ] Initialize Firebase in `main()`:
-  ```dart
-  import 'package:firebase_core/firebase_core.dart';
-  import 'package:firebase_analytics/firebase_analytics.dart';
-
-  void main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    await SupabaseService.initialize();
-    runApp(ProviderScope(child: DisasterReliefApp()));
-  }
-  ```
-
-- [ ] Create analytics service:
-  **File:** `lib/services/analytics_service.dart`
-  ```dart
-  class AnalyticsService {
-    static final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
-
-    static Future<void> logShuttleJoin(String shuttleId) async {
-      await _analytics.logEvent(
-        name: 'shuttle_join',
-        parameters: {'shuttle_id': shuttleId},
-      );
-    }
-
-    static Future<void> logTaskComplete(String taskId) async {
-      await _analytics.logEvent(
-        name: 'task_complete',
-        parameters: {'task_id': taskId},
-      );
-    }
-
-    // Add more events per spec...
-  }
-  ```
-
-- [ ] Add event calls to critical actions:
-  - `shuttle_join`, `shuttle_leave`, `shuttle_full`, `shuttle_complete`
-  - `task_join`, `task_leave`, `task_complete`
-  - `emergency_announcement_view`, `map_navigation_click`
-
-**Acceptance Criteria:**
-- Firebase console shows events in real-time
-- User properties set (role, registration_date)
-
----
-
-#### Task 6.2: Initialize Firebase Cloud Messaging (FCM)
-**File:** `lib/services/messaging_service.dart`
-
-**Current Issue:** `firebase_messaging` declared but not initialized
-
-- [ ] Initialize FCM in `main()`:
-  ```dart
-  import 'package:firebase_messaging/firebase_messaging.dart';
-
-  void main() async {
-    WidgetsFlutterBinding.ensureInitialized();
-    await Firebase.initializeApp();
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    await SupabaseService.initialize();
-    runApp(ProviderScope(child: DisasterReliefApp()));
+    return _buildNativeMap(ref);
   }
 
-  @pragma('vm:entry-point')
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    await Firebase.initializeApp();
-    print('Background message: ${message.notification?.title}');
-  }
-  ```
-
-- [ ] Create messaging service:
-  ```dart
-  class MessagingService {
-    final FirebaseMessaging _messaging = FirebaseMessaging.instance;
-
-    Future<void> initialize() async {
-      // Request permission
-      await _messaging.requestPermission();
-
-      // Get FCM token
-      final token = await _messaging.getToken();
-
-      // Save to Supabase user profile
-      await supabase.from('profiles_private').upsert({
-        'id': supabase.auth.currentUser!.id,
-        'fcm_token': token,
-      });
-
-      // Listen to foreground messages
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        // Show in-app notification
-        showNotificationSnackbar(message);
-      });
-    }
-  }
-  ```
-
-- [ ] Register device token on login
-- [ ] Unregister on logout
-
-**Acceptance Criteria:**
-- Users receive push notifications for:
-  - Emergency announcements
-  - Task/shuttle updates (if participant)
-  - Role approval status changes
-- Notifications work on Web (FCM Web), Android, iOS
-
----
-
-#### Task 6.3: Implement Audit Log Client Hooks
-**File:** `lib/services/audit_service.dart`
-
-**Database Support:** ✅ `audit_logs` table exists
-
-- [ ] Create audit service:
-  ```dart
-  class AuditService {
-    static Future<void> log({
-      required String action,
-      required String entityType,
-      String? entityId,
-      Map<String, dynamic>? metadata,
-    }) async {
-      await supabase.from('audit_logs').insert({
-        'user_id': supabase.auth.currentUser?.id,
-        'action': action,
-        'entity_type': entityType,
-        'entity_id': entityId,
-        'metadata': metadata,
-        'ip_address': await _getIpAddress(),
-        'user_agent': window.navigator.userAgent,
-      });
-    }
-  }
-  ```
-
-- [ ] Add logging to critical actions:
-  - User role changes
-  - Referral code generation/redemption
-  - Emergency announcement creation
-  - Task/shuttle deletion
-  - Admin actions (approve/reject)
-
-- [ ] Create admin audit log viewer (Task 1.3, Tab 3)
-
-**Acceptance Criteria:**
-- All high-privilege actions logged
-- Logs immutable (append-only, RLS blocks DELETE)
-- IP address and user agent captured
-
----
-
-## Low Priority Tasks
-
-### Phase 7: UX Enhancements (Est. 5-7 hours)
-
-#### Task 7.1: Add Privacy Settings Page
-**File:** `lib/features/profile/presentation/privacy_settings_screen.dart`
-
-- [ ] Create settings page with toggles:
-  - **Show Phone Number** (public in participant lists)
-  - **Show Email** (public in profile)
-  - **Show Participation History** (public in profile)
-
-- [ ] Save to `profiles_private.privacy_settings`:
-  ```dart
-  await supabase.from('profiles_private').upsert({
-    'id': currentUserId,
-    'privacy_settings': {
-      'show_phone': showPhone,
-      'show_email': showEmail,
-      'show_history': showHistory,
-    }
-  });
-  ```
-
-- [ ] Trigger syncs to `profiles_public` (via database trigger)
-- [ ] Add route to Settings menu
-
-**Acceptance Criteria:**
-- Changes reflect immediately in public views
-- Other users cannot see hidden fields
-
----
-
-#### Task 7.2: Implement MFA Setup (Optional Security)
-**File:** `lib/features/auth/presentation/mfa_setup_screen.dart`
-
-**Spec Requirement:** Leader/Admin/Superadmin encouraged to enable MFA
-
-- [ ] Integrate Supabase MFA:
-  ```dart
-  // Enroll TOTP
-  final response = await supabase.auth.mfa.enroll(
-    factorType: FactorType.totp,
-  );
-  final qrCode = response.totp.qrCode; // Show QR to user
-
-  // Verify and activate
-  await supabase.auth.mfa.challengeAndVerify(
-    factorId: response.id,
-    code: userInputCode,
-  );
-  ```
-
-- [ ] Add MFA setup wizard in `SettingsScreen`
-- [ ] Enforce MFA on login for Leader+ roles:
-  ```dart
-  final session = await supabase.auth.signInWithPassword(...);
-  if (session.user.role.isLeaderOrAbove && !session.user.mfaEnabled) {
-    // Redirect to MFA setup
-  }
-  ```
-
-**Acceptance Criteria:**
-- Leader+ can enable TOTP or SMS MFA
-- MFA-protected accounts require code on every login
-- Fallback recovery codes generated
-
----
-
-#### Task 7.3: CAP Alert Integration (Advanced)
-**File:** `lib/features/announcements/data/cap_service.dart`
-
-**Spec Requirement:** CAP (Common Alerting Protocol) auto-generates emergency announcements
-
-- [ ] Research Taiwan CAP-TWP API (e.g., NCDR Open Data Platform)
-- [ ] Create polling service:
-  ```dart
-  class CapService {
-    Future<void> pollCapAlerts() async {
-      final response = await dio.get('https://alerts.ncdr.nat.gov.tw/api/cap');
-      final alerts = parseCapXml(response.data);
-
-      for (final alert in alerts) {
-        if (alert.severity == 'Extreme') {
-          await _createEmergencyAnnouncement(alert);
-        }
-      }
-    }
-
-    Future<void> _createEmergencyAnnouncement(CapAlert alert) async {
-      await supabase.from('announcements').insert({
-        'type': 'emergency',
-        'title_i18n': {
-          'zh-TW': alert.headline,
-          'en-US': alert.headlineEn ?? alert.headline,
-        },
-        'content_i18n': {
-          'zh-TW': alert.description,
-          'en-US': alert.descriptionEn ?? alert.description,
-        },
-        'is_active': true,
-        'created_by': 'system', // Special system user
-      });
-    }
-  }
-  ```
-
-- [ ] Schedule polling (every 5 minutes) via background isolate or Supabase Edge Function
-- [ ] Add admin approval step (draft → published)
-
-**Acceptance Criteria:**
-- Extreme CAP alerts auto-create emergency announcements
-- Admin can edit before publishing
-- No duplicate announcements for same alert ID
-
----
-
-#### Task 7.4: Geohash Deduplication UX
-**File:** `lib/features/resources/presentation/create_resource_screen.dart`
-
-**Spec Requirement:** Prompt user to merge/view nearby resource on duplicate geohash
-
-- [ ] Catch unique violation error:
-  ```dart
-  try {
-    await resourceRepository.create(resource);
-  } on PostgrestException catch (e) {
-    if (e.code == '23505') {
-      final nearby = await resourceRepository.findByGeohash(resource.geohash);
-      _showMergeDialog(nearby);
-    }
-  }
-  ```
-
-- [ ] Create merge dialog:
-  ```dart
-  void _showMergeDialog(ResourcePoint existing) {
-    showDialog(
-      context: context,
-      builder: (_) => AlertDialog(
-        title: Text('Resource Already Exists'),
-        content: Text('A resource point exists ${existing.distance}m away. '
-                      'Would you like to view it or create a new one?'),
-        actions: [
-          TextButton(
-            child: Text('View Existing'),
-            onPressed: () => context.go('/map/resources/${existing.id}'),
+  Widget _buildWebFallback(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.map, size: 64, color: Colors.grey),
+          SizedBox(height: 16),
+          Text(
+            '地圖功能僅支援行動版',
+            style: Theme.of(context).textTheme.titleLarge,
           ),
-          TextButton(
-            child: Text('Create Anyway'),
-            onPressed: () => _forceCreate(),
+          SizedBox(height: 8),
+          Text('請使用 Android 或 iOS 應用程式查看地圖'),
+          SizedBox(height: 24),
+          ElevatedButton.icon(
+            icon: Icon(Icons.list),
+            label: Text('查看列表'),
+            onPressed: () => context.go('/map/resources'),
           ),
         ],
       ),
     );
   }
-  ```
+
+  Widget _buildNativeMap(WidgetRef ref) {
+    // Existing GoogleMap implementation
+    return GoogleMap(/* ... */);
+  }
+}
+```
 
 **Acceptance Criteria:**
-- User informed of nearby resources (<1.2km)
-- Can choose to view or proceed
-- No silent failures
+- Web users see friendly message instead of crash
+- Native platforms show full map functionality
+- List view accessible from web fallback
+
+---
+
+### Task 5.3: Create .env.example Template
+
+**Priority:** 🟡 **MEDIUM**
+**Estimated Time:** 30 minutes
+**Files to Create:** `.env.example`
+
+```env
+# Supabase Configuration
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key-here
+
+# Google Maps API Key
+GOOGLE_MAPS_API_KEY=your-maps-api-key-here
+
+# Optional: Sentry DSN for error tracking
+# SENTRY_DSN=https://...
+
+# Optional: Environment (development/staging/production)
+# APP_ENV=development
+```
+
+**Update README.md:**
+
+```markdown
+## Setup
+
+1. Clone repository
+2. Copy `.env.example` to `.env`:
+   ```bash
+   cp .env.example .env
+   ```
+3. Fill in your Supabase credentials and Google Maps API key
+4. Run:
+   ```bash
+   flutter pub get
+   flutter run
+   ```
+
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `SUPABASE_URL` | Yes | Your Supabase project URL |
+| `SUPABASE_ANON_KEY` | Yes | Public anon key from Supabase |
+| `GOOGLE_MAPS_API_KEY` | Yes | Google Maps API key (with Maps SDK enabled) |
+```
+
+**Acceptance Criteria:**
+- `.env.example` committed to repo
+- `.env` in `.gitignore` (already done)
+- README instructions clear
+
+---
+
+## Phase 6: Optional Enhancements
+
+### Task 6.1: Upgrade Flutter Packages
+
+**Priority:** 🟢 **LOW**
+**Estimated Time:** 4 hours
+**Files to Modify:** `pubspec.yaml`
+
+**Current → Target Versions:**
+- Riverpod: `2.5.1` → `3.0.0`
+- GoRouter: `14.2.7` → `17.0.0`
+- Isar: `2.5.0` → `3.0.0` (with web WASM support)
+
+**Migration Steps:**
+
+1. Update `pubspec.yaml`:
+   ```yaml
+   dependencies:
+     flutter_riverpod: ^3.0.0
+     riverpod_annotation: ^3.0.0
+     go_router: ^17.0.0
+     isar: ^3.0.0
+     isar_flutter_libs: ^3.0.0
+
+   dev_dependencies:
+     riverpod_generator: ^3.0.0
+   ```
+
+2. Run migration:
+   ```bash
+   flutter pub upgrade
+   flutter pub run build_runner build --delete-conflicting-outputs
+   ```
+
+3. Fix breaking changes (refer to migration guides):
+   - Riverpod 3.0: `ref.watch` → `ref.listen` for side effects
+   - GoRouter 17.0: Route configuration changes
+   - Isar 3.0: New WASM support configuration
+
+**Acceptance Criteria:**
+- All packages updated successfully
+- No compilation errors
+- All tests pass
+- Web build works with Isar WASM
+
+---
+
+### Task 6.2: Implement Phone OTP Authentication
+
+**Priority:** 🟢 **LOW**
+**Estimated Time:** 6 hours
+**Files to Modify:** `lib/features/auth/presentation/phone_login_screen.dart`
+
+**Complete Implementation:**
+
+```dart
+class PhoneLoginScreen extends ConsumerStatefulWidget {
+  const PhoneLoginScreen({super.key});
+
+  @override
+  ConsumerState<PhoneLoginScreen> createState() => _PhoneLoginScreenState();
+}
+
+class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
+  final _phoneController = TextEditingController();
+  final _otpController = TextEditingController();
+  bool _otpSent = false;
+  bool _isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('手機號碼登入')),
+      body: Padding(
+        padding: EdgeInsets.all(24),
+        child: _otpSent ? _buildOtpInput() : _buildPhoneInput(),
+      ),
+    );
+  }
+
+  Widget _buildPhoneInput() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        TextField(
+          controller: _phoneController,
+          keyboardType: TextInputType.phone,
+          decoration: InputDecoration(
+            labelText: '手機號碼',
+            prefix: Text('+886 '),
+            hintText: '912345678',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: _isLoading ? null : _sendOtp,
+          child: _isLoading
+            ? CircularProgressIndicator()
+            : Text('發送驗證碼'),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildOtpInput() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Text('驗證碼已發送至 +886${_phoneController.text}'),
+        SizedBox(height: 16),
+        TextField(
+          controller: _otpController,
+          keyboardType: TextInputType.number,
+          maxLength: 6,
+          decoration: InputDecoration(
+            labelText: '6位數驗證碼',
+            border: OutlineInputBorder(),
+          ),
+        ),
+        SizedBox(height: 24),
+        ElevatedButton(
+          onPressed: _isLoading ? null : _verifyOtp,
+          child: _isLoading
+            ? CircularProgressIndicator()
+            : Text('驗證並登入'),
+        ),
+        TextButton(
+          onPressed: _isLoading ? null : _sendOtp,
+          child: Text('重新發送驗證碼'),
+        ),
+      ],
+    );
+  }
+
+  Future<void> _sendOtp() async {
+    final phone = '+886${_phoneController.text.trim()}';
+    if (_phoneController.text.length != 9) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('請輸入正確的手機號碼')),
+      );
+      return;
+    }
+
+    setState(() => _isLoading = true);
+
+    try {
+      await ref.read(authRepositoryProvider).sendOtp(phone);
+      setState(() {
+        _otpSent = true;
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('發送失敗：$e')),
+      );
+    }
+  }
+
+  Future<void> _verifyOtp() async {
+    final phone = '+886${_phoneController.text.trim()}';
+    final otp = _otpController.text.trim();
+
+    if (otp.length != 6) return;
+
+    setState(() => _isLoading = true);
+
+    try {
+      await ref.read(authRepositoryProvider).verifyOtp(phone, otp);
+      if (mounted) context.go('/home');
+    } catch (e) {
+      setState(() => _isLoading = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('驗證失敗：$e')),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _phoneController.dispose();
+    _otpController.dispose();
+    super.dispose();
+  }
+}
+```
+
+**Update AuthRepository:**
+
+```dart
+Future<void> sendOtp(String phone) async {
+  await _supabase.auth.signInWithOtp(phone: phone);
+}
+
+Future<void> verifyOtp(String phone, String token) async {
+  await _supabase.auth.verifyOTP(
+    phone: phone,
+    token: token,
+    type: OtpType.sms,
+  );
+}
+```
+
+**Acceptance Criteria:**
+- Users receive SMS with 6-digit code
+- OTP expires after 5 minutes
+- Rate limiting prevents spam (1 SMS per minute)
+- Successful verification logs user in
 
 ---
 
@@ -1409,7 +1425,7 @@ CREATE TABLE role_upgrade_requests (
 
 1. **Early Return Pattern** (reduce nesting)
    ```dart
-   // ❌ Bad (nested)
+   // ❌ Bad
    void processUser(User? user) {
      if (user != null) {
        if (user.isActive) {
@@ -1418,7 +1434,7 @@ CREATE TABLE role_upgrade_requests (
      }
    }
 
-   // ✅ Good (early return)
+   // ✅ Good
    void processUser(User? user) {
      if (user == null) return;
      if (!user.isActive) return;
@@ -1428,12 +1444,16 @@ CREATE TABLE role_upgrade_requests (
 
 2. **Extract Method** (single responsibility)
    ```dart
-   // ❌ Bad (100-line method)
+   // ❌ Bad
    Widget build(BuildContext context) {
-     // ... massive widget tree
+     return Column(
+       children: [
+         // 50 lines of complex UI...
+       ],
+     );
    }
 
-   // ✅ Good (extracted methods)
+   // ✅ Good
    Widget build(BuildContext context) {
      return Column(
        children: [
@@ -1445,21 +1465,7 @@ CREATE TABLE role_upgrade_requests (
    }
    ```
 
-3. **Guard Clauses** (fail fast)
-   ```dart
-   // ✅ Good
-   Widget build(BuildContext context, WidgetRef ref) {
-     final dataAsync = ref.watch(dataProvider);
-
-     if (dataAsync.isLoading) return LoadingSpinner();
-     if (dataAsync.hasError) return ErrorWidget(dataAsync.error);
-
-     final data = dataAsync.value!;
-     return SuccessView(data);
-   }
-   ```
-
-4. **Avoid Deep Widget Nesting** (use composition)
+3. **Avoid Deep Nesting** (max 3-4 levels)
    ```dart
    // ❌ Bad
    return Container(
@@ -1469,9 +1475,7 @@ CREATE TABLE role_upgrade_requests (
            Row(
              children: [
                Expanded(
-                 child: Container(
-                   // ...deep nesting
-                 ),
+                 child: Container(/* ... */),
                ),
              ],
            ),
@@ -1487,210 +1491,92 @@ CREATE TABLE role_upgrade_requests (
    );
    ```
 
-5. **Riverpod Best Practices**
-   ```dart
-   // ✅ Use ConsumerWidget (avoid Consumer nesting)
-   class MyScreen extends ConsumerWidget {
-     @override
-     Widget build(BuildContext context, WidgetRef ref) {
-       final data = ref.watch(dataProvider);
-       return data.when(
-         data: (value) => SuccessView(value),
-         loading: () => LoadingView(),
-         error: (error, stack) => ErrorView(error),
-       );
-     }
-   }
-   ```
-
-### Testing Requirements
-
-- [ ] Unit tests for repositories (CRUD operations)
-- [ ] Widget tests for critical screens (login, task creation)
-- [ ] Integration tests for role-based access control
-- [ ] E2E tests for join/leave flows
-
-**Example:**
-```dart
-// test/features/tasks/task_repository_test.dart
-void main() {
-  late TaskRepository repository;
-
-  setUp(() {
-    repository = TaskRepository(mockSupabase);
-  });
-
-  test('createTask enforces rate limit for Users', () async {
-    // Arrange
-    when(mockSupabase.auth.currentUser.role).thenReturn(UserRole.user);
-
-    // Act & Assert
-    await repository.createTask(task1);
-    expect(
-      () => repository.createTask(task2), // Within 1 hour
-      throwsA(isA<RateLimitException>()),
-    );
-  });
-}
-```
-
----
-
-## Implementation Order
-
-### Recommended Sequence (by dependency)
-
-**Week 1: Core Pages & Navigation**
-1. Task 1.4 - Create Shuttle Page (unblocks user flows)
-2. Task 1.1 - My Shuttles Page
-3. Task 1.2 - My Tasks Page
-4. Task 1.6 - Shuttle Chat UI
-
-**Week 2: Admin & RBAC**
-5. Task 2.2 - Referral Code System (backend)
-6. Task 2.3 - Role Upgrade Flow
-7. Task 1.3 - Admin Panel (integrates 2.2 & 2.3)
-8. Task 2.4 - Fix API Key Exposure
-
-**Week 3: Data Model & UX**
-9. Task 3.1 - Fix ShuttleModel Fields
-10. Task 3.3 - Participant List UI
-11. Task 1.5 - Google Maps Navigation
-12. Task 3.4 - Enforce Schema Fields
-
-**Week 4: Auth & Security**
-13. Task 2.1 - Phone OTP Auth
-14. Task 3.5 - Fix SDK Version Drift
-15. Task 6.1 - Firebase Analytics
-16. Task 6.2 - Firebase Messaging
-
-**Week 5: PWA & Offline**
-17. Task 4.1 - PWA Manifest
-18. Task 4.2 - Service Worker Caching
-19. Task 4.3 - Offline Queue
-
-**Week 6: Map & Polish**
-20. Task 5.1 - Map Display Tasks/Shuttles
-21. Task 5.3 - Phone Masking
-22. Task 6.3 - Audit Logging
-23. Task 7.1 - Privacy Settings
-
-**Week 7+: Optional Enhancements**
-24. Task 7.2 - MFA Setup
-25. Task 7.3 - CAP Integration
-26. Task 7.4 - Geohash Dedup UX
-
 ---
 
 ## Progress Tracking
 
-### Completion Checklist
+### Critical Blockers (Week 1)
+- [ ] Task 1.1 - Create `role_upgrade_requests` Table
+- [ ] Task 1.2 - Fix Referral Codes Schema
+- [ ] Task 1.3 - Fix Multilingual Content Input
+- [ ] Task 1.4 - Add Admin Route Guard
 
-**High Priority (Must Have)**
-- [ ] Task 1.1 - My Shuttles Page
-- [ ] Task 1.2 - My Tasks Page
-- [ ] Task 1.3 - Admin Panel
-- [ ] Task 1.4 - Create Shuttle Page
-- [ ] Task 1.5 - Google Maps Navigation
-- [ ] Task 1.6 - Shuttle Chat UI
-- [ ] Task 2.1 - Phone OTP Auth
-- [ ] Task 2.2 - Referral Code System
-- [ ] Task 2.3 - Role Upgrade Flow
-- [ ] Task 2.4 - Fix API Key Exposure
-- [ ] Task 3.1 - Fix ShuttleModel Fields
-- [ ] Task 3.4 - Enforce Schema Fields
+### Database Enhancements (Week 2)
+- [ ] Task 2.1 - Configure pg_cron
+- [ ] Task 2.2 - Add Shuttle Priority Guard
+- [ ] Task 2.3 - Auto-mask Phone Numbers
 
-**Medium Priority (Should Have)**
-- [ ] Task 3.3 - Participant List UI
-- [ ] Task 3.5 - Fix SDK Version Drift
-- [ ] Task 4.1 - PWA Manifest
-- [ ] Task 4.2 - Service Worker Caching
-- [ ] Task 5.1 - Map Display Tasks/Shuttles
-- [ ] Task 5.3 - Phone Masking
-- [ ] Task 6.1 - Firebase Analytics
-- [ ] Task 6.2 - Firebase Messaging
-- [ ] Task 6.3 - Audit Logging
+### UI/UX Improvements (Week 3)
+- [ ] Task 3.1 - Resource Duplicate Detection
+- [ ] Task 3.2 - Forgot Password Flow
+- [ ] Task 3.3 - Extract Nested Widgets
 
-**Low Priority (Nice to Have)**
-- [ ] Task 4.3 - Offline Queue
-- [ ] Task 5.2 - Resource List Map Preview
-- [ ] Task 7.1 - Privacy Settings
-- [ ] Task 7.2 - MFA Setup
-- [ ] Task 7.3 - CAP Integration
-- [ ] Task 7.4 - Geohash Dedup UX
+### Testing & Quality (Week 4)
+- [ ] Task 4.1 - Integration Tests
+- [ ] Task 4.2 - Unit Tests
+
+### PWA & Deployment (Week 5)
+- [ ] Task 5.1 - Service Worker Cache
+- [ ] Task 5.2 - Web Map Fallback
+- [ ] Task 5.3 - .env.example Template
+
+### Optional Enhancements
+- [ ] Task 6.1 - Upgrade Flutter Packages
+- [ ] Task 6.2 - Phone OTP Authentication
 
 ---
 
-## Appendix: Database Schema Reference
+## Deployment Checklist
 
-### Key Tables (from `supabase_schema.sql`)
+### Before Production
 
-**Shuttles:**
-```sql
-CREATE TABLE shuttles (
-  id uuid PRIMARY KEY,
-  display_id text GENERATED ALWAYS AS ('S-' || left(id::text, 6)) STORED,
-  title text NOT NULL,
-  origin geography(point, 4326) NOT NULL,
-  destination geography(point, 4326) NOT NULL,
-  depart_at timestamptz NOT NULL,
-  seats_total int NOT NULL,
-  seats_taken int DEFAULT 0,
-  vehicle jsonb,
-  contact_name text,
-  contact_phone_masked text,
-  is_priority boolean DEFAULT false,
-  created_by uuid NOT NULL REFERENCES auth.users(id)
-);
+- [ ] All Critical Blockers completed
+- [ ] Integration tests passing
+- [ ] Environment variables configured in Vercel
+- [ ] Supabase RLS policies reviewed
+- [ ] Database migrations executed on production
+- [ ] pg_cron jobs configured
+- [ ] Google Maps API key restricted (HTTP referrers)
+- [ ] Sentry error tracking configured (optional)
+- [ ] Performance testing completed
+- [ ] Security audit completed
+
+### Vercel Configuration
+
+```bash
+# Environment Variables to set in Vercel Dashboard
+SUPABASE_URL=https://your-prod-project.supabase.co
+SUPABASE_ANON_KEY=eyJ...
+GOOGLE_MAPS_API_KEY=AIza...
 ```
 
-**Role Upgrade Requests (needs creation):**
-```sql
-CREATE TABLE role_upgrade_requests (
-  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id uuid NOT NULL REFERENCES auth.users(id),
-  current_role text NOT NULL,
-  requested_role text NOT NULL,
-  status text DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
-  created_at timestamptz DEFAULT now()
-);
+### Build Command
+
+```bash
+bash vercel_build.sh
 ```
 
-**Referral Codes:**
-```sql
-CREATE TABLE referral_codes (
-  id uuid PRIMARY KEY,
-  code text UNIQUE NOT NULL,
-  issuer_id uuid REFERENCES auth.users(id),
-  expires_at timestamptz NOT NULL,
-  is_active boolean DEFAULT true,
-  max_uses int DEFAULT 1,
-  used_count int DEFAULT 0
-);
-```
+### Supabase Production Setup
 
-**Audit Logs:**
-```sql
-CREATE TABLE audit_logs (
-  id uuid PRIMARY KEY,
-  user_id uuid REFERENCES auth.users(id),
-  action text NOT NULL,
-  entity_type text,
-  entity_id uuid,
-  metadata jsonb,
-  ip_address text,
-  created_at timestamptz DEFAULT now()
-);
-```
+1. Enable Point-in-Time Recovery (PITR)
+2. Configure daily backups
+3. Set up monitoring alerts
+4. Review audit logs retention policy
+5. Enable email confirmations for new registrations
 
 ---
 
 ## Contact & Support
 
-For questions or clarifications on this roadmap, reference:
-- **Spec Document:** `specs_feature.md`
-- **Database Schema:** `supabase_schema.sql` (if exists)
-- **Project Repository:** [GitHub URL]
+**Tech Stack:**
+- Frontend: Flutter 3.38.1 + Riverpod 2.x + GoRouter 14
+- Backend: Supabase (PostgreSQL 15 + PostGIS + Realtime)
+- Deployment: Vercel (Web), Native (Android/iOS)
 
-**Last Updated:** 2025-01-21
-**Maintainer:** Development Team
+**Spec Documents:**
+- `specs_feature.md` - Feature requirements
+- `specs_arch.md` - Architecture specifications
+
+**Last Updated:** 2025-11-21
+**Project Status:** 82% Complete
+**Next Milestone:** Complete Critical Blockers (Week 1)
