@@ -21,5 +21,12 @@
       "type": "image/png",
       "purpose": "any maskable"
     }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshots/home.png",
+      "sizes": "540x720",
+      "type": "image/png"
+    }
   ]
 }
