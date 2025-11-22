@@ -26,7 +26,7 @@ class ChatRepository {
 
   Future<void> sendTaskMessage(ChatMessage message) async {
     await _supabase.from('mission_messages').insert({
-      'mission_id': message.missionId,
+      'mission_id': message.taskId,
       'author_id': message.senderId,
       'content': message.content,
     });

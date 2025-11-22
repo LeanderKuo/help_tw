@@ -20,8 +20,9 @@ ChatMessage _$ChatMessageFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatMessage {
-  String get id => throw _privateConstructorUsedError;
-  @JsonKey(name: 'task_id')
+  String get id =>
+      throw _privateConstructorUsedError; // Tasks table stores this as mission_id; keep external naming as taskId.
+  @JsonKey(name: 'mission_id')
   String? get taskId => throw _privateConstructorUsedError;
   @JsonKey(name: 'shuttle_id')
   String? get shuttleId => throw _privateConstructorUsedError;
@@ -47,7 +48,7 @@ abstract class $ChatMessageCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      @JsonKey(name: 'task_id') String? taskId,
+      @JsonKey(name: 'mission_id') String? taskId,
       @JsonKey(name: 'shuttle_id') String? shuttleId,
       @JsonKey(name: 'sender_id') String? senderId,
       String? content,
@@ -119,7 +120,7 @@ abstract class _$$ChatMessageImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      @JsonKey(name: 'task_id') String? taskId,
+      @JsonKey(name: 'mission_id') String? taskId,
       @JsonKey(name: 'shuttle_id') String? shuttleId,
       @JsonKey(name: 'sender_id') String? senderId,
       String? content,
@@ -184,7 +185,7 @@ class __$$ChatMessageImplCopyWithImpl<$Res>
 class _$ChatMessageImpl implements _ChatMessage {
   const _$ChatMessageImpl(
       {required this.id,
-      @JsonKey(name: 'task_id') this.taskId,
+      @JsonKey(name: 'mission_id') this.taskId,
       @JsonKey(name: 'shuttle_id') this.shuttleId,
       @JsonKey(name: 'sender_id') this.senderId,
       this.content,
@@ -196,8 +197,9 @@ class _$ChatMessageImpl implements _ChatMessage {
 
   @override
   final String id;
+// Tasks table stores this as mission_id; keep external naming as taskId.
   @override
-  @JsonKey(name: 'task_id')
+  @JsonKey(name: 'mission_id')
   final String? taskId;
   @override
   @JsonKey(name: 'shuttle_id')
@@ -259,7 +261,7 @@ class _$ChatMessageImpl implements _ChatMessage {
 abstract class _ChatMessage implements ChatMessage {
   const factory _ChatMessage(
           {required final String id,
-          @JsonKey(name: 'task_id') final String? taskId,
+          @JsonKey(name: 'mission_id') final String? taskId,
           @JsonKey(name: 'shuttle_id') final String? shuttleId,
           @JsonKey(name: 'sender_id') final String? senderId,
           final String? content,
@@ -272,8 +274,8 @@ abstract class _ChatMessage implements ChatMessage {
 
   @override
   String get id;
-  @override
-  @JsonKey(name: 'task_id')
+  @override // Tasks table stores this as mission_id; keep external naming as taskId.
+  @JsonKey(name: 'mission_id')
   String? get taskId;
   @override
   @JsonKey(name: 'shuttle_id')

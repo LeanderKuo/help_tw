@@ -9,7 +9,7 @@ part of 'chat_message.dart';
 _$ChatMessageImpl _$$ChatMessageImplFromJson(Map<String, dynamic> json) =>
     _$ChatMessageImpl(
       id: json['id'] as String,
-      taskId: json['task_id'] as String?,
+      taskId: json['mission_id'] as String?,
       shuttleId: json['shuttle_id'] as String?,
       senderId: json['sender_id'] as String?,
       content: json['content'] as String?,
@@ -22,7 +22,7 @@ _$ChatMessageImpl _$$ChatMessageImplFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$ChatMessageImplToJson(_$ChatMessageImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'task_id': instance.taskId,
+      'mission_id': instance.taskId,
       'shuttle_id': instance.shuttleId,
       'sender_id': instance.senderId,
       'content': instance.content,

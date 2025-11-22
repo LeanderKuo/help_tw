@@ -3496,7 +3496,7 @@ _$ShuttleModelImpl _$$ShuttleModelImplFromJson(Map<String, dynamic> json) =>
       displayId: json['display_id'] as String?,
       title: json['title'] as String,
       description: json['description'] as String?,
-      status: json['status'] as String? ?? 'Scheduled',
+      status: json['status'] as String? ?? 'open',
       routeStartLat: (json['route_start_lat'] as num?)?.toDouble(),
       routeStartLng: (json['route_start_lng'] as num?)?.toDouble(),
       routeEndLat: (json['route_end_lat'] as num?)?.toDouble(),
@@ -3525,7 +3525,7 @@ _$ShuttleModelImpl _$$ShuttleModelImplFromJson(Map<String, dynamic> json) =>
       updatedAt: json['updated_at'] == null
           ? null
           : DateTime.parse(json['updated_at'] as String),
-      vehicle: json['vehicle'] as Map<String, dynamic>?,
+      vehicle: json['vehicle_info'] as Map<String, dynamic>?,
       contactName: json['contact_name'] as String?,
       contactPhoneMasked: json['contact_phone_masked'] as String?,
       participantIds: (json['participants'] as List<dynamic>?)
@@ -3560,7 +3560,7 @@ Map<String, dynamic> _$$ShuttleModelImplToJson(_$ShuttleModelImpl instance) =>
       'created_by': instance.createdBy,
       'created_at': instance.createdAt?.toIso8601String(),
       'updated_at': instance.updatedAt?.toIso8601String(),
-      'vehicle': instance.vehicle,
+      'vehicle_info': instance.vehicle,
       'contact_name': instance.contactName,
       'contact_phone_masked': instance.contactPhoneMasked,
       'participants': instance.participantIds,

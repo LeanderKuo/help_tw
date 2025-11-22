@@ -26,7 +26,7 @@ mixin _$ShuttleModel {
   String get title => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   String get status =>
-      throw _privateConstructorUsedError; // Scheduled, En Route, Arrived, Cancelled
+      throw _privateConstructorUsedError; // open, in_progress, done, canceled
   @JsonKey(name: 'route_start_lat')
   double? get routeStartLat => throw _privateConstructorUsedError;
   @JsonKey(name: 'route_start_lng')
@@ -62,7 +62,7 @@ mixin _$ShuttleModel {
   DateTime? get createdAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'updated_at')
   DateTime? get updatedAt => throw _privateConstructorUsedError;
-  @JsonKey(name: 'vehicle')
+  @JsonKey(name: 'vehicle_info')
   Map<String, dynamic>? get vehicle => throw _privateConstructorUsedError;
   @JsonKey(name: 'contact_name')
   String? get contactName => throw _privateConstructorUsedError;
@@ -112,7 +112,7 @@ abstract class $ShuttleModelCopyWith<$Res> {
       @JsonKey(name: 'created_by') String? createdBy,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
+      @JsonKey(name: 'vehicle_info') Map<String, dynamic>? vehicle,
       @JsonKey(name: 'contact_name') String? contactName,
       @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
       @JsonKey(name: 'participants') List<String> participantIds,
@@ -318,7 +318,7 @@ abstract class _$$ShuttleModelImplCopyWith<$Res>
       @JsonKey(name: 'created_by') String? createdBy,
       @JsonKey(name: 'created_at') DateTime? createdAt,
       @JsonKey(name: 'updated_at') DateTime? updatedAt,
-      @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
+      @JsonKey(name: 'vehicle_info') Map<String, dynamic>? vehicle,
       @JsonKey(name: 'contact_name') String? contactName,
       @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
       @JsonKey(name: 'participants') List<String> participantIds,
@@ -498,7 +498,7 @@ class _$ShuttleModelImpl extends _ShuttleModel {
       @JsonKey(name: 'display_id') this.displayId,
       required this.title,
       this.description,
-      this.status = 'Scheduled',
+      this.status = 'open',
       @JsonKey(name: 'route_start_lat') this.routeStartLat,
       @JsonKey(name: 'route_start_lng') this.routeStartLng,
       @JsonKey(name: 'route_end_lat') this.routeEndLat,
@@ -517,7 +517,7 @@ class _$ShuttleModelImpl extends _ShuttleModel {
       @JsonKey(name: 'created_by') this.createdBy,
       @JsonKey(name: 'created_at') this.createdAt,
       @JsonKey(name: 'updated_at') this.updatedAt,
-      @JsonKey(name: 'vehicle') final Map<String, dynamic>? vehicle,
+      @JsonKey(name: 'vehicle_info') final Map<String, dynamic>? vehicle,
       @JsonKey(name: 'contact_name') this.contactName,
       @JsonKey(name: 'contact_phone_masked') this.contactPhoneMasked,
       @JsonKey(name: 'participants')
@@ -543,7 +543,7 @@ class _$ShuttleModelImpl extends _ShuttleModel {
   @override
   @JsonKey()
   final String status;
-// Scheduled, En Route, Arrived, Cancelled
+// open, in_progress, done, canceled
   @override
   @JsonKey(name: 'route_start_lat')
   final double? routeStartLat;
@@ -600,7 +600,7 @@ class _$ShuttleModelImpl extends _ShuttleModel {
   final DateTime? updatedAt;
   final Map<String, dynamic>? _vehicle;
   @override
-  @JsonKey(name: 'vehicle')
+  @JsonKey(name: 'vehicle_info')
   Map<String, dynamic>? get vehicle {
     final value = _vehicle;
     if (value == null) return null;
@@ -771,7 +771,7 @@ abstract class _ShuttleModel extends ShuttleModel {
       @JsonKey(name: 'created_by') final String? createdBy,
       @JsonKey(name: 'created_at') final DateTime? createdAt,
       @JsonKey(name: 'updated_at') final DateTime? updatedAt,
-      @JsonKey(name: 'vehicle') final Map<String, dynamic>? vehicle,
+      @JsonKey(name: 'vehicle_info') final Map<String, dynamic>? vehicle,
       @JsonKey(name: 'contact_name') final String? contactName,
       @JsonKey(name: 'contact_phone_masked') final String? contactPhoneMasked,
       @JsonKey(name: 'participants') final List<String> participantIds,
@@ -795,7 +795,7 @@ abstract class _ShuttleModel extends ShuttleModel {
   String? get description;
   @override
   String get status;
-  @override // Scheduled, En Route, Arrived, Cancelled
+  @override // open, in_progress, done, canceled
   @JsonKey(name: 'route_start_lat')
   double? get routeStartLat;
   @override
@@ -849,7 +849,7 @@ abstract class _ShuttleModel extends ShuttleModel {
   @JsonKey(name: 'updated_at')
   DateTime? get updatedAt;
   @override
-  @JsonKey(name: 'vehicle')
+  @JsonKey(name: 'vehicle_info')
   Map<String, dynamic>? get vehicle;
   @override
   @JsonKey(name: 'contact_name')

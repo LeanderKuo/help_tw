@@ -111,7 +111,7 @@ class _ResourceListScreenState extends ConsumerState<ResourceListScreen> {
               child: resourcesAsync.when(
                 data: (resources) {
                   final filteredResources = resources.where((r) {
-                    if (!r.isActive) return false;
+                    if (r.status.toLowerCase() != 'active') return false;
                     if (_searchQuery.isNotEmpty) {
                       return r.title.toLowerCase().contains(
                         _searchQuery.toLowerCase(),
@@ -339,6 +339,10 @@ class _ResourceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isActive = resource.status.toLowerCase() == 'active';
+    final categories =
+        resource.categories.isEmpty ? const ['uncategorized'] : resource.categories;
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
@@ -361,15 +365,13 @@ class _ResourceCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   StatusChip(
-                    label: resource.isActive
-                        ? l10n.activeStatus
-                        : l10n.inactiveStatus,
-                    backgroundColor: resource.isActive
+                    label:
+                        isActive ? l10n.activeStatus : l10n.inactiveStatus,
+                    backgroundColor: isActive
                         ? AppColors.success.withValues(alpha: 0.12)
                         : AppColors.statusCompleted.withValues(alpha: 0.12),
-                    textColor: resource.isActive
-                        ? AppColors.success
-                        : AppColors.statusCompleted,
+                    textColor:
+                        isActive ? AppColors.success : AppColors.statusCompleted,
                   ),
                   IconButton(
                     onPressed: () => _navigate(context),
@@ -405,20 +407,19 @@ class _ResourceCard extends StatelessWidget {
               Wrap(
                 spacing: 6,
                 runSpacing: 6,
-                children:
-                    (resource.tags.isEmpty ? const ['no-tag'] : resource.tags)
-                        .map(
-                          (tag) => Chip(
-                            label: Text(
-                              tag,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            backgroundColor: AppColors.backgroundLight,
+                children: categories
+                    .map(
+                      (tag) => Chip(
+                        label: Text(
+                          tag,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w600,
                           ),
-                        )
-                        .toList(),
+                        ),
+                        backgroundColor: AppColors.backgroundLight,
+                      ),
+                    )
+                    .toList(),
               ),
               const SizedBox(height: 10),
               _infoRow(
@@ -431,11 +432,11 @@ class _ResourceCard extends StatelessWidget {
                 Icons.access_time,
                 _formatDate(resource.updatedAt ?? resource.createdAt),
               ),
-              if (resource.expiresAt != null) ...[
+              if (resource.expiry != null) ...[
                 const SizedBox(height: 4),
                 _infoRow(
                   Icons.hourglass_bottom,
-                  'Expires: ${_formatDate(resource.expiresAt)}',
+                  'Expires: ${_formatDate(resource.expiry)}',
                 ),
               ],
             ],
