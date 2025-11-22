@@ -165,6 +165,13 @@ class TaskRepository {
     final userId = _supabase.auth.currentUser?.id;
     if (userId == null) throw Exception('User not authenticated');
 
+    // Check if user has already joined
+    final alreadyJoined = await isUserParticipant(taskId);
+    if (alreadyJoined) {
+      debugPrint('User already joined task $taskId');
+      return; // Silently return, user is already in the task
+    }
+
     await _supabase.from('task_participants').insert({
       'task_id': taskId,
       'user_id': userId,

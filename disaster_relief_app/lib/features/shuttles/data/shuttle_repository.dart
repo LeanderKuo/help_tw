@@ -244,6 +244,13 @@ class ShuttleRepository {
     String role = 'passenger',
     bool isVisible = true,
   }) async {
+    // Check if user has already joined
+    final alreadyJoined = await isUserParticipant(shuttleId);
+    if (alreadyJoined) {
+      debugPrint('User already joined shuttle $shuttleId');
+      return; // Silently return, user is already in the shuttle
+    }
+
     await _supabase.rpc(
       'join_shuttle',
       params: {
