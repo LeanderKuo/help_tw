@@ -282,7 +282,7 @@ class _ShuttleListScreenState extends ConsumerState<ShuttleListScreen>
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _costType,
+                    initialValue: _costType,
                     items: const ['All costs', 'free', 'share_gas', 'paid']
                         .map(
                           (cost) =>

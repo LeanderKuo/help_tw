@@ -634,7 +634,7 @@ class _CreateShuttleScreenState extends ConsumerState<CreateShuttleScreen> {
                     },
                   ),
                   DropdownButtonFormField<String>(
-                    value: _costType,
+                    initialValue: _costType,
                     decoration: const InputDecoration(labelText: 'Cost type'),
                     items: const [
                       DropdownMenuItem(value: 'free', child: Text('Free')),
@@ -664,7 +664,7 @@ class _CreateShuttleScreenState extends ConsumerState<CreateShuttleScreen> {
                 ]),
                 _buildSection('Vehicle & contact', [
                   DropdownButtonFormField<String>(
-                    value: _vehicleType,
+                    initialValue: _vehicleType,
                     decoration: const InputDecoration(
                       labelText: 'Vehicle type',
                     ),

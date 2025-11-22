@@ -135,7 +135,7 @@ class AnnouncementListScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12),
                     DropdownButtonFormField<String>(
-                      value: type,
+                      initialValue: type,
                       items: const [
                         DropdownMenuItem(value: 'general', child: Text('一般')),
                         DropdownMenuItem(value: 'emergency', child: Text('緊急')),

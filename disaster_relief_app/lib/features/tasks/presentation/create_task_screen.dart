@@ -92,7 +92,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _priority,
+                initialValue: _priority,
                 decoration: InputDecoration(labelText: l10n.priorityLabel),
                 items: _priorities.map((p) {
                   return DropdownMenuItem(

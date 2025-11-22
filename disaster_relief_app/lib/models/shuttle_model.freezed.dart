@@ -12,8 +12,7 @@ part of 'shuttle_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 ShuttleModel _$ShuttleModelFromJson(Map<String, dynamic> json) {
   return _ShuttleModel.fromJson(json);
@@ -86,41 +85,41 @@ mixin _$ShuttleModel {
 /// @nodoc
 abstract class $ShuttleModelCopyWith<$Res> {
   factory $ShuttleModelCopyWith(
-    ShuttleModel value,
-    $Res Function(ShuttleModel) then,
-  ) = _$ShuttleModelCopyWithImpl<$Res, ShuttleModel>;
+          ShuttleModel value, $Res Function(ShuttleModel) then) =
+      _$ShuttleModelCopyWithImpl<$Res, ShuttleModel>;
   @useResult
-  $Res call({
-    String id,
-    @JsonKey(name: 'display_id') String? displayId,
-    String title,
-    String? description,
-    String status,
-    @JsonKey(name: 'route_start_lat') double? routeStartLat,
-    @JsonKey(name: 'route_start_lng') double? routeStartLng,
-    @JsonKey(name: 'route_end_lat') double? routeEndLat,
-    @JsonKey(name: 'route_end_lng') double? routeEndLng,
-    @JsonKey(name: 'origin_address') String? originAddress,
-    @JsonKey(name: 'destination_address') String? destinationAddress,
-    @JsonKey(name: 'departure_time') DateTime? departureTime,
-    @JsonKey(name: 'arrive_at') DateTime? arriveAt,
-    @JsonKey(name: 'signup_deadline') DateTime? signupDeadline,
-    @JsonKey(name: 'cost_type') String costType,
-    @JsonKey(name: 'fare_total') double? fareTotal,
-    @JsonKey(name: 'fare_per_person') double? farePerPerson,
-    int capacity,
-    @JsonKey(name: 'seats_taken') int seatsTaken,
-    @JsonKey(name: 'driver_id') String? driverId,
-    @JsonKey(name: 'created_by') String? createdBy,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'updated_at') DateTime? updatedAt,
-    @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
-    @JsonKey(name: 'contact_name') String? contactName,
-    @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
-    @JsonKey(name: 'participants') List<String> participantIds,
-    @JsonKey(name: 'is_priority') bool isPriority,
-    @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
-  });
+  $Res call(
+      {String id,
+      @JsonKey(name: 'display_id') String? displayId,
+      String title,
+      String? description,
+      String status,
+      @JsonKey(name: 'route_start_lat') double? routeStartLat,
+      @JsonKey(name: 'route_start_lng') double? routeStartLng,
+      @JsonKey(name: 'route_end_lat') double? routeEndLat,
+      @JsonKey(name: 'route_end_lng') double? routeEndLng,
+      @JsonKey(name: 'origin_address') String? originAddress,
+      @JsonKey(name: 'destination_address') String? destinationAddress,
+      @JsonKey(name: 'departure_time') DateTime? departureTime,
+      @JsonKey(name: 'arrive_at') DateTime? arriveAt,
+      @JsonKey(name: 'signup_deadline') DateTime? signupDeadline,
+      @JsonKey(name: 'cost_type') String costType,
+      @JsonKey(name: 'fare_total') double? fareTotal,
+      @JsonKey(name: 'fare_per_person') double? farePerPerson,
+      int capacity,
+      @JsonKey(name: 'seats_taken') int seatsTaken,
+      @JsonKey(name: 'driver_id') String? driverId,
+      @JsonKey(name: 'created_by') String? createdBy,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
+      @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
+      @JsonKey(name: 'contact_name') String? contactName,
+      @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
+      @JsonKey(name: 'participants') List<String> participantIds,
+      @JsonKey(name: 'is_priority') bool isPriority,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      @Id()
+      int? isarId});
 }
 
 /// @nodoc
@@ -166,127 +165,124 @@ class _$ShuttleModelCopyWithImpl<$Res, $Val extends ShuttleModel>
     Object? isPriority = null,
     Object? isarId = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            displayId: freezed == displayId
-                ? _value.displayId
-                : displayId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            title: null == title
-                ? _value.title
-                : title // ignore: cast_nullable_to_non_nullable
-                      as String,
-            description: freezed == description
-                ? _value.description
-                : description // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            status: null == status
-                ? _value.status
-                : status // ignore: cast_nullable_to_non_nullable
-                      as String,
-            routeStartLat: freezed == routeStartLat
-                ? _value.routeStartLat
-                : routeStartLat // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            routeStartLng: freezed == routeStartLng
-                ? _value.routeStartLng
-                : routeStartLng // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            routeEndLat: freezed == routeEndLat
-                ? _value.routeEndLat
-                : routeEndLat // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            routeEndLng: freezed == routeEndLng
-                ? _value.routeEndLng
-                : routeEndLng // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            originAddress: freezed == originAddress
-                ? _value.originAddress
-                : originAddress // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            destinationAddress: freezed == destinationAddress
-                ? _value.destinationAddress
-                : destinationAddress // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            departureTime: freezed == departureTime
-                ? _value.departureTime
-                : departureTime // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            arriveAt: freezed == arriveAt
-                ? _value.arriveAt
-                : arriveAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            signupDeadline: freezed == signupDeadline
-                ? _value.signupDeadline
-                : signupDeadline // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            costType: null == costType
-                ? _value.costType
-                : costType // ignore: cast_nullable_to_non_nullable
-                      as String,
-            fareTotal: freezed == fareTotal
-                ? _value.fareTotal
-                : fareTotal // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            farePerPerson: freezed == farePerPerson
-                ? _value.farePerPerson
-                : farePerPerson // ignore: cast_nullable_to_non_nullable
-                      as double?,
-            capacity: null == capacity
-                ? _value.capacity
-                : capacity // ignore: cast_nullable_to_non_nullable
-                      as int,
-            seatsTaken: null == seatsTaken
-                ? _value.seatsTaken
-                : seatsTaken // ignore: cast_nullable_to_non_nullable
-                      as int,
-            driverId: freezed == driverId
-                ? _value.driverId
-                : driverId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            createdBy: freezed == createdBy
-                ? _value.createdBy
-                : createdBy // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            createdAt: freezed == createdAt
-                ? _value.createdAt
-                : createdAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            updatedAt: freezed == updatedAt
-                ? _value.updatedAt
-                : updatedAt // ignore: cast_nullable_to_non_nullable
-                      as DateTime?,
-            vehicle: freezed == vehicle
-                ? _value.vehicle
-                : vehicle // ignore: cast_nullable_to_non_nullable
-                      as Map<String, dynamic>?,
-            contactName: freezed == contactName
-                ? _value.contactName
-                : contactName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            contactPhoneMasked: freezed == contactPhoneMasked
-                ? _value.contactPhoneMasked
-                : contactPhoneMasked // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            participantIds: null == participantIds
-                ? _value.participantIds
-                : participantIds // ignore: cast_nullable_to_non_nullable
-                      as List<String>,
-            isPriority: null == isPriority
-                ? _value.isPriority
-                : isPriority // ignore: cast_nullable_to_non_nullable
-                      as bool,
-            isarId: freezed == isarId
-                ? _value.isarId
-                : isarId // ignore: cast_nullable_to_non_nullable
-                      as int?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayId: freezed == displayId
+          ? _value.displayId
+          : displayId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      routeStartLat: freezed == routeStartLat
+          ? _value.routeStartLat
+          : routeStartLat // ignore: cast_nullable_to_non_nullable
+              as double?,
+      routeStartLng: freezed == routeStartLng
+          ? _value.routeStartLng
+          : routeStartLng // ignore: cast_nullable_to_non_nullable
+              as double?,
+      routeEndLat: freezed == routeEndLat
+          ? _value.routeEndLat
+          : routeEndLat // ignore: cast_nullable_to_non_nullable
+              as double?,
+      routeEndLng: freezed == routeEndLng
+          ? _value.routeEndLng
+          : routeEndLng // ignore: cast_nullable_to_non_nullable
+              as double?,
+      originAddress: freezed == originAddress
+          ? _value.originAddress
+          : originAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationAddress: freezed == destinationAddress
+          ? _value.destinationAddress
+          : destinationAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      departureTime: freezed == departureTime
+          ? _value.departureTime
+          : departureTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      arriveAt: freezed == arriveAt
+          ? _value.arriveAt
+          : arriveAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      signupDeadline: freezed == signupDeadline
+          ? _value.signupDeadline
+          : signupDeadline // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      costType: null == costType
+          ? _value.costType
+          : costType // ignore: cast_nullable_to_non_nullable
+              as String,
+      fareTotal: freezed == fareTotal
+          ? _value.fareTotal
+          : fareTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
+      farePerPerson: freezed == farePerPerson
+          ? _value.farePerPerson
+          : farePerPerson // ignore: cast_nullable_to_non_nullable
+              as double?,
+      capacity: null == capacity
+          ? _value.capacity
+          : capacity // ignore: cast_nullable_to_non_nullable
+              as int,
+      seatsTaken: null == seatsTaken
+          ? _value.seatsTaken
+          : seatsTaken // ignore: cast_nullable_to_non_nullable
+              as int,
+      driverId: freezed == driverId
+          ? _value.driverId
+          : driverId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      vehicle: freezed == vehicle
+          ? _value.vehicle
+          : vehicle // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+      contactName: freezed == contactName
+          ? _value.contactName
+          : contactName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      contactPhoneMasked: freezed == contactPhoneMasked
+          ? _value.contactPhoneMasked
+          : contactPhoneMasked // ignore: cast_nullable_to_non_nullable
+              as String?,
+      participantIds: null == participantIds
+          ? _value.participantIds
+          : participantIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      isPriority: null == isPriority
+          ? _value.isPriority
+          : isPriority // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isarId: freezed == isarId
+          ? _value.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ) as $Val);
   }
 }
 
@@ -294,42 +290,42 @@ class _$ShuttleModelCopyWithImpl<$Res, $Val extends ShuttleModel>
 abstract class _$$ShuttleModelImplCopyWith<$Res>
     implements $ShuttleModelCopyWith<$Res> {
   factory _$$ShuttleModelImplCopyWith(
-    _$ShuttleModelImpl value,
-    $Res Function(_$ShuttleModelImpl) then,
-  ) = __$$ShuttleModelImplCopyWithImpl<$Res>;
+          _$ShuttleModelImpl value, $Res Function(_$ShuttleModelImpl) then) =
+      __$$ShuttleModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String id,
-    @JsonKey(name: 'display_id') String? displayId,
-    String title,
-    String? description,
-    String status,
-    @JsonKey(name: 'route_start_lat') double? routeStartLat,
-    @JsonKey(name: 'route_start_lng') double? routeStartLng,
-    @JsonKey(name: 'route_end_lat') double? routeEndLat,
-    @JsonKey(name: 'route_end_lng') double? routeEndLng,
-    @JsonKey(name: 'origin_address') String? originAddress,
-    @JsonKey(name: 'destination_address') String? destinationAddress,
-    @JsonKey(name: 'departure_time') DateTime? departureTime,
-    @JsonKey(name: 'arrive_at') DateTime? arriveAt,
-    @JsonKey(name: 'signup_deadline') DateTime? signupDeadline,
-    @JsonKey(name: 'cost_type') String costType,
-    @JsonKey(name: 'fare_total') double? fareTotal,
-    @JsonKey(name: 'fare_per_person') double? farePerPerson,
-    int capacity,
-    @JsonKey(name: 'seats_taken') int seatsTaken,
-    @JsonKey(name: 'driver_id') String? driverId,
-    @JsonKey(name: 'created_by') String? createdBy,
-    @JsonKey(name: 'created_at') DateTime? createdAt,
-    @JsonKey(name: 'updated_at') DateTime? updatedAt,
-    @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
-    @JsonKey(name: 'contact_name') String? contactName,
-    @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
-    @JsonKey(name: 'participants') List<String> participantIds,
-    @JsonKey(name: 'is_priority') bool isPriority,
-    @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
-  });
+  $Res call(
+      {String id,
+      @JsonKey(name: 'display_id') String? displayId,
+      String title,
+      String? description,
+      String status,
+      @JsonKey(name: 'route_start_lat') double? routeStartLat,
+      @JsonKey(name: 'route_start_lng') double? routeStartLng,
+      @JsonKey(name: 'route_end_lat') double? routeEndLat,
+      @JsonKey(name: 'route_end_lng') double? routeEndLng,
+      @JsonKey(name: 'origin_address') String? originAddress,
+      @JsonKey(name: 'destination_address') String? destinationAddress,
+      @JsonKey(name: 'departure_time') DateTime? departureTime,
+      @JsonKey(name: 'arrive_at') DateTime? arriveAt,
+      @JsonKey(name: 'signup_deadline') DateTime? signupDeadline,
+      @JsonKey(name: 'cost_type') String costType,
+      @JsonKey(name: 'fare_total') double? fareTotal,
+      @JsonKey(name: 'fare_per_person') double? farePerPerson,
+      int capacity,
+      @JsonKey(name: 'seats_taken') int seatsTaken,
+      @JsonKey(name: 'driver_id') String? driverId,
+      @JsonKey(name: 'created_by') String? createdBy,
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'updated_at') DateTime? updatedAt,
+      @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
+      @JsonKey(name: 'contact_name') String? contactName,
+      @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
+      @JsonKey(name: 'participants') List<String> participantIds,
+      @JsonKey(name: 'is_priority') bool isPriority,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      @Id()
+      int? isarId});
 }
 
 /// @nodoc
@@ -337,9 +333,8 @@ class __$$ShuttleModelImplCopyWithImpl<$Res>
     extends _$ShuttleModelCopyWithImpl<$Res, _$ShuttleModelImpl>
     implements _$$ShuttleModelImplCopyWith<$Res> {
   __$$ShuttleModelImplCopyWithImpl(
-    _$ShuttleModelImpl _value,
-    $Res Function(_$ShuttleModelImpl) _then,
-  ) : super(_value, _then);
+      _$ShuttleModelImpl _value, $Res Function(_$ShuttleModelImpl) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -374,165 +369,164 @@ class __$$ShuttleModelImplCopyWithImpl<$Res>
     Object? isPriority = null,
     Object? isarId = freezed,
   }) {
-    return _then(
-      _$ShuttleModelImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as String,
-        displayId: freezed == displayId
-            ? _value.displayId
-            : displayId // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        title: null == title
-            ? _value.title
-            : title // ignore: cast_nullable_to_non_nullable
-                  as String,
-        description: freezed == description
-            ? _value.description
-            : description // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        status: null == status
-            ? _value.status
-            : status // ignore: cast_nullable_to_non_nullable
-                  as String,
-        routeStartLat: freezed == routeStartLat
-            ? _value.routeStartLat
-            : routeStartLat // ignore: cast_nullable_to_non_nullable
-                  as double?,
-        routeStartLng: freezed == routeStartLng
-            ? _value.routeStartLng
-            : routeStartLng // ignore: cast_nullable_to_non_nullable
-                  as double?,
-        routeEndLat: freezed == routeEndLat
-            ? _value.routeEndLat
-            : routeEndLat // ignore: cast_nullable_to_non_nullable
-                  as double?,
-        routeEndLng: freezed == routeEndLng
-            ? _value.routeEndLng
-            : routeEndLng // ignore: cast_nullable_to_non_nullable
-                  as double?,
-        originAddress: freezed == originAddress
-            ? _value.originAddress
-            : originAddress // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        destinationAddress: freezed == destinationAddress
-            ? _value.destinationAddress
-            : destinationAddress // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        departureTime: freezed == departureTime
-            ? _value.departureTime
-            : departureTime // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-        arriveAt: freezed == arriveAt
-            ? _value.arriveAt
-            : arriveAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-        signupDeadline: freezed == signupDeadline
-            ? _value.signupDeadline
-            : signupDeadline // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-        costType: null == costType
-            ? _value.costType
-            : costType // ignore: cast_nullable_to_non_nullable
-                  as String,
-        fareTotal: freezed == fareTotal
-            ? _value.fareTotal
-            : fareTotal // ignore: cast_nullable_to_non_nullable
-                  as double?,
-        farePerPerson: freezed == farePerPerson
-            ? _value.farePerPerson
-            : farePerPerson // ignore: cast_nullable_to_non_nullable
-                  as double?,
-        capacity: null == capacity
-            ? _value.capacity
-            : capacity // ignore: cast_nullable_to_non_nullable
-                  as int,
-        seatsTaken: null == seatsTaken
-            ? _value.seatsTaken
-            : seatsTaken // ignore: cast_nullable_to_non_nullable
-                  as int,
-        driverId: freezed == driverId
-            ? _value.driverId
-            : driverId // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        createdBy: freezed == createdBy
-            ? _value.createdBy
-            : createdBy // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        createdAt: freezed == createdAt
-            ? _value.createdAt
-            : createdAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-        updatedAt: freezed == updatedAt
-            ? _value.updatedAt
-            : updatedAt // ignore: cast_nullable_to_non_nullable
-                  as DateTime?,
-        vehicle: freezed == vehicle
-            ? _value._vehicle
-            : vehicle // ignore: cast_nullable_to_non_nullable
-                  as Map<String, dynamic>?,
-        contactName: freezed == contactName
-            ? _value.contactName
-            : contactName // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        contactPhoneMasked: freezed == contactPhoneMasked
-            ? _value.contactPhoneMasked
-            : contactPhoneMasked // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        participantIds: null == participantIds
-            ? _value._participantIds
-            : participantIds // ignore: cast_nullable_to_non_nullable
-                  as List<String>,
-        isPriority: null == isPriority
-            ? _value.isPriority
-            : isPriority // ignore: cast_nullable_to_non_nullable
-                  as bool,
-        isarId: freezed == isarId
-            ? _value.isarId
-            : isarId // ignore: cast_nullable_to_non_nullable
-                  as int?,
-      ),
-    );
+    return _then(_$ShuttleModelImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayId: freezed == displayId
+          ? _value.displayId
+          : displayId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      title: null == title
+          ? _value.title
+          : title // ignore: cast_nullable_to_non_nullable
+              as String,
+      description: freezed == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: null == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String,
+      routeStartLat: freezed == routeStartLat
+          ? _value.routeStartLat
+          : routeStartLat // ignore: cast_nullable_to_non_nullable
+              as double?,
+      routeStartLng: freezed == routeStartLng
+          ? _value.routeStartLng
+          : routeStartLng // ignore: cast_nullable_to_non_nullable
+              as double?,
+      routeEndLat: freezed == routeEndLat
+          ? _value.routeEndLat
+          : routeEndLat // ignore: cast_nullable_to_non_nullable
+              as double?,
+      routeEndLng: freezed == routeEndLng
+          ? _value.routeEndLng
+          : routeEndLng // ignore: cast_nullable_to_non_nullable
+              as double?,
+      originAddress: freezed == originAddress
+          ? _value.originAddress
+          : originAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destinationAddress: freezed == destinationAddress
+          ? _value.destinationAddress
+          : destinationAddress // ignore: cast_nullable_to_non_nullable
+              as String?,
+      departureTime: freezed == departureTime
+          ? _value.departureTime
+          : departureTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      arriveAt: freezed == arriveAt
+          ? _value.arriveAt
+          : arriveAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      signupDeadline: freezed == signupDeadline
+          ? _value.signupDeadline
+          : signupDeadline // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      costType: null == costType
+          ? _value.costType
+          : costType // ignore: cast_nullable_to_non_nullable
+              as String,
+      fareTotal: freezed == fareTotal
+          ? _value.fareTotal
+          : fareTotal // ignore: cast_nullable_to_non_nullable
+              as double?,
+      farePerPerson: freezed == farePerPerson
+          ? _value.farePerPerson
+          : farePerPerson // ignore: cast_nullable_to_non_nullable
+              as double?,
+      capacity: null == capacity
+          ? _value.capacity
+          : capacity // ignore: cast_nullable_to_non_nullable
+              as int,
+      seatsTaken: null == seatsTaken
+          ? _value.seatsTaken
+          : seatsTaken // ignore: cast_nullable_to_non_nullable
+              as int,
+      driverId: freezed == driverId
+          ? _value.driverId
+          : driverId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdBy: freezed == createdBy
+          ? _value.createdBy
+          : createdBy // ignore: cast_nullable_to_non_nullable
+              as String?,
+      createdAt: freezed == createdAt
+          ? _value.createdAt
+          : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      updatedAt: freezed == updatedAt
+          ? _value.updatedAt
+          : updatedAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      vehicle: freezed == vehicle
+          ? _value._vehicle
+          : vehicle // ignore: cast_nullable_to_non_nullable
+              as Map<String, dynamic>?,
+      contactName: freezed == contactName
+          ? _value.contactName
+          : contactName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      contactPhoneMasked: freezed == contactPhoneMasked
+          ? _value.contactPhoneMasked
+          : contactPhoneMasked // ignore: cast_nullable_to_non_nullable
+              as String?,
+      participantIds: null == participantIds
+          ? _value._participantIds
+          : participantIds // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      isPriority: null == isPriority
+          ? _value.isPriority
+          : isPriority // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isarId: freezed == isarId
+          ? _value.isarId
+          : isarId // ignore: cast_nullable_to_non_nullable
+              as int?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$ShuttleModelImpl extends _ShuttleModel {
-  const _$ShuttleModelImpl({
-    required this.id,
-    @JsonKey(name: 'display_id') this.displayId,
-    required this.title,
-    this.description,
-    this.status = 'Scheduled',
-    @JsonKey(name: 'route_start_lat') this.routeStartLat,
-    @JsonKey(name: 'route_start_lng') this.routeStartLng,
-    @JsonKey(name: 'route_end_lat') this.routeEndLat,
-    @JsonKey(name: 'route_end_lng') this.routeEndLng,
-    @JsonKey(name: 'origin_address') this.originAddress,
-    @JsonKey(name: 'destination_address') this.destinationAddress,
-    @JsonKey(name: 'departure_time') this.departureTime,
-    @JsonKey(name: 'arrive_at') this.arriveAt,
-    @JsonKey(name: 'signup_deadline') this.signupDeadline,
-    @JsonKey(name: 'cost_type') this.costType = 'free',
-    @JsonKey(name: 'fare_total') this.fareTotal,
-    @JsonKey(name: 'fare_per_person') this.farePerPerson,
-    this.capacity = 0,
-    @JsonKey(name: 'seats_taken') this.seatsTaken = 0,
-    @JsonKey(name: 'driver_id') this.driverId,
-    @JsonKey(name: 'created_by') this.createdBy,
-    @JsonKey(name: 'created_at') this.createdAt,
-    @JsonKey(name: 'updated_at') this.updatedAt,
-    @JsonKey(name: 'vehicle') final Map<String, dynamic>? vehicle,
-    @JsonKey(name: 'contact_name') this.contactName,
-    @JsonKey(name: 'contact_phone_masked') this.contactPhoneMasked,
-    @JsonKey(name: 'participants') final List<String> participantIds = const [],
-    @JsonKey(name: 'is_priority') this.isPriority = false,
-    @JsonKey(includeFromJson: false, includeToJson: false) @Id() this.isarId,
-  }) : _vehicle = vehicle,
-       _participantIds = participantIds,
-       super._();
+  const _$ShuttleModelImpl(
+      {required this.id,
+      @JsonKey(name: 'display_id') this.displayId,
+      required this.title,
+      this.description,
+      this.status = 'Scheduled',
+      @JsonKey(name: 'route_start_lat') this.routeStartLat,
+      @JsonKey(name: 'route_start_lng') this.routeStartLng,
+      @JsonKey(name: 'route_end_lat') this.routeEndLat,
+      @JsonKey(name: 'route_end_lng') this.routeEndLng,
+      @JsonKey(name: 'origin_address') this.originAddress,
+      @JsonKey(name: 'destination_address') this.destinationAddress,
+      @JsonKey(name: 'departure_time') this.departureTime,
+      @JsonKey(name: 'arrive_at') this.arriveAt,
+      @JsonKey(name: 'signup_deadline') this.signupDeadline,
+      @JsonKey(name: 'cost_type') this.costType = 'free',
+      @JsonKey(name: 'fare_total') this.fareTotal,
+      @JsonKey(name: 'fare_per_person') this.farePerPerson,
+      this.capacity = 0,
+      @JsonKey(name: 'seats_taken') this.seatsTaken = 0,
+      @JsonKey(name: 'driver_id') this.driverId,
+      @JsonKey(name: 'created_by') this.createdBy,
+      @JsonKey(name: 'created_at') this.createdAt,
+      @JsonKey(name: 'updated_at') this.updatedAt,
+      @JsonKey(name: 'vehicle') final Map<String, dynamic>? vehicle,
+      @JsonKey(name: 'contact_name') this.contactName,
+      @JsonKey(name: 'contact_phone_masked') this.contactPhoneMasked,
+      @JsonKey(name: 'participants')
+      final List<String> participantIds = const [],
+      @JsonKey(name: 'is_priority') this.isPriority = false,
+      @JsonKey(includeFromJson: false, includeToJson: false) @Id() this.isarId})
+      : _vehicle = vehicle,
+        _participantIds = participantIds,
+        super._();
 
   factory _$ShuttleModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ShuttleModelImplFromJson(json);
@@ -549,7 +543,7 @@ class _$ShuttleModelImpl extends _ShuttleModel {
   @override
   @JsonKey()
   final String status;
-  // Scheduled, En Route, Arrived, Cancelled
+// Scheduled, En Route, Arrived, Cancelled
   @override
   @JsonKey(name: 'route_start_lat')
   final double? routeStartLat;
@@ -696,10 +690,8 @@ class _$ShuttleModelImpl extends _ShuttleModel {
                 other.contactName == contactName) &&
             (identical(other.contactPhoneMasked, contactPhoneMasked) ||
                 other.contactPhoneMasked == contactPhoneMasked) &&
-            const DeepCollectionEquality().equals(
-              other._participantIds,
-              _participantIds,
-            ) &&
+            const DeepCollectionEquality()
+                .equals(other._participantIds, _participantIds) &&
             (identical(other.isPriority, isPriority) ||
                 other.isPriority == isPriority) &&
             (identical(other.isarId, isarId) || other.isarId == isarId));
@@ -708,37 +700,37 @@ class _$ShuttleModelImpl extends _ShuttleModel {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hashAll([
-    runtimeType,
-    id,
-    displayId,
-    title,
-    description,
-    status,
-    routeStartLat,
-    routeStartLng,
-    routeEndLat,
-    routeEndLng,
-    originAddress,
-    destinationAddress,
-    departureTime,
-    arriveAt,
-    signupDeadline,
-    costType,
-    fareTotal,
-    farePerPerson,
-    capacity,
-    seatsTaken,
-    driverId,
-    createdBy,
-    createdAt,
-    updatedAt,
-    const DeepCollectionEquality().hash(_vehicle),
-    contactName,
-    contactPhoneMasked,
-    const DeepCollectionEquality().hash(_participantIds),
-    isPriority,
-    isarId,
-  ]);
+        runtimeType,
+        id,
+        displayId,
+        title,
+        description,
+        status,
+        routeStartLat,
+        routeStartLng,
+        routeEndLat,
+        routeEndLng,
+        originAddress,
+        destinationAddress,
+        departureTime,
+        arriveAt,
+        signupDeadline,
+        costType,
+        fareTotal,
+        farePerPerson,
+        capacity,
+        seatsTaken,
+        driverId,
+        createdBy,
+        createdAt,
+        updatedAt,
+        const DeepCollectionEquality().hash(_vehicle),
+        contactName,
+        contactPhoneMasked,
+        const DeepCollectionEquality().hash(_participantIds),
+        isPriority,
+        isarId
+      ]);
 
   @JsonKey(ignore: true)
   @override
@@ -748,44 +740,45 @@ class _$ShuttleModelImpl extends _ShuttleModel {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ShuttleModelImplToJson(this);
+    return _$$ShuttleModelImplToJson(
+      this,
+    );
   }
 }
 
 abstract class _ShuttleModel extends ShuttleModel {
-  const factory _ShuttleModel({
-    required final String id,
-    @JsonKey(name: 'display_id') final String? displayId,
-    required final String title,
-    final String? description,
-    final String status,
-    @JsonKey(name: 'route_start_lat') final double? routeStartLat,
-    @JsonKey(name: 'route_start_lng') final double? routeStartLng,
-    @JsonKey(name: 'route_end_lat') final double? routeEndLat,
-    @JsonKey(name: 'route_end_lng') final double? routeEndLng,
-    @JsonKey(name: 'origin_address') final String? originAddress,
-    @JsonKey(name: 'destination_address') final String? destinationAddress,
-    @JsonKey(name: 'departure_time') final DateTime? departureTime,
-    @JsonKey(name: 'arrive_at') final DateTime? arriveAt,
-    @JsonKey(name: 'signup_deadline') final DateTime? signupDeadline,
-    @JsonKey(name: 'cost_type') final String costType,
-    @JsonKey(name: 'fare_total') final double? fareTotal,
-    @JsonKey(name: 'fare_per_person') final double? farePerPerson,
-    final int capacity,
-    @JsonKey(name: 'seats_taken') final int seatsTaken,
-    @JsonKey(name: 'driver_id') final String? driverId,
-    @JsonKey(name: 'created_by') final String? createdBy,
-    @JsonKey(name: 'created_at') final DateTime? createdAt,
-    @JsonKey(name: 'updated_at') final DateTime? updatedAt,
-    @JsonKey(name: 'vehicle') final Map<String, dynamic>? vehicle,
-    @JsonKey(name: 'contact_name') final String? contactName,
-    @JsonKey(name: 'contact_phone_masked') final String? contactPhoneMasked,
-    @JsonKey(name: 'participants') final List<String> participantIds,
-    @JsonKey(name: 'is_priority') final bool isPriority,
-    @JsonKey(includeFromJson: false, includeToJson: false)
-    @Id()
-    final int? isarId,
-  }) = _$ShuttleModelImpl;
+  const factory _ShuttleModel(
+      {required final String id,
+      @JsonKey(name: 'display_id') final String? displayId,
+      required final String title,
+      final String? description,
+      final String status,
+      @JsonKey(name: 'route_start_lat') final double? routeStartLat,
+      @JsonKey(name: 'route_start_lng') final double? routeStartLng,
+      @JsonKey(name: 'route_end_lat') final double? routeEndLat,
+      @JsonKey(name: 'route_end_lng') final double? routeEndLng,
+      @JsonKey(name: 'origin_address') final String? originAddress,
+      @JsonKey(name: 'destination_address') final String? destinationAddress,
+      @JsonKey(name: 'departure_time') final DateTime? departureTime,
+      @JsonKey(name: 'arrive_at') final DateTime? arriveAt,
+      @JsonKey(name: 'signup_deadline') final DateTime? signupDeadline,
+      @JsonKey(name: 'cost_type') final String costType,
+      @JsonKey(name: 'fare_total') final double? fareTotal,
+      @JsonKey(name: 'fare_per_person') final double? farePerPerson,
+      final int capacity,
+      @JsonKey(name: 'seats_taken') final int seatsTaken,
+      @JsonKey(name: 'driver_id') final String? driverId,
+      @JsonKey(name: 'created_by') final String? createdBy,
+      @JsonKey(name: 'created_at') final DateTime? createdAt,
+      @JsonKey(name: 'updated_at') final DateTime? updatedAt,
+      @JsonKey(name: 'vehicle') final Map<String, dynamic>? vehicle,
+      @JsonKey(name: 'contact_name') final String? contactName,
+      @JsonKey(name: 'contact_phone_masked') final String? contactPhoneMasked,
+      @JsonKey(name: 'participants') final List<String> participantIds,
+      @JsonKey(name: 'is_priority') final bool isPriority,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+      @Id()
+      final int? isarId}) = _$ShuttleModelImpl;
   const _ShuttleModel._() : super._();
 
   factory _ShuttleModel.fromJson(Map<String, dynamic> json) =

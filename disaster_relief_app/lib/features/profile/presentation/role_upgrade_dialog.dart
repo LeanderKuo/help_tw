@@ -123,7 +123,7 @@ class _RoleUpgradeDialogState extends ConsumerState<RoleUpgradeDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             DropdownButtonFormField<AppRole>(
-              value: _targetRole,
+              initialValue: _targetRole,
               onChanged: (value) => setState(() => _targetRole = value),
               items: targets
                   .map(

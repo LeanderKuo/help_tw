@@ -113,7 +113,7 @@ class _PhoneLoginScreenState extends ConsumerState<PhoneLoginScreen> {
                 SizedBox(
                   width: 120,
                   child: DropdownButtonFormField<String>(
-                    value: _countryCode,
+                    initialValue: _countryCode,
                     decoration: const InputDecoration(labelText: 'Code'),
                     items: const [
                       DropdownMenuItem(value: '+886', child: Text('+886')),

@@ -12,8 +12,7 @@ part of 'user_profile.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
-);
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 UserProfile _$UserProfileFromJson(Map<String, dynamic> json) {
   return _UserProfile.fromJson(json);
@@ -45,21 +44,19 @@ mixin _$UserProfile {
 /// @nodoc
 abstract class $UserProfileCopyWith<$Res> {
   factory $UserProfileCopyWith(
-    UserProfile value,
-    $Res Function(UserProfile) then,
-  ) = _$UserProfileCopyWithImpl<$Res, UserProfile>;
+          UserProfile value, $Res Function(UserProfile) then) =
+      _$UserProfileCopyWithImpl<$Res, UserProfile>;
   @useResult
-  $Res call({
-    String id,
-    String email,
-    @JsonKey(name: 'display_id') String? displayId,
-    String? nickname,
-    String role,
-    @JsonKey(name: 'avatar_url') String? avatarUrl,
-    @JsonKey(name: 'masked_phone') String? maskedPhone,
-    @JsonKey(name: 'full_name') String? fullName,
-    @JsonKey(name: 'real_phone') String? realPhone,
-  });
+  $Res call(
+      {String id,
+      String email,
+      @JsonKey(name: 'display_id') String? displayId,
+      String? nickname,
+      String role,
+      @JsonKey(name: 'avatar_url') String? avatarUrl,
+      @JsonKey(name: 'masked_phone') String? maskedPhone,
+      @JsonKey(name: 'full_name') String? fullName,
+      @JsonKey(name: 'real_phone') String? realPhone});
 }
 
 /// @nodoc
@@ -85,47 +82,44 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
     Object? fullName = freezed,
     Object? realPhone = freezed,
   }) {
-    return _then(
-      _value.copyWith(
-            id: null == id
-                ? _value.id
-                : id // ignore: cast_nullable_to_non_nullable
-                      as String,
-            email: null == email
-                ? _value.email
-                : email // ignore: cast_nullable_to_non_nullable
-                      as String,
-            displayId: freezed == displayId
-                ? _value.displayId
-                : displayId // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            nickname: freezed == nickname
-                ? _value.nickname
-                : nickname // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            role: null == role
-                ? _value.role
-                : role // ignore: cast_nullable_to_non_nullable
-                      as String,
-            avatarUrl: freezed == avatarUrl
-                ? _value.avatarUrl
-                : avatarUrl // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            maskedPhone: freezed == maskedPhone
-                ? _value.maskedPhone
-                : maskedPhone // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            fullName: freezed == fullName
-                ? _value.fullName
-                : fullName // ignore: cast_nullable_to_non_nullable
-                      as String?,
-            realPhone: freezed == realPhone
-                ? _value.realPhone
-                : realPhone // ignore: cast_nullable_to_non_nullable
-                      as String?,
-          )
-          as $Val,
-    );
+    return _then(_value.copyWith(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayId: freezed == displayId
+          ? _value.displayId
+          : displayId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nickname: freezed == nickname
+          ? _value.nickname
+          : nickname // ignore: cast_nullable_to_non_nullable
+              as String?,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String,
+      avatarUrl: freezed == avatarUrl
+          ? _value.avatarUrl
+          : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      maskedPhone: freezed == maskedPhone
+          ? _value.maskedPhone
+          : maskedPhone // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fullName: freezed == fullName
+          ? _value.fullName
+          : fullName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      realPhone: freezed == realPhone
+          ? _value.realPhone
+          : realPhone // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
   }
 }
 
@@ -133,22 +127,20 @@ class _$UserProfileCopyWithImpl<$Res, $Val extends UserProfile>
 abstract class _$$UserProfileImplCopyWith<$Res>
     implements $UserProfileCopyWith<$Res> {
   factory _$$UserProfileImplCopyWith(
-    _$UserProfileImpl value,
-    $Res Function(_$UserProfileImpl) then,
-  ) = __$$UserProfileImplCopyWithImpl<$Res>;
+          _$UserProfileImpl value, $Res Function(_$UserProfileImpl) then) =
+      __$$UserProfileImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({
-    String id,
-    String email,
-    @JsonKey(name: 'display_id') String? displayId,
-    String? nickname,
-    String role,
-    @JsonKey(name: 'avatar_url') String? avatarUrl,
-    @JsonKey(name: 'masked_phone') String? maskedPhone,
-    @JsonKey(name: 'full_name') String? fullName,
-    @JsonKey(name: 'real_phone') String? realPhone,
-  });
+  $Res call(
+      {String id,
+      String email,
+      @JsonKey(name: 'display_id') String? displayId,
+      String? nickname,
+      String role,
+      @JsonKey(name: 'avatar_url') String? avatarUrl,
+      @JsonKey(name: 'masked_phone') String? maskedPhone,
+      @JsonKey(name: 'full_name') String? fullName,
+      @JsonKey(name: 'real_phone') String? realPhone});
 }
 
 /// @nodoc
@@ -156,9 +148,8 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     extends _$UserProfileCopyWithImpl<$Res, _$UserProfileImpl>
     implements _$$UserProfileImplCopyWith<$Res> {
   __$$UserProfileImplCopyWithImpl(
-    _$UserProfileImpl _value,
-    $Res Function(_$UserProfileImpl) _then,
-  ) : super(_value, _then);
+      _$UserProfileImpl _value, $Res Function(_$UserProfileImpl) _then)
+      : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
@@ -173,63 +164,61 @@ class __$$UserProfileImplCopyWithImpl<$Res>
     Object? fullName = freezed,
     Object? realPhone = freezed,
   }) {
-    return _then(
-      _$UserProfileImpl(
-        id: null == id
-            ? _value.id
-            : id // ignore: cast_nullable_to_non_nullable
-                  as String,
-        email: null == email
-            ? _value.email
-            : email // ignore: cast_nullable_to_non_nullable
-                  as String,
-        displayId: freezed == displayId
-            ? _value.displayId
-            : displayId // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        nickname: freezed == nickname
-            ? _value.nickname
-            : nickname // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        role: null == role
-            ? _value.role
-            : role // ignore: cast_nullable_to_non_nullable
-                  as String,
-        avatarUrl: freezed == avatarUrl
-            ? _value.avatarUrl
-            : avatarUrl // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        maskedPhone: freezed == maskedPhone
-            ? _value.maskedPhone
-            : maskedPhone // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        fullName: freezed == fullName
-            ? _value.fullName
-            : fullName // ignore: cast_nullable_to_non_nullable
-                  as String?,
-        realPhone: freezed == realPhone
-            ? _value.realPhone
-            : realPhone // ignore: cast_nullable_to_non_nullable
-                  as String?,
-      ),
-    );
+    return _then(_$UserProfileImpl(
+      id: null == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
+              as String,
+      displayId: freezed == displayId
+          ? _value.displayId
+          : displayId // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nickname: freezed == nickname
+          ? _value.nickname
+          : nickname // ignore: cast_nullable_to_non_nullable
+              as String?,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as String,
+      avatarUrl: freezed == avatarUrl
+          ? _value.avatarUrl
+          : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
+      maskedPhone: freezed == maskedPhone
+          ? _value.maskedPhone
+          : maskedPhone // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fullName: freezed == fullName
+          ? _value.fullName
+          : fullName // ignore: cast_nullable_to_non_nullable
+              as String?,
+      realPhone: freezed == realPhone
+          ? _value.realPhone
+          : realPhone // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$UserProfileImpl implements _UserProfile {
-  const _$UserProfileImpl({
-    required this.id,
-    required this.email,
-    @JsonKey(name: 'display_id') this.displayId,
-    this.nickname,
-    this.role = 'User',
-    @JsonKey(name: 'avatar_url') this.avatarUrl,
-    @JsonKey(name: 'masked_phone') this.maskedPhone,
-    @JsonKey(name: 'full_name') this.fullName,
-    @JsonKey(name: 'real_phone') this.realPhone,
-  });
+class _$UserProfileImpl extends _UserProfile {
+  const _$UserProfileImpl(
+      {required this.id,
+      required this.email,
+      @JsonKey(name: 'display_id') this.displayId,
+      this.nickname,
+      this.role = 'User',
+      @JsonKey(name: 'avatar_url') this.avatarUrl,
+      @JsonKey(name: 'masked_phone') this.maskedPhone,
+      @JsonKey(name: 'full_name') this.fullName,
+      @JsonKey(name: 'real_phone') this.realPhone})
+      : super._();
 
   factory _$UserProfileImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserProfileImplFromJson(json);
@@ -288,18 +277,8 @@ class _$UserProfileImpl implements _UserProfile {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-    runtimeType,
-    id,
-    email,
-    displayId,
-    nickname,
-    role,
-    avatarUrl,
-    maskedPhone,
-    fullName,
-    realPhone,
-  );
+  int get hashCode => Object.hash(runtimeType, id, email, displayId, nickname,
+      role, avatarUrl, maskedPhone, fullName, realPhone);
 
   @JsonKey(ignore: true)
   @override
@@ -309,22 +288,25 @@ class _$UserProfileImpl implements _UserProfile {
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserProfileImplToJson(this);
+    return _$$UserProfileImplToJson(
+      this,
+    );
   }
 }
 
-abstract class _UserProfile implements UserProfile {
-  const factory _UserProfile({
-    required final String id,
-    required final String email,
-    @JsonKey(name: 'display_id') final String? displayId,
-    final String? nickname,
-    final String role,
-    @JsonKey(name: 'avatar_url') final String? avatarUrl,
-    @JsonKey(name: 'masked_phone') final String? maskedPhone,
-    @JsonKey(name: 'full_name') final String? fullName,
-    @JsonKey(name: 'real_phone') final String? realPhone,
-  }) = _$UserProfileImpl;
+abstract class _UserProfile extends UserProfile {
+  const factory _UserProfile(
+          {required final String id,
+          required final String email,
+          @JsonKey(name: 'display_id') final String? displayId,
+          final String? nickname,
+          final String role,
+          @JsonKey(name: 'avatar_url') final String? avatarUrl,
+          @JsonKey(name: 'masked_phone') final String? maskedPhone,
+          @JsonKey(name: 'full_name') final String? fullName,
+          @JsonKey(name: 'real_phone') final String? realPhone}) =
+      _$UserProfileImpl;
+  const _UserProfile._() : super._();
 
   factory _UserProfile.fromJson(Map<String, dynamic> json) =
       _$UserProfileImpl.fromJson;

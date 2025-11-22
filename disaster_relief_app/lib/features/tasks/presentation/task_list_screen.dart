@@ -264,7 +264,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _selectedFilter,
+                    initialValue: _selectedFilter,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -293,7 +293,7 @@ class _TaskListScreenState extends ConsumerState<TaskListScreen>
                 const SizedBox(width: 12),
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    value: _selectedSort,
+                    initialValue: _selectedSort,
                     decoration: InputDecoration(
                       contentPadding: const EdgeInsets.symmetric(
                         horizontal: 12,
