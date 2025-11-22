@@ -37,5 +37,7 @@ if [ -z "${SUPABASE_URL:-}" ] || [ -z "${SUPABASE_ANON_KEY:-}" ]; then
 fi
 
 flutter build web --release \
+  --no-wasm-dry-run \
   --dart-define=SUPABASE_URL="$SUPABASE_URL" \
-  --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY"
+  --dart-define=SUPABASE_ANON_KEY="$SUPABASE_ANON_KEY" \
+  --dart-define=GOOGLE_MAPS_API_KEY="${GOOGLE_MAPS_API_KEY:-}"
