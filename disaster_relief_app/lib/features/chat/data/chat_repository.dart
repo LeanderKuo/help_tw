@@ -14,9 +14,9 @@ class ChatRepository {
 
   Future<List<ChatMessage>> getTaskMessages(String taskId) async {
     final data = await _supabase
-        .from('task_messages')
+        .from('mission_messages')
         .select()
-        .eq('task_id', taskId)
+        .eq('mission_id', taskId)
         .order('created_at', ascending: true);
 
     return (data as List)
@@ -25,19 +25,18 @@ class ChatRepository {
   }
 
   Future<void> sendTaskMessage(ChatMessage message) async {
-    await _supabase.from('task_messages').insert({
-      'task_id': message.taskId,
+    await _supabase.from('mission_messages').insert({
+      'mission_id': message.taskId,
       'author_id': message.senderId,
       'content': message.content,
-      'image_url': message.imageUrl,
     });
   }
 
   Stream<List<ChatMessage>> subscribeToTaskMessages(String taskId) {
     return _supabase
-        .from('task_messages')
+        .from('mission_messages')
         .stream(primaryKey: ['id'])
-        .eq('task_id', taskId)
+        .eq('mission_id', taskId)
         .order('created_at')
         .map(
           (data) => data.map((json) => ChatMessage.fromSupabase(json)).toList(),
@@ -60,7 +59,6 @@ class ChatRepository {
       'shuttle_id': message.shuttleId,
       'author_id': message.senderId,
       'content': message.content,
-      'image_url': message.imageUrl,
     });
   }
 }

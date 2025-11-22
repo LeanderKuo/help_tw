@@ -47,7 +47,7 @@ class TaskRepository {
       ];
       // Supabase -> short timeout so the UI doesn't hang on web.
       final data = await _supabase
-          .from('tasks')
+          .from('missions')
           .select(selectColumns.join(','))
           .order('created_at', ascending: false)
           .timeout(const Duration(seconds: 12));
@@ -95,7 +95,7 @@ class TaskRepository {
         authorId: authorId ?? task.createdBy,
       );
       await OfflineQueueService.instance.enqueue(
-        table: 'tasks',
+        table: 'missions',
         payload: payload,
       );
       await isar.writeTxn((isar) async {
@@ -108,7 +108,7 @@ class TaskRepository {
 
     // Send to server
     await _supabase
-        .from('tasks')
+        .from('missions')
         .insert(task.toSupabasePayload(authorId: authorId));
 
     // Cache locally (skip on web)
@@ -134,7 +134,7 @@ class TaskRepository {
       try {
         final authorId = _supabase.auth.currentUser?.id ?? task.createdBy;
         await _supabase
-            .from('tasks')
+            .from('missions')
             .insert(task.toSupabasePayload(authorId: authorId));
         await isar.writeTxn((isar) async {
           await isar.taskModels.put(task.copyWith(isDraft: false));
@@ -152,7 +152,7 @@ class TaskRepository {
 
     final rows =
         await _supabase
-                .from('task_participants')
+                .from('mission_participants')
                 .select('user_id')
                 .eq('task_id', taskId)
                 .eq('user_id', userId)
@@ -172,7 +172,7 @@ class TaskRepository {
       return; // Silently return, user is already in the task
     }
 
-    await _supabase.from('task_participants').insert({
+    await _supabase.from('mission_participants').insert({
       'task_id': taskId,
       'user_id': userId,
       'is_visible': isVisible,
@@ -184,7 +184,7 @@ class TaskRepository {
     if (userId == null) throw Exception('User not authenticated');
 
     await _supabase
-        .from('task_participants')
+        .from('mission_participants')
         .delete()
         .eq('task_id', taskId)
         .eq('user_id', userId);
@@ -193,17 +193,17 @@ class TaskRepository {
   Future<void> updateTask(TaskModel task) async {
     final authorId = _supabase.auth.currentUser?.id ?? task.createdBy;
     await _supabase
-        .from('tasks')
+        .from('missions')
         .update(task.toSupabasePayload(authorId: authorId))
         .eq('id', task.id);
   }
 
   Future<void> completeTask(String taskId) async {
-    await _supabase.from('tasks').update({'status': 'done'}).eq('id', taskId);
+    await _supabase.from('missions').update({'status': 'done'}).eq('id', taskId);
   }
 
   Future<void> deleteTask(String taskId) async {
-    await _supabase.from('tasks').delete().eq('id', taskId);
+    await _supabase.from('missions').delete().eq('id', taskId);
   }
 
   Future<Set<String>> getJoinedTaskIds() async {
@@ -212,7 +212,7 @@ class TaskRepository {
 
     final rows =
         await _supabase
-                .from('task_participants')
+                .from('mission_participants')
                 .select('task_id')
                 .eq('user_id', userId)
             as List<dynamic>;

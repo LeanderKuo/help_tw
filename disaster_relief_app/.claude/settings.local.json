@@ -7,7 +7,16 @@
       "Bash(flutter build:*)",
       "Bash(flutter gen-l10n:*)",
       "Bash(flutter run:*)",
-      "Bash(flutter attach:*)"
+      "Bash(flutter attach:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nfeat: Complete Firebase removal and add critical database migrations\n\nThis commit completes Phase 1 Critical Blockers from CLAUDE.md:\n\nDatabase Changes:\n- Add role_upgrade_requests table with comprehensive RLS policies\n- Add COMPLETE_DATABASE_SETUP.sql with all required tables and functions\n- Update migrations for role upgrade request handling\n\nCode Cleanup:\n- Remove all Firebase dependencies from pubspec.yaml\n- Fix shuttle and task repository implementations\n- Fix task model encoding issues (材料 character corruption)\n- Add web platform checks for shuttle screens\n- Update main.dart to use Supabase-only initialization\n\nBug Fixes:\n- Fix Chinese character encoding in TaskModel (materialsStatus default)\n- Add proper contact field prefilling in create screens\n- Remove Firebase initialization code\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(flutter clean:*)",
+      "Bash(supabase db push:*)",
+      "Bash(npm install:*)",
+      "Bash(winget install:*)",
+      "Bash(flutter pub run build_runner build:*)",
+      "Bash(npx supabase:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)"
     ],
     "deny": [],
     "ask": []
