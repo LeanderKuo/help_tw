@@ -1496,10 +1496,10 @@ Future<void> verifyOtp(String phone, String token) async {
 ## Progress Tracking
 
 ### Critical Blockers (Week 1)
-- [ ] Task 1.1 - Create `role_upgrade_requests` Table
-- [ ] Task 1.2 - Fix Referral Codes Schema
-- [ ] Task 1.3 - Fix Multilingual Content Input
-- [ ] Task 1.4 - Add Admin Route Guard
+- [x] Task 1.1 - Create `role_upgrade_requests` Table ✅
+- [x] Task 1.2 - Fix Referral Codes Schema ✅
+- [x] Task 1.3 - Fix Multilingual Content Input ✅
+- [x] Task 1.4 - Add Admin Route Guard ✅
 
 ### Database Enhancements (Week 2)
 - [ ] Task 2.1 - Configure pg_cron

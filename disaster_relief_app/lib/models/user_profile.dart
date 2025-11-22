@@ -7,6 +7,8 @@ part 'user_profile.g.dart';
 
 @freezed
 class UserProfile with _$UserProfile {
+  const UserProfile._();
+
   const factory UserProfile({
     required String id,
     required String email,
@@ -21,4 +23,14 @@ class UserProfile with _$UserProfile {
 
   factory UserProfile.fromJson(Map<String, dynamic> json) =>
       _$UserProfileFromJson(json);
+
+  /// Check if user has Admin, Superadmin, or Root role
+  bool get isAdminOrAbove {
+    return role == 'Admin' || role == 'Superadmin' || role == 'Root';
+  }
+
+  /// Check if user has Leader role or above
+  bool get isLeaderOrAbove {
+    return role == 'Leader' || isAdminOrAbove;
+  }
 }

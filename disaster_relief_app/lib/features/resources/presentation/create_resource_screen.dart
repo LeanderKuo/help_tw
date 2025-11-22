@@ -16,8 +16,10 @@ class CreateResourceScreen extends ConsumerStatefulWidget {
 
 class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
-  final _descriptionController = TextEditingController();
+  final _titleZhController = TextEditingController();
+  final _titleEnController = TextEditingController();
+  final _descriptionZhController = TextEditingController();
+  final _descriptionEnController = TextEditingController();
   String _selectedType = 'Other';
 
   // Default to Taipei for now, ideally pick from map
@@ -28,17 +30,30 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
 
   @override
   void dispose() {
-    _titleController.dispose();
-    _descriptionController.dispose();
+    _titleZhController.dispose();
+    _titleEnController.dispose();
+    _descriptionZhController.dispose();
+    _descriptionEnController.dispose();
     super.dispose();
   }
 
-  void _submit() {
+  void _submit() async {
     if (_formKey.currentState!.validate()) {
+      // Validate that both language versions are filled
+      if (_titleZhController.text.trim().isEmpty ||
+          _titleEnController.text.trim().isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('請填寫中英文標題 / Please fill in both titles'),
+          ),
+        );
+        return;
+      }
+
       final newResource = ResourcePoint(
         id: const Uuid().v4(),
-        title: _titleController.text,
-        description: _descriptionController.text,
+        title: _titleZhController.text.trim(),
+        description: _descriptionZhController.text.trim(),
         type: _selectedType,
         latitude: _latitude,
         longitude: _longitude,
@@ -46,8 +61,15 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
         updatedAt: DateTime.now(),
       );
 
-      ref.read(resourceControllerProvider.notifier).addResource(newResource);
-      context.pop();
+      await ref.read(resourceControllerProvider.notifier).addResourceWithTranslations(
+        newResource,
+        titleZh: _titleZhController.text.trim(),
+        titleEn: _titleEnController.text.trim(),
+        descriptionZh: _descriptionZhController.text.trim(),
+        descriptionEn: _descriptionEnController.text.trim(),
+      );
+
+      if (mounted) context.pop();
     }
   }
 
@@ -62,13 +84,30 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
           key: _formKey,
           child: ListView(
             children: [
+              // Chinese Title
               TextFormField(
-                controller: _titleController,
-                decoration: InputDecoration(labelText: l10n.titleLabel),
+                controller: _titleZhController,
+                decoration: const InputDecoration(
+                  labelText: '標題 (中文) *',
+                  border: OutlineInputBorder(),
+                ),
                 validator: (value) =>
-                    value == null || value.isEmpty ? l10n.requiredField : null,
+                    value == null || value.isEmpty ? '請填寫中文標題' : null,
               ),
               const SizedBox(height: 16),
+
+              // English Title
+              TextFormField(
+                controller: _titleEnController,
+                decoration: const InputDecoration(
+                  labelText: 'Title (English) *',
+                  border: OutlineInputBorder(),
+                ),
+                validator: (value) =>
+                    value == null || value.isEmpty ? 'Please enter English title' : null,
+              ),
+              const SizedBox(height: 16),
+
               DropdownButtonFormField<String>(
                 initialValue: _selectedType,
                 decoration: InputDecoration(labelText: l10n.typeLabel),
@@ -85,9 +124,25 @@ class _CreateResourceScreenState extends ConsumerState<CreateResourceScreen> {
                 },
               ),
               const SizedBox(height: 16),
+
+              // Chinese Description
               TextFormField(
-                controller: _descriptionController,
-                decoration: InputDecoration(labelText: l10n.descriptionLabel),
+                controller: _descriptionZhController,
+                decoration: const InputDecoration(
+                  labelText: '描述 (中文)',
+                  border: OutlineInputBorder(),
+                ),
+                maxLines: 3,
+              ),
+              const SizedBox(height: 16),
+
+              // English Description
+              TextFormField(
+                controller: _descriptionEnController,
+                decoration: const InputDecoration(
+                  labelText: 'Description (English)',
+                  border: OutlineInputBorder(),
+                ),
                 maxLines: 3,
               ),
               const SizedBox(height: 24),

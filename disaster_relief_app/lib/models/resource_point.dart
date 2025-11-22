@@ -72,14 +72,26 @@ class ResourcePoint with _$ResourcePoint {
   }
 
   /// Build a payload that matches Supabase column names.
-  Map<String, dynamic> toSupabasePayload({String locale = 'zh-TW'}) {
+  /// Now accepts separate translations for title and description.
+  Map<String, dynamic> toSupabasePayload({
+    String? titleZh,
+    String? titleEn,
+    String? descriptionZh,
+    String? descriptionEn,
+  }) {
     final normalizedType = type.toLowerCase();
     final category = expiresAt != null ? 'temporary' : 'permanent';
     return {
       'id': id,
-      'title': {locale: title, 'en-US': title},
-      if (description != null)
-        'description': {locale: description, 'en-US': description},
+      'title': {
+        'zh-TW': titleZh ?? title,
+        'en-US': titleEn ?? title,
+      },
+      if (description != null || descriptionZh != null || descriptionEn != null)
+        'description': {
+          'zh-TW': descriptionZh ?? description ?? '',
+          'en-US': descriptionEn ?? description ?? '',
+        },
       'resource_type': normalizedType,
       'category': category,
       'address': address,

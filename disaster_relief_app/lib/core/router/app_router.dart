@@ -25,6 +25,7 @@ import '../../features/admin/presentation/admin_panel_screen.dart';
 import '../../models/shuttle_model.dart';
 import '../../models/task_model.dart';
 import '../../features/auth/data/auth_repository.dart';
+import '../../features/profile/data/profile_repository.dart';
 import '../../features/profile/presentation/settings_screen.dart';
 import '../../l10n/app_localizations.dart';
 import '../../features/announcements/data/announcement_repository.dart';
@@ -32,6 +33,7 @@ import '../widgets/global_chrome.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
+  final profileRepository = ref.watch(profileRepositoryProvider);
 
   return GoRouter(
     initialLocation: '/',
@@ -150,6 +152,19 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: '/admin',
             builder: (context, state) => const AdminPanelScreen(),
+            redirect: (context, state) async {
+              final user = authRepository.currentUser;
+
+              if (user == null) return '/login';
+
+              final profile = await profileRepository.getProfile(user.id);
+
+              if (profile == null || !profile.isAdminOrAbove) {
+                return '/home'; // Redirect non-admins to home
+              }
+
+              return null; // Allow access
+            },
           ),
         ],
       ),

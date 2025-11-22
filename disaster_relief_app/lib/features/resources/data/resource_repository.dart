@@ -116,4 +116,51 @@ class ResourceRepository {
       });
     }
   }
+
+  // Create a new resource point with multilingual support
+  Future<void> createResourcePointWithTranslations(
+    ResourcePoint resource, {
+    required String titleZh,
+    required String titleEn,
+    required String descriptionZh,
+    required String descriptionEn,
+  }) async {
+    final creator = _supabase.auth.currentUser?.id ?? resource.createdBy;
+    final payload = resource.copyWith(createdBy: creator).toSupabasePayload(
+      titleZh: titleZh,
+      titleEn: titleEn,
+      descriptionZh: descriptionZh,
+      descriptionEn: descriptionEn,
+    );
+
+    final List<ConnectivityResult> connectivityStatus = await Connectivity()
+        .checkConnectivity();
+    final bool isOffline = connectivityStatus.contains(ConnectivityResult.none);
+    if (isOffline) {
+      await OfflineQueueService.instance.enqueue(
+        table: 'resource_points',
+        payload: payload,
+      );
+      // Cache locally for offline viewing
+      if (!kIsWeb) {
+        final isar = await _isarService.db;
+        final cached = resource.copyWith(isarId: fastHash(resource.id));
+        await isar.writeTxn((isar) async {
+          await isar.resourcePoints.put(cached);
+        });
+      }
+      return;
+    }
+
+    await _supabase.from('resource_points').insert(payload);
+
+    // Save to local cache (skip on web where Isar isn't available)
+    if (!kIsWeb) {
+      final isar = await _isarService.db;
+      final cached = resource.copyWith(isarId: fastHash(resource.id));
+      await isar.writeTxn((isar) async {
+        await isar.resourcePoints.put(cached);
+      });
+    }
+  }
 }

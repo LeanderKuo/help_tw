@@ -28,6 +28,23 @@ class ResourceController
     await loadResources();
   }
 
+  Future<void> addResourceWithTranslations(
+    ResourcePoint resource, {
+    required String titleZh,
+    required String titleEn,
+    required String descriptionZh,
+    required String descriptionEn,
+  }) async {
+    await _repository.createResourcePointWithTranslations(
+      resource,
+      titleZh: titleZh,
+      titleEn: titleEn,
+      descriptionZh: descriptionZh,
+      descriptionEn: descriptionEn,
+    );
+    await loadResources();
+  }
+
   void filterResources(String type) {
     // This would require keeping the full list in memory or re-fetching
     // For simplicity, let's just re-fetch or filter the current state if it's data
