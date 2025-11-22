@@ -2473,7 +2473,7 @@ _$TaskModelImpl _$$TaskModelImplFromJson(Map<String, dynamic> json) =>
       latitude: (json['latitude'] as num?)?.toDouble(),
       longitude: (json['longitude'] as num?)?.toDouble(),
       address: json['address'] as String?,
-      materialsStatus: json['materials_status'] as String? ?? '蝛拙?',
+      materialsStatus: json['materials_status'] as String? ?? '穩定',
       participantCount: (json['participant_count'] as num?)?.toInt() ?? 0,
       requiredParticipants:
           (json['required_participants'] as num?)?.toInt() ?? 0,

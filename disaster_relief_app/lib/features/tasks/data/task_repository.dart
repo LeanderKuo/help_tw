@@ -83,14 +83,14 @@ class TaskRepository {
 
   // Create Task (Offline first approach)
   Future<void> createTask(TaskModel task) async {
-    final isar = await _isarService.db;
     final List<ConnectivityResult> connectivityStatus = await Connectivity()
         .checkConnectivity();
     final authorId = _supabase.auth.currentUser?.id ?? task.createdBy;
 
     final bool isOffline = connectivityStatus.contains(ConnectivityResult.none);
 
-    if (isOffline) {
+    if (isOffline && !kIsWeb) {
+      final isar = await _isarService.db;
       final payload = task.toSupabasePayload(
         authorId: authorId ?? task.createdBy,
       );
@@ -106,26 +106,19 @@ class TaskRepository {
       return;
     }
 
-    // 1. Save to local as draft (or not draft if we are optimistic)
-    // For now, let's try to send to server, if fail, mark as draft.
-    try {
-      await _supabase
-          .from('tasks')
-          .insert(task.toSupabasePayload(authorId: authorId));
-      // If success, save to local as synced
+    // Send to server
+    await _supabase
+        .from('tasks')
+        .insert(task.toSupabasePayload(authorId: authorId));
+
+    // Cache locally (skip on web)
+    if (!kIsWeb) {
+      final isar = await _isarService.db;
       await isar.writeTxn((isar) async {
         await isar.taskModels.put(
           task.copyWith(isDraft: false, isarId: fastHash(task.id)),
         );
       });
-    } catch (e) {
-      // If fail, save as draft
-      await isar.writeTxn((isar) async {
-        await isar.taskModels.put(
-          task.copyWith(isDraft: true, isarId: fastHash(task.id)),
-        );
-      });
-      rethrow; // Optional: rethrow to let UI know it's offline
     }
   }
 

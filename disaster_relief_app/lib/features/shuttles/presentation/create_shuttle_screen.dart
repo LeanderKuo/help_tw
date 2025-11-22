@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geocoding/geocoding.dart';
@@ -51,21 +52,22 @@ class _CreateShuttleScreenState extends ConsumerState<CreateShuttleScreen> {
   @override
   void initState() {
     super.initState();
-    // Prefill contact fields once profile is available.
-    ref.listen(currentUserProfileProvider, (prev, next) {
-      final profile = next.valueOrNull;
-      if (!_prefilledContact && profile != null) {
-        _contactNameController.text =
-            profile.fullName ?? profile.nickname ?? profile.email;
-        if (profile.maskedPhone != null &&
-            profile.maskedPhone!.isNotEmpty &&
-            _contactPhoneController.text.isEmpty) {
-          _contactPhoneController.text = profile.maskedPhone!;
-        }
-        _prefilledContact = true;
-      }
-    });
     _prefillFromShuttle();
+  }
+
+  /// Prefill contact fields from user profile (called in build via ref.listen)
+  void _prefillContactFromProfile(AsyncValue<dynamic> next) {
+    final profile = next.valueOrNull;
+    if (!_prefilledContact && profile != null) {
+      _contactNameController.text =
+          profile.fullName ?? profile.nickname ?? profile.email;
+      if (profile.maskedPhone != null &&
+          profile.maskedPhone!.isNotEmpty &&
+          _contactPhoneController.text.isEmpty) {
+        _contactPhoneController.text = profile.maskedPhone!;
+      }
+      _prefilledContact = true;
+    }
   }
 
   @override
@@ -109,6 +111,15 @@ class _CreateShuttleScreenState extends ConsumerState<CreateShuttleScreen> {
   }
 
   Future<void> _pickLocation({required bool isOrigin}) async {
+    // On web, show a message and use address search instead
+    if (kIsWeb) {
+      _showMessage(
+        'Web 版請使用地址搜尋功能 / On web, please use address search',
+        isError: false,
+      );
+      return;
+    }
+
     final initialPosition = isOrigin ? _origin : _destination;
     final userPosition = await LocationService.currentPosition();
     if (!mounted) return;
@@ -529,6 +540,11 @@ class _CreateShuttleScreenState extends ConsumerState<CreateShuttleScreen> {
     final role = ref.watch(currentUserRoleProvider).valueOrNull ?? AppRole.user;
     final canSetPriority = role.isLeaderOrAbove;
     final pageTitle = widget.isEditing ? 'Edit shuttle' : _l10n.createShuttle;
+
+    // Prefill contact fields once profile is available (must be in build method)
+    ref.listen(currentUserProfileProvider, (prev, next) {
+      _prefillContactFromProfile(next);
+    });
 
     return Scaffold(
       appBar: AppBar(title: Text(pageTitle)),

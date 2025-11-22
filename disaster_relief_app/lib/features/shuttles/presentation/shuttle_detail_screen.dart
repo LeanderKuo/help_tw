@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -74,37 +75,39 @@ class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
             children: [
               SizedBox(
                 height: 240,
-                child: GoogleMap(
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(
-                      shuttle.routeStartLat ?? 25.0330,
-                      shuttle.routeStartLng ?? 121.5654,
-                    ),
-                    zoom: 12,
-                  ),
-                  markers: {
-                    if (shuttle.routeStartLat != null &&
-                        shuttle.routeStartLng != null)
-                      Marker(
-                        markerId: const MarkerId('start'),
-                        position: LatLng(
-                          shuttle.routeStartLat!,
-                          shuttle.routeStartLng!,
+                child: kIsWeb
+                    ? _buildWebMapFallback(shuttle, l10n)
+                    : GoogleMap(
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(
+                            shuttle.routeStartLat ?? 25.0330,
+                            shuttle.routeStartLng ?? 121.5654,
+                          ),
+                          zoom: 12,
                         ),
-                        infoWindow: InfoWindow(title: l10n.startPoint),
+                        markers: {
+                          if (shuttle.routeStartLat != null &&
+                              shuttle.routeStartLng != null)
+                            Marker(
+                              markerId: const MarkerId('start'),
+                              position: LatLng(
+                                shuttle.routeStartLat!,
+                                shuttle.routeStartLng!,
+                              ),
+                              infoWindow: InfoWindow(title: l10n.startPoint),
+                            ),
+                          if (shuttle.routeEndLat != null &&
+                              shuttle.routeEndLat != null)
+                            Marker(
+                              markerId: const MarkerId('end'),
+                              position: LatLng(
+                                shuttle.routeEndLat!,
+                                shuttle.routeEndLng!,
+                              ),
+                              infoWindow: InfoWindow(title: l10n.endPoint),
+                            ),
+                        },
                       ),
-                    if (shuttle.routeEndLat != null &&
-                        shuttle.routeEndLng != null)
-                      Marker(
-                        markerId: const MarkerId('end'),
-                        position: LatLng(
-                          shuttle.routeEndLat!,
-                          shuttle.routeEndLng!,
-                        ),
-                        infoWindow: InfoWindow(title: l10n.endPoint),
-                      ),
-                  },
-                ),
               ),
               Expanded(
                 child: SingleChildScrollView(
@@ -257,6 +260,41 @@ class _ShuttleDetailScreenState extends ConsumerState<ShuttleDetailScreen> {
         },
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, s) => Center(child: Text(l10n.errorWithMessage('$e'))),
+      ),
+    );
+  }
+
+  Widget _buildWebMapFallback(ShuttleModel shuttle, AppLocalizations l10n) {
+    return Container(
+      color: AppColors.surfaceLight,
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.map_outlined, size: 48, color: AppColors.textSecondaryLight),
+            const SizedBox(height: 12),
+            const Text(
+              '地圖功能僅支援行動版 / Map only available on mobile',
+              style: TextStyle(
+                color: AppColors.textSecondaryLight,
+                fontSize: 14,
+              ),
+            ),
+            const SizedBox(height: 8),
+            if (shuttle.originAddress != null || shuttle.destinationAddress != null)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Text(
+                  '${shuttle.originAddress ?? ""} → ${shuttle.destinationAddress ?? ""}',
+                  style: const TextStyle(
+                    color: AppColors.textPrimaryLight,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

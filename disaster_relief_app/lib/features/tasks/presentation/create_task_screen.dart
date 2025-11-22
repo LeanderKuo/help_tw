@@ -41,7 +41,7 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
     super.dispose();
   }
 
-  void _submit() {
+  Future<void> _submit() async {
     if (_formKey.currentState!.validate()) {
       final now = DateTime.now();
       final isEditing = widget.isEditing && widget.task != null;
@@ -58,17 +58,25 @@ class _CreateTaskScreenState extends ConsumerState<CreateTaskScreen> {
               description: _descriptionController.text,
               priority: _priority,
               status: 'Open',
-              materialsStatus: 'í??',
+              materialsStatus: '穩定',
               createdAt: now,
               updatedAt: now,
             );
 
-      if (isEditing) {
-        ref.read(taskControllerProvider.notifier).updateTask(task);
-      } else {
-        ref.read(taskControllerProvider.notifier).createTask(task);
+      try {
+        if (isEditing) {
+          await ref.read(taskControllerProvider.notifier).updateTask(task);
+        } else {
+          await ref.read(taskControllerProvider.notifier).createTask(task);
+        }
+        if (mounted) context.pop();
+      } catch (e) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('建立失敗: $e')),
+          );
+        }
       }
-      context.pop();
     }
   }
 

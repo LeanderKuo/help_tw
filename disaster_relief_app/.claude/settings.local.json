@@ -4,7 +4,10 @@
       "Bash(flutter pub get:*)",
       "Bash(dart run build_runner:*)",
       "Bash(flutter analyze:*)",
-      "Bash(flutter build:*)"
+      "Bash(flutter build:*)",
+      "Bash(flutter gen-l10n:*)",
+      "Bash(flutter run:*)",
+      "Bash(flutter attach:*)"
     ],
     "deny": [],
     "ask": []

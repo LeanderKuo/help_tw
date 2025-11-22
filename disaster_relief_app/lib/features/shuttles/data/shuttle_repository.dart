@@ -54,7 +54,6 @@ class ShuttleRepository {
         'contact_name',
         'contact_phone_masked',
         'is_priority',
-        'participants',
       ];
       final data = await _supabase
           .from('shuttles')

@@ -437,18 +437,18 @@ class _ShuttleCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 8),
-              Row(
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
                 children: [
                   _infoChip(
                     icon: Icons.event,
                     label: _formatDate(shuttle.departureTime),
                   ),
-                  const SizedBox(width: 8),
                   _infoChip(
                     icon: Icons.airline_seat_recline_normal,
                     label: 'Seats: ${shuttle.seatsTaken}/${shuttle.capacity}',
                   ),
-                  const SizedBox(width: 8),
                   _infoChip(
                     icon: Icons.access_time,
                     label: shuttle.signupDeadline != null

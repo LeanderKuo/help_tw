@@ -358,7 +358,7 @@ class _$TaskModelImpl extends _TaskModel {
       this.latitude,
       this.longitude,
       this.address,
-      @JsonKey(name: 'materials_status') this.materialsStatus = '蝛拙?',
+      @JsonKey(name: 'materials_status') this.materialsStatus = '穩定',
       @JsonKey(name: 'participant_count') this.participantCount = 0,
       @JsonKey(name: 'required_participants') this.requiredParticipants = 0,
       final List<String> images = const [],

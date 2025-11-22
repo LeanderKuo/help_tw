@@ -21,7 +21,7 @@ class TaskModel with _$TaskModel {
     double? latitude,
     double? longitude,
     String? address,
-    @JsonKey(name: 'materials_status') @Default('蝛拙?') String materialsStatus,
+    @JsonKey(name: 'materials_status') @Default('穩定') String materialsStatus,
     @JsonKey(name: 'participant_count') @Default(0) int participantCount,
     @JsonKey(name: 'required_participants')
     @Default(0)
@@ -56,7 +56,7 @@ class TaskModel with _$TaskModel {
       latitude: lat,
       longitude: lng,
       address: json['address'] as String?,
-      materialsStatus: (json['materials_status'] as String?) ?? '蝛拙?',
+      materialsStatus: (json['materials_status'] as String?) ?? '穩定',
       participantCount: (json['participant_count'] as num?)?.toInt() ?? 0,
       requiredParticipants:
           (json['required_participants'] as num?)?.toInt() ?? 0,

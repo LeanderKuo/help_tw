@@ -2,8 +2,8 @@
 CREATE TABLE role_upgrade_requests (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID REFERENCES auth.users(id) NOT NULL,
-  current_role TEXT NOT NULL,
-  requested_role TEXT NOT NULL,
+  from_role TEXT NOT NULL,
+  to_role TEXT NOT NULL,
   unit TEXT,  -- Organization/unit for Leader申請
   reason TEXT,  -- Justification
   referral_code TEXT,  -- Required for Leader→Admin
@@ -65,8 +65,8 @@ BEGIN
       NEW.id,
       jsonb_build_object(
         'user_id', NEW.user_id,
-        'from_role', NEW.current_role,
-        'to_role', NEW.requested_role,
+        'from_role', NEW.from_role,
+        'to_role', NEW.to_role,
         'reason', NEW.review_reason
       )
     );
@@ -74,7 +74,7 @@ BEGIN
     -- If approved, update user role
     IF NEW.status = 'approved' THEN
       UPDATE profiles_public
-      SET role = NEW.requested_role, updated_at = now()
+      SET role = NEW.to_role, updated_at = now()
       WHERE id = NEW.user_id;
     END IF;
   END IF;
