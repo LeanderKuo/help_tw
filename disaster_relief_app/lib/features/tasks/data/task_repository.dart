@@ -137,7 +137,7 @@ class TaskRepository {
         });
       } catch (e) {
         // Keep as draft
-        print('Failed to sync task ${task.id}: $e');
+        debugPrint('Failed to sync task ${task.id}: $e');
       }
     }
   }

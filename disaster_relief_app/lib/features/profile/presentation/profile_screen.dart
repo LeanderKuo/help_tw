@@ -18,9 +18,8 @@ class ProfileScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(authRepositoryProvider).currentUser;
     final profileAsync = ref.watch(currentUserProfileProvider);
-    final roleAsync = ref.watch(currentUserRoleProvider);
     final profile = profileAsync.valueOrNull;
-    final role = roleAsync.valueOrNull ?? AppRole.user;
+    final role = ref.watch(currentUserRoleProvider);
     final rawDisplayName = profile?.nickname ?? user?.email ?? l10n.noEmail;
     final displayName = rawDisplayName.trim().isEmpty
         ? l10n.noEmail

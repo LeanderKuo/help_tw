@@ -19,13 +19,13 @@ final currentUserProfileProvider = StreamProvider<UserProfile?>((ref) {
   return profileRepo.watchProfile(userId);
 });
 
-final currentUserRoleProvider = StreamProvider<AppRole>((ref) {
+final currentUserRoleProvider = Provider<AppRole>((ref) {
   final authRepo = ref.watch(authRepositoryProvider);
   final userId = authRepo.currentUser?.id;
   if (userId == null) {
-    return Stream.value(AppRole.visitor);
+    return AppRole.visitor;
   }
 
-  final profileStream = ref.watch(currentUserProfileProvider.stream);
-  return profileStream.map((profile) => roleFromString(profile?.role));
+  final profile = ref.watch(currentUserProfileProvider).valueOrNull;
+  return roleFromString(profile?.role);
 });

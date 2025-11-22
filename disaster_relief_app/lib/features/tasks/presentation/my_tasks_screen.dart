@@ -93,7 +93,7 @@ class _MyTasksScreenState extends ConsumerState<MyTasksScreen>
   Widget build(BuildContext context) {
     final tasksAsync = ref.watch(taskControllerProvider);
     final joinedAsync = ref.watch(joinedTaskIdsProvider);
-    final role = ref.watch(currentUserRoleProvider).valueOrNull ?? AppRole.user;
+    final role = ref.watch(currentUserRoleProvider);
     final userId = ref.watch(authRepositoryProvider).currentUser?.id;
 
     return Scaffold(

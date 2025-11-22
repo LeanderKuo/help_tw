@@ -18,7 +18,7 @@ class AnnouncementListScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final announcementsAsync = ref.watch(announcementsProvider);
-    final role = ref.watch(currentUserRoleProvider).valueOrNull ?? AppRole.user;
+    final role = ref.watch(currentUserRoleProvider);
     final canManage = role.canManageAnnouncements;
 
     return Scaffold(

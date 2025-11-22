@@ -12,7 +12,7 @@ class AdminPanelScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final role = ref.watch(currentUserRoleProvider).valueOrNull ?? AppRole.user;
+    final role = ref.watch(currentUserRoleProvider);
     if (!role.isAdminOrAbove) {
       return Scaffold(
         appBar: AppBar(title: const Text('Admin Panel')),

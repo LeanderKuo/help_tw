@@ -109,9 +109,6 @@ class ShuttleRepository {
     final List<ConnectivityResult> connectivityStatus = await Connectivity()
         .checkConnectivity();
     final shuttleId = const Uuid().v4();
-    // Legacy UI field (DB no longer stores fare per seat).
-    // ignore: unused_local_variable
-    final double? _legacyCostPerSeat = costPerSeat;
 
     final localizedTitle = {'zh-TW': title, 'en-US': title};
     final localizedDesc = description != null
@@ -211,9 +208,6 @@ class ShuttleRepository {
     int? seatsTaken,
   }) async {
     final updates = <String, dynamic>{};
-    // Legacy UI field (DB no longer stores fare per seat).
-    // ignore: unused_local_variable
-    final double? _legacyCostPerSeat = costPerSeat;
 
     if (title != null) {
       updates['title'] = {'zh-TW': title, 'en-US': title};

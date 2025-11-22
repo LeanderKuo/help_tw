@@ -127,7 +127,7 @@ class _MyShuttlesScreenState extends ConsumerState<MyShuttlesScreen>
   Widget build(BuildContext context) {
     final shuttlesAsync = ref.watch(shuttleControllerProvider);
     final joinedAsync = ref.watch(joinedShuttleIdsProvider);
-    final role = ref.watch(currentUserRoleProvider).valueOrNull ?? AppRole.user;
+    final role = ref.watch(currentUserRoleProvider);
     final userId = ref.watch(authRepositoryProvider).currentUser?.id;
 
     return Scaffold(

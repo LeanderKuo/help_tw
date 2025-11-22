@@ -323,7 +323,7 @@ class _CreateShuttleScreenState extends ConsumerState<CreateShuttleScreen> {
   }
 
   Future<void> _submit() async {
-    final role = ref.read(currentUserRoleProvider).valueOrNull ?? AppRole.user;
+    final role = ref.read(currentUserRoleProvider);
     final isEditing = widget.isEditing && widget.shuttle != null;
     final canSetPriority = role.isLeaderOrAbove;
 
@@ -537,7 +537,7 @@ class _CreateShuttleScreenState extends ConsumerState<CreateShuttleScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final role = ref.watch(currentUserRoleProvider).valueOrNull ?? AppRole.user;
+    final role = ref.watch(currentUserRoleProvider);
     final canSetPriority = role.isLeaderOrAbove;
     final pageTitle = widget.isEditing ? 'Edit shuttle' : _l10n.createShuttle;
 
