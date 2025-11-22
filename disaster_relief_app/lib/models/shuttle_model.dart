@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 
+import 'dart:math' as math;
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
 
@@ -16,8 +17,8 @@ class ShuttleModel with _$ShuttleModel {
     @JsonKey(name: 'display_id') String? displayId,
     required String title,
     String? description,
-    @Default('Scheduled')
-    String status, // Scheduled, En Route, Arrived, Cancelled
+    @Default('open')
+    String status, // open, in_progress, done, canceled
     @JsonKey(name: 'route_start_lat') double? routeStartLat,
     @JsonKey(name: 'route_start_lng') double? routeStartLng,
     @JsonKey(name: 'route_end_lat') double? routeEndLat,
@@ -36,7 +37,7 @@ class ShuttleModel with _$ShuttleModel {
     @JsonKey(name: 'created_by') String? createdBy,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
-    @JsonKey(name: 'vehicle') Map<String, dynamic>? vehicle,
+    @JsonKey(name: 'vehicle_info') Map<String, dynamic>? vehicle,
     @JsonKey(name: 'contact_name') String? contactName,
     @JsonKey(name: 'contact_phone_masked') String? contactPhoneMasked,
     @JsonKey(name: 'participants') @Default([]) List<String> participantIds,
@@ -49,72 +50,61 @@ class ShuttleModel with _$ShuttleModel {
 
   /// Parse Supabase `shuttles` rows (geography + snake_case fields).
   factory ShuttleModel.fromSupabase(Map<String, dynamic> json) {
-    final origin = json['origin'];
-    final destination = json['destination'];
-
-    double? startLat = _toDouble(json['origin_lat'] ?? json['route_start_lat']);
-    double? startLng = _toDouble(json['origin_lng'] ?? json['route_start_lng']);
-    double? endLat = _toDouble(
-      json['destination_lat'] ?? json['route_end_lat'],
-    );
-    double? endLng = _toDouble(
-      json['destination_lng'] ?? json['route_end_lng'],
-    );
-
-    if ((startLat == null || startLng == null) &&
-        origin is Map &&
-        origin['coordinates'] is List) {
-      final coords = origin['coordinates'] as List;
-      if (coords.length >= 2) {
-        startLng = _toDouble(coords[0]) ?? startLng;
-        startLat = _toDouble(coords[1]) ?? startLat;
-      }
+    final route = json['route'];
+    Map<String, dynamic>? origin;
+    Map<String, dynamic>? destination;
+    if (route is Map) {
+      origin = route['origin'] as Map<String, dynamic>?;
+      destination = route['destination'] as Map<String, dynamic>?;
     }
 
-    if ((endLat == null || endLng == null) &&
-        destination is Map &&
-        destination['coordinates'] is List) {
-      final coords = destination['coordinates'] as List;
-      if (coords.length >= 2) {
-        endLng = _toDouble(coords[0]) ?? endLng;
-        endLat = _toDouble(coords[1]) ?? endLat;
-      }
-    }
+    double? startLat = _toDouble(origin?['lat']);
+    double? startLng = _toDouble(origin?['lng']);
+    double? endLat = _toDouble(destination?['lat']);
+    double? endLng = _toDouble(destination?['lng']);
+
+    final capacityJson = json['capacity'] as Map<String, dynamic>?;
+    final seatsTotal = (capacityJson?['total'] as num?)?.toInt() ?? 0;
+    final seatsTaken = (capacityJson?['taken'] as num?)?.toInt() ?? 0;
+
+    final schedule = json['schedule'] as Map<String, dynamic>?;
+    final departAt = schedule?['depart_at'] ?? json['depart_at'];
+    final arriveAt = schedule?['arrive_at'] ?? json['arrive_at'];
 
     return ShuttleModel(
       id: json['id'] as String,
-      title: (json['title'] ?? '') as String,
-      description: json['description'] as String?,
+      title: _localizedText(json['title']),
+      description: _localizedText(json['description']),
       status: (json['status'] as String?) ?? 'open',
       routeStartLat: startLat,
       routeStartLng: startLng,
       routeEndLat: endLat,
       routeEndLng: endLng,
-      originAddress: json['origin_address'] as String?,
-      destinationAddress: json['destination_address'] as String?,
-      departureTime: _parseDate(json['depart_at'] ?? json['departure_time']),
-      arriveAt: _parseDate(json['arrive_at']),
+      originAddress: origin?['address'] as String?,
+      destinationAddress: destination?['address'] as String?,
+      departureTime: _parseDate(departAt),
+      arriveAt: _parseDate(arriveAt),
       signupDeadline: _parseDate(json['signup_deadline']),
       costType: (json['cost_type'] as String?) ?? 'free',
       fareTotal: _toDouble(json['fare_total']),
       farePerPerson: _toDouble(json['fare_per_person']),
-      capacity:
-          (json['seats_total'] as num?)?.toInt() ??
-          (json['capacity'] as num?)?.toInt() ??
-          0,
-      seatsTaken: (json['seats_taken'] as num?)?.toInt() ?? 0,
+      capacity: seatsTotal,
+      seatsTaken: seatsTaken,
       driverId: json['driver_id'] as String?,
-      createdBy: json['created_by'] as String?,
+      createdBy: json['creator_id'] as String? ?? json['created_by'] as String?,
       createdAt: _parseDate(json['created_at']),
       updatedAt: _parseDate(json['updated_at']),
       displayId: json['display_id'] as String?,
-      vehicle: json['vehicle'] as Map<String, dynamic>?,
+      vehicle: (json['vehicle_info'] ?? json['vehicle']) as Map<String, dynamic>?,
       contactName: json['contact_name'] as String?,
       contactPhoneMasked: json['contact_phone_masked'] as String?,
-      participantIds:
+      participantIds: (json['participants_snapshot'] as List?)
+              ?.whereType<String>()
+              .toList() ??
           (json['participants'] as List?)?.whereType<String>().toList() ??
           const [],
-      isPriority: (json['is_priority'] as bool?) ?? false,
+      isPriority:
+          (json['priority'] as bool?) ?? (json['is_priority'] as bool?) ?? false,
     );
   }
 
@@ -127,31 +117,47 @@ class ShuttleModel with _$ShuttleModel {
     final endLng = routeEndLng;
     return {
       'id': id,
-      'title': title,
-      'description': description,
+      'title': {'zh-TW': title, 'en-US': title},
+      if (description != null)
+        'description': {'zh-TW': description, 'en-US': description},
       'status': normalizedStatus,
-      'origin': startLat != null && startLng != null
-          ? 'POINT($startLng $startLat)'
+      'route': startLat != null &&
+              startLng != null &&
+              endLat != null &&
+              endLng != null
+          ? {
+              'origin': {
+                'lat': startLat,
+                'lng': startLng,
+                if (originAddress != null) 'address': originAddress,
+              },
+              'destination': {
+                'lat': endLat,
+                'lng': endLng,
+                if (destinationAddress != null) 'address': destinationAddress,
+              },
+            }
           : null,
-      'destination': endLat != null && endLng != null
-          ? 'POINT($endLng $endLat)'
+      'schedule': departureTime != null
+          ? {
+              'depart_at': departureTime!.toIso8601String(),
+              if (arriveAt != null) 'arrive_at': arriveAt!.toIso8601String(),
+            }
           : null,
-      'origin_address': originAddress,
-      'destination_address': destinationAddress,
-      'depart_at': departureTime?.toIso8601String(),
-      'arrive_at': arriveAt?.toIso8601String(),
-      'signup_deadline': signupDeadline?.toIso8601String(),
       'cost_type': costType,
-      'fare_total': fareTotal,
-      'fare_per_person': farePerPerson,
-      'seats_total': capacity,
+      'capacity': {
+        'total': capacity,
+        'taken': seatsTaken,
+        'remaining': math.max(capacity - seatsTaken, 0),
+      },
       'driver_id': driverId,
-      'created_by': creatorId ?? createdBy,
-      'vehicle': vehicle,
+      'creator_id': creatorId ?? createdBy,
+      'vehicle_info': vehicle,
       'contact_name': contactName,
       'contact_phone_masked': contactPhoneMasked,
-      'participants': participantIds.isEmpty ? null : participantIds,
-      'is_priority': isPriority,
+      'participants_snapshot':
+          participantIds.isEmpty ? null : participantIds.toList(),
+      'priority': isPriority,
     }..removeWhere((key, value) => value == null);
   }
 }
@@ -175,4 +181,15 @@ String _normalizeShuttleStatus(String status) {
   if (lower == 'cancelled') return 'canceled';
   if (lower == 'scheduled') return 'open';
   return lower;
+}
+
+String _localizedText(dynamic payload) {
+  if (payload == null) return '';
+  if (payload is String) return payload;
+  if (payload is Map) {
+    final zh = payload['zh-TW'] ?? payload['zh_tw'];
+    final en = payload['en-US'] ?? payload['en_us'];
+    return (zh ?? en ?? '').toString();
+  }
+  return payload.toString();
 }

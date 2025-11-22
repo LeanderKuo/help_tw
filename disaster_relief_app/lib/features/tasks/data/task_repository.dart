@@ -30,20 +30,16 @@ class TaskRepository {
     try {
       const selectColumns = [
         'id',
-        'display_id',
         'title',
         'description',
         'status',
-        'is_priority',
-        'role_label',
-        'address',
-        'materials_status',
-        'required_participants',
+        'priority',
+        'requirements',
+        'location',
         'participant_count',
-        'author_id',
+        'creator_id',
         'created_at',
         'updated_at',
-        'location',
       ];
       // Supabase -> short timeout so the UI doesn't hang on web.
       final data = await _supabase
@@ -154,7 +150,7 @@ class TaskRepository {
         await _supabase
                 .from('mission_participants')
                 .select('user_id')
-                .eq('task_id', taskId)
+                .eq('mission_id', taskId)
                 .eq('user_id', userId)
                 .limit(1)
             as List;
@@ -173,7 +169,7 @@ class TaskRepository {
     }
 
     await _supabase.from('mission_participants').insert({
-      'task_id': taskId,
+      'mission_id': taskId,
       'user_id': userId,
       'is_visible': isVisible,
     });
@@ -186,7 +182,7 @@ class TaskRepository {
     await _supabase
         .from('mission_participants')
         .delete()
-        .eq('task_id', taskId)
+        .eq('mission_id', taskId)
         .eq('user_id', userId);
   }
 
@@ -213,12 +209,12 @@ class TaskRepository {
     final rows =
         await _supabase
                 .from('mission_participants')
-                .select('task_id')
+                .select('mission_id')
                 .eq('user_id', userId)
             as List<dynamic>;
 
     return rows
-        .map((row) => (row as Map<String, dynamic>)['task_id'] as String)
+        .map((row) => (row as Map<String, dynamic>)['mission_id'] as String)
         .toSet();
   }
 }

@@ -9,7 +9,7 @@ part 'chat_message.g.dart';
 class ChatMessage with _$ChatMessage {
   const factory ChatMessage({
     required String id,
-    @JsonKey(name: 'task_id') String? taskId,
+    @JsonKey(name: 'mission_id') String? missionId,
     @JsonKey(name: 'shuttle_id') String? shuttleId,
     @JsonKey(name: 'sender_id') String? senderId,
     String? content,
@@ -24,7 +24,7 @@ class ChatMessage with _$ChatMessage {
   factory ChatMessage.fromSupabase(Map<String, dynamic> json) {
     return ChatMessage(
       id: json['id'] as String,
-      taskId: json['task_id'] as String?,
+      missionId: json['mission_id'] as String?,
       shuttleId: json['shuttle_id'] as String?,
       senderId: json['author_id'] as String? ?? json['sender_id'] as String?,
       content: json['content'] as String? ?? json['text'] as String?,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math' as math;
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +11,6 @@ import '../../../services/isar_service.dart';
 import '../../../services/offline_queue_service.dart';
 import '../../../models/shuttle_model.dart';
 import '../../../models/resource_point.dart'; // for fastHash
-import '../../../core/utils/geohash.dart';
 
 final isarServiceProvider = Provider<IsarService>((ref) {
   return IsarService();
@@ -31,29 +31,22 @@ class ShuttleRepository {
     try {
       const selectColumns = [
         'id',
-        'display_id',
         'title',
         'description',
         'status',
         'cost_type',
-        'fare_total',
-        'fare_per_person',
-        'seats_total',
-        'seats_taken',
-        'origin_address',
-        'destination_address',
-        'created_by',
-        'depart_at',
-        'arrive_at',
-        'signup_deadline',
-        'created_at',
-        'updated_at',
-        'origin',
-        'destination',
-        'vehicle',
+        'priority',
+        'vehicle_info',
+        'purposes',
+        'route',
+        'schedule',
+        'capacity',
         'contact_name',
         'contact_phone_masked',
-        'is_priority',
+        'creator_id',
+        'participants_snapshot',
+        'created_at',
+        'updated_at',
       ];
       final data = await _supabase
           .from('shuttles')
@@ -116,31 +109,55 @@ class ShuttleRepository {
     final List<ConnectivityResult> connectivityStatus = await Connectivity()
         .checkConnectivity();
     final shuttleId = const Uuid().v4();
+    // Legacy UI field (DB no longer stores fare per seat).
+    // ignore: unused_local_variable
+    final double? _legacyCostPerSeat = costPerSeat;
+
+    final localizedTitle = {'zh-TW': title, 'en-US': title};
+    final localizedDesc = description != null
+        ? {
+            'zh-TW': description,
+            'en-US': description,
+          }
+        : null;
 
     final payload = {
       'id': shuttleId,
-      'title': title,
-      'description': description,
-      'origin': 'POINT($originLng $originLat)',
-      'destination': 'POINT($destinationLng $destinationLat)',
-      'origin_address': originAddress,
-      'destination_address': destinationAddress,
-      'depart_at': departAt.toIso8601String(),
-      'arrive_at': arriveAt?.toIso8601String(),
-      'seats_total': seatsTotal,
-      'cost_type': costType,
-      'fare_per_person': costPerSeat,
-      'vehicle': {
+      'title': localizedTitle,
+      if (localizedDesc != null) 'description': localizedDesc,
+      'vehicle_info': {
         'type': vehicleType,
         if (vehiclePlate != null && vehiclePlate.isNotEmpty)
           'plate': vehiclePlate,
       },
+      'purposes': <String>[],
+      'route': {
+        'origin': {
+          'lat': originLat,
+          'lng': originLng,
+          if (originAddress != null) 'address': originAddress,
+        },
+        'destination': {
+          'lat': destinationLat,
+          'lng': destinationLng,
+          if (destinationAddress != null) 'address': destinationAddress,
+        },
+      },
+      'schedule': {
+        'depart_at': departAt.toIso8601String(),
+        if (arriveAt != null) 'arrive_at': arriveAt.toIso8601String(),
+      },
+      'capacity': {
+        'total': seatsTotal,
+        'taken': 0,
+        'remaining': seatsTotal,
+      },
+      'cost_type': costType,
       'contact_name': contactName,
       'contact_phone_masked': contactPhoneMasked,
-      'is_priority': isPriority,
-      'created_by': userId,
-      'origin_geohash': encodeGeohash(originLat, originLng),
-      'destination_geohash': encodeGeohash(destinationLat, destinationLng),
+      'priority': isPriority,
+      'creator_id': userId,
+      'status': 'open',
     }..removeWhere((key, value) => value == null);
 
     final bool isOffline = connectivityStatus.contains(ConnectivityResult.none);
@@ -152,10 +169,7 @@ class ShuttleRepository {
       );
       final local = ShuttleModel.fromSupabase({
         ...payload,
-        'seats_total': seatsTotal,
-        'seats_taken': 0,
-        'depart_at': departAt.toIso8601String(),
-        'arrive_at': arriveAt?.toIso8601String(),
+        'capacity': {'total': seatsTotal, 'taken': 0, 'remaining': seatsTotal},
         'status': 'open',
       });
       return local.copyWith(isarId: fastHash(local.id));
@@ -194,36 +208,89 @@ class ShuttleRepository {
     String? contactName,
     String? contactPhoneMasked,
     bool? isPriority,
+    int? seatsTaken,
   }) async {
-    final updates = <String, dynamic>{
-      if (title != null) 'title': title,
-      if (description != null) 'description': description,
-      if (originLat != null && originLng != null)
-        'origin': 'POINT($originLng $originLat)',
-      if (destinationLat != null && destinationLng != null)
-        'destination': 'POINT($destinationLng $destinationLat)',
-      if (originAddress != null) 'origin_address': originAddress,
-      if (destinationAddress != null) 'destination_address': destinationAddress,
-      if (departAt != null) 'depart_at': departAt.toIso8601String(),
-      if (arriveAt != null) 'arrive_at': arriveAt.toIso8601String(),
-      if (seatsTotal != null) 'seats_total': seatsTotal,
-      if (costType != null) 'cost_type': costType,
-      if (costPerSeat != null) 'fare_per_person': costPerSeat,
-      if (vehicleType != null || vehiclePlate != null)
-        'vehicle': {
-          if (vehicleType != null) 'type': vehicleType,
-          if (vehiclePlate != null && vehiclePlate.isNotEmpty)
-            'plate': vehiclePlate,
+    final updates = <String, dynamic>{};
+    // Legacy UI field (DB no longer stores fare per seat).
+    // ignore: unused_local_variable
+    final double? _legacyCostPerSeat = costPerSeat;
+
+    if (title != null) {
+      updates['title'] = {'zh-TW': title, 'en-US': title};
+    }
+    if (description != null) {
+      updates['description'] = {
+        'zh-TW': description,
+        'en-US': description,
+      };
+    }
+    final shouldUpdateRoute =
+        originLat != null && originLng != null && destinationLat != null && destinationLng != null;
+    if (shouldUpdateRoute) {
+      updates['route'] = {
+        'origin': {
+          'lat': originLat,
+          'lng': originLng,
+          if (originAddress != null) 'address': originAddress,
         },
-      if (contactName != null) 'contact_name': contactName,
-      if (contactPhoneMasked != null)
-        'contact_phone_masked': contactPhoneMasked,
-      if (isPriority != null) 'is_priority': isPriority,
-      if (originLat != null && originLng != null)
-        'origin_geohash': encodeGeohash(originLat, originLng),
-      if (destinationLat != null && destinationLng != null)
-        'destination_geohash': encodeGeohash(destinationLat, destinationLng),
-    };
+        'destination': {
+          'lat': destinationLat,
+          'lng': destinationLng,
+          if (destinationAddress != null) 'address': destinationAddress,
+        },
+      };
+    } else {
+      if (originAddress != null || destinationAddress != null) {
+        // Addresses alone require coordinates to satisfy constraint; skip to avoid invalid row.
+        debugPrint(
+          'Skipped address-only shuttle route update because coordinates were not provided.',
+        );
+      }
+    }
+
+    if (departAt != null || arriveAt != null) {
+      final scheduleUpdate = <String, dynamic>{};
+      if (departAt != null) {
+        scheduleUpdate['depart_at'] = departAt.toIso8601String();
+      }
+      if (arriveAt != null) {
+        scheduleUpdate['arrive_at'] = arriveAt.toIso8601String();
+      }
+      // Only send schedule if we have depart_at per constraint.
+      if (scheduleUpdate.containsKey('depart_at')) {
+        updates['schedule'] = scheduleUpdate;
+      }
+    }
+
+    if (seatsTotal != null) {
+      final currentCapacity = await _supabase
+          .from('shuttles')
+          .select('capacity')
+          .eq('id', shuttleId)
+          .single();
+      final currentTaken =
+          (currentCapacity['capacity']?['taken'] as num?)?.toInt() ?? seatsTaken ?? 0;
+      final normalizedTaken = math.min(currentTaken, seatsTotal);
+      updates['capacity'] = {
+        'total': seatsTotal,
+        'taken': normalizedTaken,
+        'remaining': math.max(seatsTotal - normalizedTaken, 0),
+      };
+    }
+
+    if (costType != null) updates['cost_type'] = costType;
+    if (vehicleType != null || vehiclePlate != null) {
+      updates['vehicle_info'] = {
+        if (vehicleType != null) 'type': vehicleType,
+        if (vehiclePlate != null && vehiclePlate.isNotEmpty)
+          'plate': vehiclePlate,
+      };
+    }
+    if (contactName != null) updates['contact_name'] = contactName;
+    if (contactPhoneMasked != null) {
+      updates['contact_phone_masked'] = contactPhoneMasked;
+    }
+    if (isPriority != null) updates['priority'] = isPriority;
 
     if (updates.isEmpty) {
       throw Exception('No fields provided to update shuttle');
@@ -244,6 +311,11 @@ class ShuttleRepository {
     String role = 'passenger',
     bool isVisible = true,
   }) async {
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) {
+      throw const AuthException('User not logged in');
+    }
+
     // Check if user has already joined
     final alreadyJoined = await isUserParticipant(shuttleId);
     if (alreadyJoined) {
@@ -251,20 +323,27 @@ class ShuttleRepository {
       return; // Silently return, user is already in the shuttle
     }
 
-    await _supabase.rpc(
-      'join_shuttle',
-      params: {
-        'p_shuttle_id': shuttleId,
-        'p_role': role,
-        'p_is_visible': isVisible,
-      },
-    );
+    await _supabase.from('shuttle_participants').insert({
+      'shuttle_id': shuttleId,
+      'user_id': userId,
+      'role': role,
+      'is_visible': isVisible,
+    });
 
     // Trigger a refresh or update local count optimistically
   }
 
   Future<void> leaveShuttle(String shuttleId) async {
-    await _supabase.rpc('leave_shuttle', params: {'p_shuttle_id': shuttleId});
+    final userId = _supabase.auth.currentUser?.id;
+    if (userId == null) {
+      throw const AuthException('User not logged in');
+    }
+
+    await _supabase
+        .from('shuttle_participants')
+        .delete()
+        .eq('shuttle_id', shuttleId)
+        .eq('user_id', userId);
   }
 
   Future<bool> isUserParticipant(String shuttleId) async {

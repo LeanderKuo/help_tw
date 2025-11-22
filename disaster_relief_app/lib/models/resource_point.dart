@@ -16,16 +16,17 @@ class ResourcePoint with _$ResourcePoint {
     required String title,
     String? description,
     @Default('Other') String type, // Water, Shelter, Medical, Food, Other
+    @Default(<String>[]) List<String> categories,
+    @Default('active') String status, // active, shortage, closed
     required double latitude,
     required double longitude,
     String? address,
-    @JsonKey(name: 'expires_at') DateTime? expiresAt,
-    @JsonKey(name: 'is_active') @Default(true) bool isActive,
+    @JsonKey(name: 'expiry') DateTime? expiry,
+    @JsonKey(name: 'contact_masked_phone') String? contactMaskedPhone,
     @JsonKey(name: 'created_by') String? createdBy,
     @JsonKey(name: 'created_at') DateTime? createdAt,
     @JsonKey(name: 'updated_at') DateTime? updatedAt,
     @Default([]) List<String> images,
-    @Default([]) List<String> tags,
     @JsonKey(includeFromJson: false, includeToJson: false) @Id() int? isarId,
   }) = _ResourcePoint;
 
@@ -53,21 +54,24 @@ class ResourcePoint with _$ResourcePoint {
     final normalizedType = rawType.isEmpty
         ? 'other'
         : '${rawType[0].toUpperCase()}${rawType.substring(1)}';
+    final categories = (json['categories'] as List?)?.whereType<String>().toList() ?? const [];
+    final status = (json['status'] as String?) ?? 'active';
 
     return ResourcePoint(
       id: json['id'] as String,
       title: _localizedText(json['title']),
       description: _localizedText(json['description']),
       type: normalizedType,
+      categories: categories,
+      status: status,
       latitude: parsedLat ?? 0,
       longitude: parsedLng ?? 0,
       address: json['address'] as String?,
-      expiresAt: _parseDate(json['expires_at']),
-      isActive: (json['is_active'] as bool?) ?? true,
+      expiry: _parseDate(json['expiry'] ?? json['expires_at']),
+      contactMaskedPhone: json['contact_masked_phone'] as String?,
       createdBy: json['created_by'] as String?,
       createdAt: _parseDate(json['created_at']),
       updatedAt: _parseDate(json['updated_at']),
-      tags: (json['tags'] as List?)?.whereType<String>().toList() ?? const [],
     );
   }
 
@@ -80,7 +84,6 @@ class ResourcePoint with _$ResourcePoint {
     String? descriptionEn,
   }) {
     final normalizedType = type.toLowerCase();
-    final category = expiresAt != null ? 'temporary' : 'permanent';
     return {
       'id': id,
       'title': {
@@ -92,13 +95,12 @@ class ResourcePoint with _$ResourcePoint {
           'zh-TW': descriptionZh ?? description ?? '',
           'en-US': descriptionEn ?? description ?? '',
         },
-      'resource_type': normalizedType,
-      'category': category,
+      'categories': categories.isEmpty ? [normalizedType] : categories,
+      'status': status,
       'address': address,
       'location': 'POINT($longitude $latitude)',
-      'expires_at': expiresAt?.toIso8601String(),
-      'is_active': isActive,
-      'tags': tags,
+      'expiry': expiry?.toIso8601String(),
+      'contact_masked_phone': contactMaskedPhone,
       'created_by': createdBy,
     }..removeWhere((key, value) => value == null);
   }

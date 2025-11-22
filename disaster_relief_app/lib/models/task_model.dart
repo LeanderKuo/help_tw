@@ -2,7 +2,6 @@
 
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:isar/isar.dart';
-
 part 'task_model.freezed.dart';
 part 'task_model.g.dart';
 
@@ -23,9 +22,7 @@ class TaskModel with _$TaskModel {
     String? address,
     @JsonKey(name: 'materials_status') @Default('穩定') String materialsStatus,
     @JsonKey(name: 'participant_count') @Default(0) int participantCount,
-    @JsonKey(name: 'required_participants')
-    @Default(0)
-    int requiredParticipants,
+    @JsonKey(name: 'required_participants') @Default(0) int requiredParticipants,
     @Default([]) List<String> images,
     @JsonKey(name: 'assigned_to') String? assignedTo,
     @JsonKey(name: 'created_by') String? createdBy,
@@ -38,32 +35,36 @@ class TaskModel with _$TaskModel {
   factory TaskModel.fromJson(Map<String, dynamic> json) =>
       _$TaskModelFromJson(json);
 
-  /// Parse Supabase `tasks` rows (geography + snake_case fields).
+  /// Parse Supabase `missions` rows.
   factory TaskModel.fromSupabase(Map<String, dynamic> json) {
-    final lat = _toDouble(json['lat'] ?? json['latitude']);
-    final lng = _toDouble(json['lng'] ?? json['longitude']);
-    final isPriority = json['is_priority'] == true;
-    final priorityStr =
-        (json['priority'] as String?) ?? (isPriority ? 'Emergency' : 'Normal');
+    final location = json['location'] as Map<String, dynamic>?;
+    final lat = _toDouble(location?['lat'] ?? json['lat'] ?? json['latitude']);
+    final lng = _toDouble(location?['lng'] ?? json['lng'] ?? json['longitude']);
+    final isPriority = json['priority'] == true || json['is_priority'] == true;
+    final priorityStr = isPriority ? 'Emergency' : 'Normal';
+
+    final requirements = json['requirements'] as Map<String, dynamic>?;
+    final manpowerNeeded =
+        (requirements?['manpower_needed'] as num?)?.toInt() ?? 0;
+    final materials = (requirements?['materials'] as List?) ?? const [];
 
     return TaskModel(
       id: json['id'] as String,
-      title: (json['title'] ?? '') as String,
-      description: json['description'] as String?,
+      title: _localizedText(json['title']),
+      description: _localizedText(json['description']),
       status: (json['status'] as String?) ?? 'open',
       priority: priorityStr,
       roleLabel: json['role_label'] as String?,
       latitude: lat,
       longitude: lng,
-      address: json['address'] as String?,
-      materialsStatus: (json['materials_status'] as String?) ?? '穩定',
+      address: location?['address'] as String?,
+      materialsStatus: materials.isNotEmpty ? '需求' : '穩定',
       participantCount: (json['participant_count'] as num?)?.toInt() ?? 0,
-      requiredParticipants:
-          (json['required_participants'] as num?)?.toInt() ?? 0,
+      requiredParticipants: manpowerNeeded,
       images:
           (json['images'] as List?)?.whereType<String>().toList() ?? const [],
       assignedTo: json['assigned_to'] as String?,
-      createdBy: json['author_id'] as String? ?? json['created_by'] as String?,
+      createdBy: json['creator_id'] as String? ?? json['created_by'] as String?,
       createdAt: _parseDate(json['created_at']),
       updatedAt: _parseDate(json['updated_at']),
     );
@@ -74,19 +75,28 @@ class TaskModel with _$TaskModel {
     final normalizedStatus = _normalizeTaskStatus(status);
     final priorityLower = priority.toLowerCase();
     final isPriority = priorityLower == 'emergency' || priorityLower == 'high';
+    final locationJson = (longitude != null && latitude != null)
+        ? {
+            'lat': latitude,
+            'lng': longitude,
+            if (address != null) 'address': address,
+          }
+        : null;
+    final requirementsJson = {
+      'materials': <String>[],
+      'manpower_needed': requiredParticipants,
+      'manpower_current': 0,
+    };
     return {
       'id': id,
-      'title': title,
-      'description': description,
+      'title': {'zh-TW': title, 'en-US': title},
+      if (description != null)
+        'description': {'zh-TW': description, 'en-US': description},
       'status': normalizedStatus,
-      'is_priority': isPriority,
-      'role_label': roleLabel,
-      'address': address,
-      'materials_status': materialsStatus,
-      'required_participants': requiredParticipants,
-      'author_id': authorId ?? createdBy,
-      if (longitude != null && latitude != null)
-        'location': 'POINT($longitude $latitude)',
+      'priority': isPriority,
+      'requirements': requirementsJson,
+      if (locationJson != null) 'location': locationJson,
+      'creator_id': authorId ?? createdBy,
     }..removeWhere((key, value) => value == null);
   }
 }
@@ -108,4 +118,15 @@ String _normalizeTaskStatus(String status) {
   if (lower == 'completed') return 'done';
   if (lower == 'cancelled') return 'canceled';
   return lower;
+}
+
+String _localizedText(dynamic payload) {
+  if (payload == null) return '';
+  if (payload is String) return payload;
+  if (payload is Map) {
+    final zh = payload['zh-TW'] ?? payload['zh_tw'];
+    final en = payload['en-US'] ?? payload['en_us'];
+    return (zh ?? en ?? '').toString();
+  }
+  return payload.toString();
 }

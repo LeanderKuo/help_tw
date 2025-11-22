@@ -31,24 +31,20 @@ class ResourceRepository {
         'id',
         'title',
         'description',
-        'resource_type',
-        'category',
+        'categories',
+        'status',
+        'expiry',
+        'location',
         'address',
-        'geohash',
-        'is_active',
-        'expires_at',
         'contact_masked_phone',
-        'tags',
         'created_by',
         'created_at',
         'updated_at',
-        'location',
       ];
       // 1. Try to fetch from Supabase (Network First)
       final data = await _supabase
           .from('resource_points')
           .select(selectColumns.join(','))
-          .eq('is_active', true) // Only fetch active resources
           .timeout(const Duration(seconds: 12));
 
       final resources = (data as List)
