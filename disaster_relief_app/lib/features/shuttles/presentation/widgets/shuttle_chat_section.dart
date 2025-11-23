@@ -125,18 +125,27 @@ class ShuttleChatSection extends ConsumerWidget {
     if (text.isEmpty) return;
     final user = ref.read(authRepositoryProvider).currentUser?.id;
     if (user == null) return;
+
+    final chatRepo = ref.read(chatRepositoryProvider);
+    final chatRoom = await chatRepo.getChatRoom(shuttleId, 'shuttle');
+
+    if (chatRoom == null) {
+      // Chat room doesn't exist - this shouldn't happen as it's auto-created
+      return;
+    }
+
     messageController.clear();
-    await ref
-        .read(chatRepositoryProvider)
-        .sendShuttleMessage(
-          ChatMessage(
-            id: '',
-            shuttleId: shuttleId,
-            senderId: user,
-            content: text,
-            createdAt: DateTime.now(),
-          ),
-        );
+
+    await chatRepo.sendMessage(
+      ChatMessage(
+        id: '',
+        chatRoomId: chatRoom.id,
+        senderId: user,
+        content: text,
+        createdAt: DateTime.now(),
+      ),
+    );
+
     if (scrollController.hasClients) {
       await scrollController.animateTo(
         scrollController.position.maxScrollExtent + 60,

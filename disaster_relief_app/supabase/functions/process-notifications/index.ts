@@ -64,35 +64,31 @@ serve(async (req) => {
     // Process each event
     for (const event of events as NotificationEvent[]) {
       try {
-        // Fetch affected participants based on entity type
-        let participants: any[] = []
+        // Fetch affected participants from unified table
+        const { data: participants, error: participantsError } = await supabaseClient
+          .from('participants')
+          .select('user_id')
+          .eq('entity_id', event.entity_id)
+          .eq('entity_type', event.entity_type)
+          .eq('status', 'joined')
 
-        if (event.entity_type === 'mission') {
-          const { data } = await supabaseClient
-            .from('mission_participants')
-            .select('user_id')
-            .eq('mission_id', event.entity_id)
-          participants = data || []
-        } else if (event.entity_type === 'shuttle') {
-          const { data } = await supabaseClient
-            .from('shuttle_participants')
-            .select('user_id')
-            .eq('shuttle_id', event.entity_id)
-          participants = data || []
+        if (participantsError) {
+          throw new Error(`Failed to fetch participants: ${participantsError.message}`)
         }
 
         // Create notification message
         const changedFields = event.payload.changed_fields.join(', ')
+        const title = event.entity_type === 'mission' ? '任務更新' : '班車更新'
         const message = event.entity_type === 'mission'
           ? `任務已更新：${changedFields}`
-          : `接駁已更新：${changedFields}`
+          : `班車已更新：${changedFields}`
 
         // Insert notifications for each participant
-        for (const participant of participants) {
+        for (const participant of participants || []) {
           notifications.push({
             user_id: participant.user_id,
-            title: event.entity_type === 'mission' ? '任務更新' : '接駁更新',
-            message: message,
+            title,
+            message,
             entity_type: event.entity_type,
             entity_id: event.entity_id,
             created_at: new Date().toISOString()
@@ -105,9 +101,19 @@ serve(async (req) => {
       }
     }
 
-    // Insert all notifications at once (if you have a notifications table)
-    // For now, we'll just log them and delete the events
-    console.log(`Generated ${notifications.length} notifications`)
+    // Insert all notifications at once
+    if (notifications.length > 0) {
+      const { error: insertError } = await supabaseClient
+        .from('notifications')
+        .insert(notifications)
+
+      if (insertError) {
+        console.error('Failed to insert notifications:', insertError.message)
+        // Continue anyway to delete events
+      } else {
+        console.log(`Inserted ${notifications.length} notifications`)
+      }
+    }
 
     // Delete processed events
     if (processedIds.length > 0) {

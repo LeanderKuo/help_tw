@@ -47,7 +47,7 @@ void main() {
     final msgs = [
       ChatMessage(
         id: 'm1',
-        shuttleId: 's1',
+        chatRoomId: 'room-1',
         senderId: 'user-123',
         content: 'Hello team',
         createdAt: DateTime.now(),

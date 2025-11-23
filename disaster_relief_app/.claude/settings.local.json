@@ -16,7 +16,8 @@
       "Bash(flutter pub run build_runner build:*)",
       "Bash(npx supabase:*)",
       "Bash(mkdir:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(docker exec:*)"
     ],
     "deny": [],
     "ask": []

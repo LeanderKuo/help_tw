@@ -139,20 +139,32 @@ class _ChatSectionState extends ConsumerState<_ChatSection> {
     super.dispose();
   }
 
-  void _sendMessage() {
+  Future<void> _sendMessage() async {
     if (_messageController.text.isEmpty) return;
 
     final user = ref.read(authRepositoryProvider).currentUser;
     if (user == null) return;
 
+    final chatRepo = ref.read(chatRepositoryProvider);
+    final chatRoom = await chatRepo.getChatRoom(widget.taskId, 'mission');
+
+    if (chatRoom == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('聊天室尚未建立，請稍後再試')),
+        );
+      }
+      return;
+    }
+
     final message = ChatMessage(
       id: '', // Supabase generates ID
-      taskId: widget.taskId,
+      chatRoomId: chatRoom.id,
       senderId: user.id,
       content: _messageController.text,
     );
 
-    ref.read(chatRepositoryProvider).sendTaskMessage(message);
+    await chatRepo.sendMessage(message);
     _messageController.clear();
   }
 

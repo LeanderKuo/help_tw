@@ -20,12 +20,9 @@ ChatMessage _$ChatMessageFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChatMessage {
-  String get id =>
-      throw _privateConstructorUsedError; // Tasks table stores this as mission_id; keep external naming as taskId.
-  @JsonKey(name: 'mission_id')
-  String? get taskId => throw _privateConstructorUsedError;
-  @JsonKey(name: 'shuttle_id')
-  String? get shuttleId => throw _privateConstructorUsedError;
+  String get id => throw _privateConstructorUsedError;
+  @JsonKey(name: 'chat_room_id')
+  String? get chatRoomId => throw _privateConstructorUsedError;
   @JsonKey(name: 'sender_id')
   String? get senderId => throw _privateConstructorUsedError;
   String? get content => throw _privateConstructorUsedError;
@@ -33,6 +30,8 @@ mixin _$ChatMessage {
   String? get imageUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'created_at')
   DateTime? get createdAt => throw _privateConstructorUsedError;
+  @JsonKey(name: 'expires_at')
+  DateTime? get expiresAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,12 +47,12 @@ abstract class $ChatMessageCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
-      @JsonKey(name: 'mission_id') String? taskId,
-      @JsonKey(name: 'shuttle_id') String? shuttleId,
+      @JsonKey(name: 'chat_room_id') String? chatRoomId,
       @JsonKey(name: 'sender_id') String? senderId,
       String? content,
       @JsonKey(name: 'image_url') String? imageUrl,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'expires_at') DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -70,25 +69,21 @@ class _$ChatMessageCopyWithImpl<$Res, $Val extends ChatMessage>
   @override
   $Res call({
     Object? id = null,
-    Object? taskId = freezed,
-    Object? shuttleId = freezed,
+    Object? chatRoomId = freezed,
     Object? senderId = freezed,
     Object? content = freezed,
     Object? imageUrl = freezed,
     Object? createdAt = freezed,
+    Object? expiresAt = freezed,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      taskId: freezed == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      shuttleId: freezed == shuttleId
-          ? _value.shuttleId
-          : shuttleId // ignore: cast_nullable_to_non_nullable
+      chatRoomId: freezed == chatRoomId
+          ? _value.chatRoomId
+          : chatRoomId // ignore: cast_nullable_to_non_nullable
               as String?,
       senderId: freezed == senderId
           ? _value.senderId
@@ -105,6 +100,10 @@ class _$ChatMessageCopyWithImpl<$Res, $Val extends ChatMessage>
       createdAt: freezed == createdAt
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      expiresAt: freezed == expiresAt
+          ? _value.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
     ) as $Val);
   }
@@ -120,12 +119,12 @@ abstract class _$$ChatMessageImplCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
-      @JsonKey(name: 'mission_id') String? taskId,
-      @JsonKey(name: 'shuttle_id') String? shuttleId,
+      @JsonKey(name: 'chat_room_id') String? chatRoomId,
       @JsonKey(name: 'sender_id') String? senderId,
       String? content,
       @JsonKey(name: 'image_url') String? imageUrl,
-      @JsonKey(name: 'created_at') DateTime? createdAt});
+      @JsonKey(name: 'created_at') DateTime? createdAt,
+      @JsonKey(name: 'expires_at') DateTime? expiresAt});
 }
 
 /// @nodoc
@@ -140,25 +139,21 @@ class __$$ChatMessageImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? taskId = freezed,
-    Object? shuttleId = freezed,
+    Object? chatRoomId = freezed,
     Object? senderId = freezed,
     Object? content = freezed,
     Object? imageUrl = freezed,
     Object? createdAt = freezed,
+    Object? expiresAt = freezed,
   }) {
     return _then(_$ChatMessageImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
-      taskId: freezed == taskId
-          ? _value.taskId
-          : taskId // ignore: cast_nullable_to_non_nullable
-              as String?,
-      shuttleId: freezed == shuttleId
-          ? _value.shuttleId
-          : shuttleId // ignore: cast_nullable_to_non_nullable
+      chatRoomId: freezed == chatRoomId
+          ? _value.chatRoomId
+          : chatRoomId // ignore: cast_nullable_to_non_nullable
               as String?,
       senderId: freezed == senderId
           ? _value.senderId
@@ -176,6 +171,10 @@ class __$$ChatMessageImplCopyWithImpl<$Res>
           ? _value.createdAt
           : createdAt // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      expiresAt: freezed == expiresAt
+          ? _value.expiresAt
+          : expiresAt // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -185,25 +184,21 @@ class __$$ChatMessageImplCopyWithImpl<$Res>
 class _$ChatMessageImpl implements _ChatMessage {
   const _$ChatMessageImpl(
       {required this.id,
-      @JsonKey(name: 'mission_id') this.taskId,
-      @JsonKey(name: 'shuttle_id') this.shuttleId,
+      @JsonKey(name: 'chat_room_id') this.chatRoomId,
       @JsonKey(name: 'sender_id') this.senderId,
       this.content,
       @JsonKey(name: 'image_url') this.imageUrl,
-      @JsonKey(name: 'created_at') this.createdAt});
+      @JsonKey(name: 'created_at') this.createdAt,
+      @JsonKey(name: 'expires_at') this.expiresAt});
 
   factory _$ChatMessageImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChatMessageImplFromJson(json);
 
   @override
   final String id;
-// Tasks table stores this as mission_id; keep external naming as taskId.
   @override
-  @JsonKey(name: 'mission_id')
-  final String? taskId;
-  @override
-  @JsonKey(name: 'shuttle_id')
-  final String? shuttleId;
+  @JsonKey(name: 'chat_room_id')
+  final String? chatRoomId;
   @override
   @JsonKey(name: 'sender_id')
   final String? senderId;
@@ -215,10 +210,13 @@ class _$ChatMessageImpl implements _ChatMessage {
   @override
   @JsonKey(name: 'created_at')
   final DateTime? createdAt;
+  @override
+  @JsonKey(name: 'expires_at')
+  final DateTime? expiresAt;
 
   @override
   String toString() {
-    return 'ChatMessage(id: $id, taskId: $taskId, shuttleId: $shuttleId, senderId: $senderId, content: $content, imageUrl: $imageUrl, createdAt: $createdAt)';
+    return 'ChatMessage(id: $id, chatRoomId: $chatRoomId, senderId: $senderId, content: $content, imageUrl: $imageUrl, createdAt: $createdAt, expiresAt: $expiresAt)';
   }
 
   @override
@@ -227,22 +225,23 @@ class _$ChatMessageImpl implements _ChatMessage {
         (other.runtimeType == runtimeType &&
             other is _$ChatMessageImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.taskId, taskId) || other.taskId == taskId) &&
-            (identical(other.shuttleId, shuttleId) ||
-                other.shuttleId == shuttleId) &&
+            (identical(other.chatRoomId, chatRoomId) ||
+                other.chatRoomId == chatRoomId) &&
             (identical(other.senderId, senderId) ||
                 other.senderId == senderId) &&
             (identical(other.content, content) || other.content == content) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt));
+                other.createdAt == createdAt) &&
+            (identical(other.expiresAt, expiresAt) ||
+                other.expiresAt == expiresAt));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, taskId, shuttleId, senderId,
-      content, imageUrl, createdAt);
+  int get hashCode => Object.hash(runtimeType, id, chatRoomId, senderId,
+      content, imageUrl, createdAt, expiresAt);
 
   @JsonKey(ignore: true)
   @override
@@ -261,12 +260,12 @@ class _$ChatMessageImpl implements _ChatMessage {
 abstract class _ChatMessage implements ChatMessage {
   const factory _ChatMessage(
           {required final String id,
-          @JsonKey(name: 'mission_id') final String? taskId,
-          @JsonKey(name: 'shuttle_id') final String? shuttleId,
+          @JsonKey(name: 'chat_room_id') final String? chatRoomId,
           @JsonKey(name: 'sender_id') final String? senderId,
           final String? content,
           @JsonKey(name: 'image_url') final String? imageUrl,
-          @JsonKey(name: 'created_at') final DateTime? createdAt}) =
+          @JsonKey(name: 'created_at') final DateTime? createdAt,
+          @JsonKey(name: 'expires_at') final DateTime? expiresAt}) =
       _$ChatMessageImpl;
 
   factory _ChatMessage.fromJson(Map<String, dynamic> json) =
@@ -274,12 +273,9 @@ abstract class _ChatMessage implements ChatMessage {
 
   @override
   String get id;
-  @override // Tasks table stores this as mission_id; keep external naming as taskId.
-  @JsonKey(name: 'mission_id')
-  String? get taskId;
   @override
-  @JsonKey(name: 'shuttle_id')
-  String? get shuttleId;
+  @JsonKey(name: 'chat_room_id')
+  String? get chatRoomId;
   @override
   @JsonKey(name: 'sender_id')
   String? get senderId;
@@ -291,6 +287,9 @@ abstract class _ChatMessage implements ChatMessage {
   @override
   @JsonKey(name: 'created_at')
   DateTime? get createdAt;
+  @override
+  @JsonKey(name: 'expires_at')
+  DateTime? get expiresAt;
   @override
   @JsonKey(ignore: true)
   _$$ChatMessageImplCopyWith<_$ChatMessageImpl> get copyWith =>
